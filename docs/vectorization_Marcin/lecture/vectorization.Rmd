@@ -1,0 +1,263 @@
+---
+title: "Vectorization in R"
+subtitle: "RaukR 2021 • Advanced R for Bioinformatics"
+author: "<b>Marcin Kierczak</b>"
+institute: NBIS, SciLifeLab
+keywords: r, RaukR, markdown
+output:
+  xaringan::moon_reader:
+    encoding: 'UTF-8'
+    self_contained: false
+    chakra: 'assets/remark-latest.min.js'
+    css: 'assets/presentation.css'
+    lib_dir: libs
+    nature:
+      ratio: '4:3'
+      highlightLanguage: r
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: "RaukR 2021 • %current%/%total%"
+---
+exclude: true
+count: false
+
+```{r,echo=FALSE,child="assets/header-presentation.Rmd"}
+```
+
+<!-- ----------------- Only edit title & author above this ----------------- -->
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+# load the packages you need
+
+library(tidyverse)
+library(peakRAM)
+#library(ggplot2)
+```
+---
+name: contents
+
+## Learning Outcomes
+
+By the end of this module, you will:
+
+* understand how to write more efficient loops
+* be able to vectorize most loops
+* understand how the `apply*` functions work
+* be aware of the `purrr` package
+* understand what a recursive call is
+
+---
+name: for_loop_example
+## The simplest of all `for` loops
+
+Say, we want to add 1 to every element of a vector:
+
+```{r for.loop.ex1, echo=T}
+vec <- c(1:5)
+vec
+for (i in vec) {
+  vec[i] <- vec[i] + 1
+}
+vec
+```
+
+--
+
+Exactly the same can be achieved in R by means of **vectorization**:
+```{r for.loop.avoid, echo=T}
+vec <- c(1:5)
+vec + 1
+```
+
+Which is better than? `r emo::ji('confused')`
+---
+name: vectorization_benchmark
+
+## Repeating actions &mdash; vectorization
+
+Let us compare the time of execution of the vectorized version (vector with 10,000 elements):
+```{r for.loop.avoid.timing, echo=F}
+vec <- c(1:1e6)
+ptm <- proc.time()
+vec <- vec + 1
+proc.time() - ptm # vectorized
+```
+
+--
+
+to the loop version:
+```{r for.loop.avoid.timing2, echo=F}
+vec <- c(1:1e6)
+ptm <- proc.time()
+for (i in vec) {
+  vec[i] <- vec[i] + 1
+}
+proc.time() - ptm # for-loop
+```
+
+---
+name: base_vectorize
+## Vectorization &mdash; the problem
+```{r is_a_droid}
+is_a_droid <- function(x) {
+  droids <- c('2-1B', '4-LOM', '8D8', '0-0-0', 'AP-5', 'AZI-3', 'Mister Bones', 'BB-8', 'BB-9E', 'BD-1', 'BT-1', 'C1-10P', 'C-3PO', 'R2-D2')
+  if (x %in% droids) {
+    return(T)
+  } else {
+    return(F)
+  }
+}
+
+test <- c('Anakin', 'Vader', 'R2-D2', 'AZI-3', 'Luke')
+is_a_droid(test)
+```
+
+---
+name: base_vectorize2
+## Vectorization &mdash; the solution(s)
+
+The `base::Vectorize` way:
+```{r vec_is_a_droid}
+vectorized_is_a_droid <- base::Vectorize(is_a_droid, vectorize.args = c('x'))
+vectorized_is_a_droid(test)
+```
+
+--
+
+The `apply*` way:
+```{r, error=T}
+apply(as.matrix(test), FUN = is_a_droid, MARGIN = 1)
+```
+
+--
+
+```{r}
+lapply(test, FUN=is_a_droid) %>% unlist()
+```
+
+--
+
+```{r}
+sapply(test, is_a_droid)
+```
+
+---
+name: base_vectorize3
+## Vectorization &mdash; the solution(s)
+
+The `vapply`:
+```{r}
+vapply(test, is_a_droid, FUN.VALUE = TRUE)
+```
+
+--
+
+```{r}
+vapply(test, is_a_droid, FUN.VALUE = 1)
+```
+
+--
+
+```{r, error = T}
+vapply(test, is_a_droid, FUN.VALUE = c(1,0))
+vapply(test, is_a_droid, FUN.VALUE = 'a')
+```
+
+--
+
+Or the `purrr` way:
+```{r}
+purrr::map(test, is_a_droid) %>% unlist()
+```
+
+---
+name: recursion
+## Recursion
+When we explicitely repeat an action using a loop, we talk about **iteration**. We can also repeat actions by means of **recursion**, i.e. when a function calls itself. Let us implement a factorial $!$: 
+```{r rec.fact, echo=T}
+factorial.rec <- function(x) {
+  if (x == 0 || x == 1)
+    return(1)
+  else
+    return(x * factorial.rec(x - 1)) # Recursive call!
+}
+factorial.rec(5)
+```
+
+---
+name: rec_eq_iter
+## Recursion = iteration?
+Yes, every iteration can be converted to recursion (Church-Turing conjecture) and *vice versa*. It is not always obvious, but theoretically it is doable. Let's see how to implement *factorial* in iterative manner:
+
+```{r rec.fact.iter, echo=T}
+factorial.iter <- function(x) {
+  if (x == 0 || x == 1)
+    return(1)
+  else {
+    tmp <- 1
+    for (i in 2:x) {
+      tmp <- tmp * i
+    }
+    return(tmp)  
+  }
+}
+factorial.iter(5)
+```
+
+---
+name: rec_eq_iter_really
+## Recursion == iteration, really?
+
+More writing for the iterative version, right? What about the time efficiency?  
+The recursive version:
+```{r rec.fact.timing, echo=F}
+peakRAM::peakRAM(factorial.rec(2000))
+```
+And the iterative one:
+```{r iter.fact.timing, echo=F}
+peakRAM::peakRAM(factorial.iter(2000))
+```
+
+---
+name: loops_avoid_growing
+## Loops &mdash; avoid growing data
+Avoid changing dimensions of an object inside the loop:
+```{r avoid.growing, echo=T}
+v <- c() # Initialize
+for (i in 1:100) {
+  v <- c(v, i)
+}
+```
+
+--
+
+It is much better to do it like this:
+```{r avoid.growing2, echo=T}
+v <- rep(NA, 100) # Initialize with length
+for (i in 1:100) {
+  v[i] <- i
+}
+```
+
+--
+
+
+<!-- --------------------- Do not edit this and below --------------------- -->
+
+---
+name: end-slide
+class: end-slide, middle
+count: false
+
+# Thank you. Questions?
+
+```{r,echo=FALSE,child="assets/footer-presentation.Rmd"}
+```
+
+```{r,include=FALSE,eval=FALSE}
+# manually run this to render this document to HTML
+rmarkdown::render("presentation.Rmd")
+# manually run this to convert HTML to PDF
+#pagedown::chrome_print("presentation.html",output="presentation.pdf")
+```

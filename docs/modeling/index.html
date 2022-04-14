@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introduction to predictive modeling by way of tidymodels</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Max Kuhn" />
+    <script src="libs/header-attrs-2.8/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="css/fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+class: title-slide, left, middle
+background-image: url("images/tidymodels.svg")
+background-position: 85% 50%
+background-size: 30%
+background-color: #F9F8F3
+
+.pull-left[
+
+# Introduction to predictive modeling by way of tidymodels
+
+## Max Kuhn
+
+### RaukR-2021
+
+### Repo: [github.com/NBISweden/RaukR-2021](https://github.com/topepo/github.com/NBISweden/RaukR-2021)
+
+]
+
+
+---
+# Our goals for this workshop
+
+* Use an example to:
+
+  * Introduce tidymodels and its general philosophy on modeling. 
+  * Discuss important modeling concepts for all types of models
+
+* Point you to places to learn more and get help. 
+
+---
+# Why tidymodels?
+
+There are several other modeling frameworks in R that try to:
+
+ * create a uniform, cohesive, and unsurprising set of modeling APIs
+ 
+Examples are &lt;span class="pkg"&gt;caret&lt;/span&gt;, &lt;span class="pkg"&gt;mlr3&lt;/span&gt;, and others. 
+
+* &lt;span class="pkg"&gt;caret&lt;/span&gt; is more favorable for people who prefer base R/traditional interfaces.
+
+* tidymodels would probably be preferable to those who place importance on a tidy _R_ interface, a large number of features, and the idea that the interfaces should enable the "pit of success". 
+
+* &lt;span class="pkg"&gt;mlr3&lt;/span&gt; is more pythonic and also has many features.
+
+---
+# The tidymodels package
+
+There are a lot of tidymodels packages but about 90% of the work is done by 5 packages. 
+
+The best way to get started with tidymodels is to use the &lt;span class="pkg"&gt;tidymodels&lt;/span&gt; meta-package. It loads the core packages plus some tidyverse packages.
+
+Some helpful links:
+
+ * List of [all tidymodels functions](https://www.tidymodels.org/find/#search-all-of-tidymodels)
+ * List of [all parsnip models](https://www.tidymodels.org/find/parsnip/)
+ * List of [all recipe steps](https://www.tidymodels.org/find/recipes/)
+
+
+---
+# The tidymodels package
+
+
+```r
+library(tidymodels)
+```
+
+```
+## Registered S3 method overwritten by 'tune':
+##   method                   from   
+##   required_pkgs.model_spec parsnip
+```
+
+```
+## ── Attaching packages ─────────────────────────────────────────── tidymodels 0.1.3 ──
+```
+
+```
+## ✓ broom        0.7.6      ✓ recipes      0.1.16
+## ✓ dials        0.0.9      ✓ rsample      0.1.0 
+## ✓ dplyr        1.0.6      ✓ tibble       3.1.2 
+## ✓ ggplot2      3.3.3      ✓ tidyr        1.1.3 
+## ✓ infer        0.5.4      ✓ tune         0.1.5 
+## ✓ modeldata    0.1.0      ✓ workflows    0.2.2 
+## ✓ parsnip      0.1.6      ✓ workflowsets 0.0.2 
+## ✓ purrr        0.3.4      ✓ yardstick    0.0.8
+```
+
+```
+## ── Conflicts ────────────────────────────────────────────── tidymodels_conflicts() ──
+## x purrr::discard() masks scales::discard()
+## x dplyr::filter()  masks stats::filter()
+## x dplyr::lag()     masks stats::lag()
+## x recipes::step()  masks stats::step()
+## • Use tidymodels_prefer() to resolve common conflicts.
+```
+
+---
+# Managing name conflicts
+
+```r
+tidymodels_prefer(quiet = FALSE)
+```
+
+```
+## [conflicted] Will prefer dplyr::filter over any other package
+## [conflicted] Will prefer dplyr::select over any other package
+## [conflicted] Will prefer dplyr::slice over any other package
+## [conflicted] Will prefer dplyr::rename over any other package
+## [conflicted] Will prefer dials::neighbors over any other package
+## [conflicted] Will prefer plsmod::pls over any other package
+## [conflicted] Will prefer purrr::map over any other package
+## [conflicted] Will prefer recipes::step over any other package
+## [conflicted] Will prefer themis::step_downsample over any other package
+## [conflicted] Will prefer themis::step_upsample over any other package
+## [conflicted] Will prefer tune::tune over any other package
+## [conflicted] Will prefer yardstick::precision over any other package
+## [conflicted] Will prefer yardstick::recall over any other package
+```
+
+
+
+
+---
+# Base R and tidyverse differences
+
+.pull-left[
+Base R/&lt;span class="pkg"&gt;caret&lt;/span&gt;
+
+```r
+mtcars &lt;- mtcars[order(mtcars$cyl),]
+mtcars &lt;- mtcars[, "mpg", drop = FALSE]
+
+
+# ──────────────────────────────────────────────
+
+mtcars$mp        # matches incomplete arg
+mtcars[, "mpg"]  # a vector
+
+
+# ──────────────────────────────────────────────
+
+num_args &lt;- function(x) length(formals(x))
+
+
+num_args(caret::trainControl) + 
+  num_args(caret:::train.default)
+```
+
+```
+## 38
+```
+]
+.pull-right[
+tidyverse/tidymodels
+
+```r
+mtcars %&gt;% 
+  arrange(cyl) %&gt;% 
+  select(mpg)
+
+# ──────────────────────────────────────────────
+
+tb_cars &lt;- as_tibble(mtcars)
+tb_cars$mp        # fails
+tb_cars[, "mpg"]  # A tibble 
+
+# ──────────────────────────────────────────────
+
+
+
+num_args(linear_reg) + num_args(set_engine) + 
+  num_args(tune_grid) + num_args(control_grid) + 
+  num_args(vfold_cv)
+```
+```
+## 23
+```
+]
+
+
+---
+layout: false
+class: inverse, middle, center
+
+# [`tidymodels.org`](https://www.tidymodels.org/)
+
+# _Tidy Modeling with R_ ([`tmwr.org`](https://www.tmwr.org/))
+
+
+---
+# Example data set - High content screens
+
+These data are used in our _Applied Predictive Modeling_ book and are originally from [Hill, LaPan, Li and Haney (2007)](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-8-340). 
+
+They developed models for cells in a high content oncology screen. The data consists of 119 imaging measurements on 2019 cells. 
+
+Four optical channels were used to differentiate parts of the cells: 1 for the cell body, 2 for the nucleus, and 3+4 for the cytoskeleton. These data were used to _segment the cells_ in each image. 
+
+
+
+---
+# Example data set - High content screens
+
+From the segmented cells, we would compute a variety of image features for aspects of morphology and texture. 
+
+These would be used to predict some assayed outcome (e.g. related to compound activity, phenotype, etc.). 
+
+The end goal would be to have a few relevant measures of the event of interest (e.g. nuclear translocation or cytoplasmic proteins). 
+
+If models can accurately predict these, medicinal chemists have a tool to help optimize their compounds _in-silico_...
+
+---
+layout: false
+class: inverse, middle, center
+background-color: #000000
+
+&lt;img src="images/some_cells.png" width="55%" style="display: block; margin: auto;" /&gt;
+
+---
+# Example data set - High content screens
+
+... unless the cells have not been well segmented. 
+
+These data have been manually labeled as to whether or not the segmentation algorithm did a good job or not. 
+
+A model to predict this would be used to preprocess the data prior to outcome modeling and analysis. 
+
+Quality of segmentation will be our outcome for this example. 
+
+
+The data are in `modeldata`. See `?cells`. There are 57 features generated across the four channels. 
+---
+# Example data set object
+
+
+```r
+data(cells)
+# Remove the dataset identifier
+cells &lt;- cells %&gt;% select(-case)
+dim(cells)
+```
+
+```
+## [1] 2019   57
+```
+
+```r
+levels(cells$class)
+```
+
+```
+## [1] "PS" "WS"
+```
+
+
+---
+layout: false
+class: inverse, middle, center
+
+# Big Picture Modeling Stuff
+
+---
+# Define the scope of "The Model" 
+
+In tidymodels, there is the idea that a model-oriented data analysis consists of
+
+ - a preprocessor, and 
+ - a model
+ 
+The preprocessor might be a simple formula or a sophisticated recipe.  
+
+It's important to consider both of these activities as part of the data analysis process.
+
+ - Post-model activities should also be included there (e.g. calibration, cut-off optimization, etc.)
+ - We don't have those implemented yet. 
+
+
+---
+# Basic tidymodels components
+
+&lt;img src="images/blocks.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# A relevant example
+
+Let's say that we have some highly correlated predictors and we want to reduce the correlation by first applying principal component analysis to the data. 
+
+ - AKA principal component regression
+ 
+---
+# A relevant example
+
+Let's say that we have some highly correlated predictors and we want to reduce the correlation by first applying principal component analysis to the data. 
+
+ - AKA ~~principal component regression~~ feature extraction
+
+
+---
+# A relevant example
+
+Let's say that we have some highly correlated predictors and we want to reduce the correlation by first applying principal component analysis to the data. 
+
+ - AKA ~~principal component regression~~ feature extraction
+
+What do we consider the estimation part of this process? 
+
+
+---
+# Is it this? 
+
+&lt;img src="images/faux-model.svg" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Or is it this? 
+
+&lt;img src="images/the-model.svg" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# What's the difference?
+
+It is easy to think that the model fit is the only estimation steps. 
+
+There are cases where this could go really wrong: 
+
+* Poor estimation of performance (by treating the PCA parts as known)
+
+* Selection bias in feature selection
+
+* Information leakage
+
+These problems are exacerbated as the preprocessors increase in complexity and/or effectiveness. 
+
+_We'll come back to this at the end of this section_
+
+---
+layout: false
+class: inverse, middle, center
+
+# First step - data spending!
+
+---
+# Data splitting and spending
+
+How do we "spend" the data to find an optimal model? 
+
+We _typically_ split data into training and test data sets:
+
+*  ***Training Set***: these data are used to estimate model parameters and to pick the values of the complexity parameter(s) for the model.
+
+*  ***Test Set***: these data can be used to get an independent assessment of model efficacy. **They should not be used during model training** (like, at all). 
+
+
+
+---
+layout: false
+class: inverse, middle, center
+background-color: #FFFFFF
+
+# &lt;span style="color:Black;"&gt;Always have a separate piece of data that can &lt;span style="color:Red;"&gt;&lt;b&gt;contradict&lt;/b&gt;&lt;/span&gt; what you &lt;span style="color:Blue;"&gt;&lt;b&gt;believe&lt;/b&gt;&lt;/span&gt;&lt;/span&gt;
+
+
+
+---
+# Data splitting and spending 
+
+The more data we spend, the better estimates we'll get (provided the data is accurate).  
+
+Given a fixed amount of data:
+
+* Too much spent in training won't allow us to get a good assessment of predictive performance.  We may find a model that fits the training data very well, but is not generalizable (overfitting)
+
+* Too much spent in testing won't allow us to get a good assessment of model parameters
+
+Statistically, the best course of action would be to use all the data for model building and use statistical methods to get good estimates of error.
+
+From a non-statistical perspective, many consumers of complex models emphasize the need for an untouched set of samples to evaluate performance.
+
+
+---
+# Mechanics of data splitting
+
+There are a few different ways to do the split: simple random sampling, _stratified sampling based on the outcome_, by date, or methods that focus on the distribution of the predictors.
+
+For stratification:
+
+* **classification**: this would mean sampling within the classes to preserve the distribution of the outcome in the training and test sets
+
+* **regression**: determine the quartiles of the data set and sample within those artificial groups
+
+For _time series_, we often use the most recent data as the test set. 
+
+---
+
+# Splitting with cell data
+
+`initial_split()` can be used when we use randomness to make the split.
+
+
+```r
+cell_split &lt;- initial_split(cells, strata = class, prop = 3/4)
+cell_split
+```
+
+```
+## &lt;Analysis/Assess/Total&gt;
+## &lt;1514/505/2019&gt;
+```
+
+```r
+cell_train &lt;- training(cell_split)
+cell_test  &lt;- testing(cell_split)
+
+c(training = nrow(cell_train), testing = nrow(cell_test))
+```
+
+```
+## training  testing 
+##     1514      505
+```
+
+
+---
+layout: false
+class: inverse, middle, center
+
+#  Creating models in R
+
+
+---
+
+# Specifying models in R using formulas
+
+To fit a model to the housing data, the model terms must be specified. Historically, there are two main interfaces for doing this. 
+
+The **formula** interface using R [formula rules](https://cran.r-project.org/doc/manuals/r-release/R-intro.html#Formulae-for-statistical-models) to specify a _symbolic_ representation of the terms:
+
+Variables + interactions
+
+
+```r
+model_fn(class ~ area_ch_1 + skew_inten_ch_4 + area_ch_1:skew_inten_ch_4, data = cell_train)
+```
+
+Shorthand for all predictors
+
+
+```r
+model_fn(class ~ ., data = cell_train)
+```
+
+Inline functions / transformations
+
+
+```r
+model_fn(log10(class) ~ ns(skew_inten_ch_4, df = 3) + ., data = cell_train)
+```
+
+---
+
+# Downsides to formulas
+
+* You can't nest in-line functions such as `model_fn(y ~ pca(scale(x1), scale(x2), scale(x3)), data = dat)`.
+
+* All the model matrix calculations happen at once and can't be recycled when used in a model function. 
+
+* For very _wide_ data sets, the formula method can be [extremely inefficient](https://rviews.rstudio.com/2017/03/01/the-r-formula-method-the-bad-parts/). 
+
+* There are limited _roles_ that variables can take which has led to several re-implementations of formulas. 
+
+* Specifying multivariate outcomes is clunky and inelegant.
+
+* Not all modeling functions have a formula method (consistency!). 
+
+---
+
+# Specifying models without formulas
+
+Some modeling function have a non-formula (XY) interface. This usually has arguments for the predictors and the outcome(s):
+
+
+```r
+# Usually, the variables must all be numeric
+pre_vars &lt;- c("var_inten_ch_1", "var_inten_ch_4", "avg_inten_ch_3")
+model_fn(x = cell_train[, pre_vars],
+         y = cell_train$class)
+```
+
+This is inconvenient if you have transformations, factor variables, interactions, or any other operations to apply to the data prior to modeling. 
+
+Overall, it is difficult to predict if a package has one or both of these interfaces. For example, `glm` only has formulas. 
+
+There is a **third interface**, using _recipes_ that will be discussed later that solves some of these issues. 
+
+---
+
+# A logistic regression model 
+
+Let's start by fitting an ordinary logistic regression model to the training set. You can choose the model terms for your model, but I will use a very simple model:
+
+
+```r
+simple_glm &lt;- glm(class ~ area_ch_1 + avg_inten_ch_4, data = cell_train, family = binomial)
+```
+
+Before looking at coefficients, we should do some model checking to see if there is anything obviously wrong with the model. 
+
+To get the statistics on the individual data points, we will use the awesome `broom` package:
+
+
+```r
+simple_glm_values &lt;- augment(simple_glm)
+names(simple_glm_values)
+```
+
+```
+## [1] "class"          "area_ch_1"      "avg_inten_ch_4" ".fitted"       
+## [5] ".resid"         ".std.resid"     ".hat"           ".sigma"        
+## [9] ".cooksd"
+```
+
+---
+layout: false
+class: inverse, middle, center
+
+#  Fitting via tidymodels
+
+---
+# The parsnip package
+
+.pull-left-a-lot[
+
+- A tidy unified _interface_ to models
+
+- `glm()` isn't the only way to perform logistic regression
+  
+  - &lt;span class="pkg"&gt;glmnet&lt;/span&gt; for regularized regression
+  - &lt;span class="pkg"&gt;stan&lt;/span&gt; for Bayesian regression
+  - &lt;span class="pkg"&gt;keras&lt;/span&gt; for regression using tensorflow
+  
+- But...remember the consistency slide?
+
+  - Each interface has its own minutiae to remember
+  - &lt;span class="pkg"&gt;parsnip&lt;/span&gt; standardizes all that!
+]
+.pull-right-a-little[
+
+&lt;img src="images/all_the_models.jpeg" width="791" style="display: block; margin: auto;" /&gt;
+
+]
+
+  
+---
+
+# parsnip in action
+
+.pull-left[
+
+1) Create specification
+
+2) Set the engine
+
+3) Fit the model
+
+
+```r
+spec_logit_reg &lt;- logistic_reg()
+spec_logit_reg
+```
+
+```
+## Logistic Regression Model Specification (classification)
+```
+
+```r
+spec_glm &lt;- spec_logit_reg %&gt;% set_engine("glm")
+spec_glm
+```
+
+```
+## Logistic Regression Model Specification (classification)
+## 
+## Computational engine: glm
+```
+
+]
+
+.pull-right[
+
+
+```r
+fit_glm &lt;- fit(
+  spec_glm,
+  class ~ area_ch_1 + avg_inten_ch_4,
+  data = cell_train
+)
+
+fit_glm
+```
+
+```
+## parsnip model object
+## 
+## Fit time:  4ms 
+## 
+## Call:  stats::glm(formula = class ~ area_ch_1 + avg_inten_ch_4, family = stats::binomial, 
+##     data = data)
+## 
+## Coefficients:
+##    (Intercept)       area_ch_1  avg_inten_ch_4  
+##      -1.239520        0.000542        0.003214  
+## 
+## Degrees of Freedom: 1513 Total (i.e. Null);  1511 Residual
+## Null Deviance:	    1970 
+## Residual Deviance: 1890 	AIC: 1900
+```
+
+]
+
+
+---
+
+# Alternative engines
+
+With &lt;span class="pkg"&gt;parsnip&lt;/span&gt;, it is easy to switch to a different engine, like Stan, to run the
+same model with alternative backends.
+
+.pull-left[
+
+
+```r
+spec_stan &lt;- 
+  spec_logit_reg %&gt;%
+  # Engine specific arguments are 
+  # passed through here
+  set_engine("stan", chains = 4, iter = 1000)
+
+# Otherwise, looks exactly the same!
+fit_stan &lt;- fit(
+  spec_stan,
+  class ~ area_ch_1 + avg_inten_ch_4,
+  data = cell_train
+)
+```
+
+]
+
+.pull-right[
+
+
+```r
+coef(fit_stan$fit)
+```
+
+```
+##    (Intercept)      area_ch_1 avg_inten_ch_4 
+##     -1.2164978      0.0004544      0.0032323
+```
+
+```r
+coef(fit_glm$fit)
+```
+
+```
+##    (Intercept)      area_ch_1 avg_inten_ch_4 
+##     -1.2395198      0.0005423      0.0032140
+```
+
+]
+
+---
+# Duplicate computations
+
+Note that, for both of these fits, some of the computations are repeated. 
+
+For example, the formula method does a fair amount of work to figure out how to turn the data frame into a matrix of predictors. 
+
+When there are special effects (e.g. splines), dummy variables, interactions, or other components, the formula/terms objects have to keep track of everything. 
+
+In cases where there are a lot of _predictors_, these computations can consume a lot of resources. If we can save them, that would be helpful. 
+
+The answer is a _workflow_ object. These bundle together a preprocessor (such as a formula) along with a model. 
+
+
+---
+# A modeling _workflow_ 
+
+We can _optionally_ bundle the recipe and model together into a &lt;span style="color:LightGray;"&gt;&lt;strike&gt;pipeline&lt;/strike&gt;&lt;/span&gt; _workflow_:
+
+
+```r
+glm_wflow &lt;- 
+  workflow() %&gt;%    # attached with the tidymodels package
+  add_model(spec_glm) %&gt;% 
+  add_formula(class ~ area_ch_1 + avg_inten_ch_4) # or add_recipe() or add_variables()
+
+glm_fit &lt;- fit(glm_wflow, data = cell_train)
+glm_fit
+```
+
+```
+## ══ Workflow [trained] ═══════════════════════════════════════════════════════════════
+## Preprocessor: Formula
+## Model: logistic_reg()
+## 
+## ── Preprocessor ─────────────────────────────────────────────────────────────────────
+## class ~ area_ch_1 + avg_inten_ch_4
+## 
+## ── Model ────────────────────────────────────────────────────────────────────────────
+## 
+## Call:  stats::glm(formula = ..y ~ ., family = stats::binomial, data = data)
+## 
+## Coefficients:
+##    (Intercept)       area_ch_1  avg_inten_ch_4  
+##      -1.239520        0.000542        0.003214  
+## 
+## Degrees of Freedom: 1513 Total (i.e. Null);  1511 Residual
+## Null Deviance:	    1970 
+## Residual Deviance: 1890 	AIC: 1900
+```
+
+
+---
+# Swapping models
+
+
+```r
+stan_wflow &lt;- 
+  glm_wflow %&gt;% 
+  update_model(spec_stan)
+
+set.seed(21)
+stan_fit &lt;- fit(stan_wflow, data = cell_train)
+stan_fit
+```
+
+```
+## ══ Workflow [trained] ═══════════════════════════════════════════════════════════════
+## Preprocessor: Formula
+## Model: logistic_reg()
+## 
+## ── Preprocessor ─────────────────────────────────────────────────────────────────────
+## class ~ area_ch_1 + avg_inten_ch_4
+## 
+## ── Model ────────────────────────────────────────────────────────────────────────────
+## stan_glm
+##  family:       binomial [logit]
+##  formula:      ..y ~ .
+##  observations: 1514
+##  predictors:   3
+## ------
+##                Median MAD_SD
+## (Intercept)    -1.2    0.1  
+## area_ch_1       0.0    0.0  
+## avg_inten_ch_4  0.0    0.0  
+## 
+## ------
+## * For help interpreting the printed output see ?print.stanreg
+## * For info on the priors used see ?prior_summary.stanreg
+```
+
+---
+# Workflows
+
+Once the first model is fit, the preprocessor (i.e. the formula) is processed and the model matrix is formed. 
+
+New models don't need to repeat those computations. 
+
+Some other nice features: 
+
+* Workflows are smarter with data than `model.matrix()` in terms of new factor levels. 
+* Other preprocessors can be used: recipes and `dplyr::select()` statements (that do no data processing).
+* As will be seen later, they can help organize your work when a sequence of models are used. 
+* A workflow captures the entire modeling process (mentioned earlier) and a simple `fit()` and `predict()` sequence are used for all of the estimation parts. 
+
+---
+# Using workflows to predict
+
+
+```r
+# generate some bogus data (instead of using the training or test sets)
+set.seed(31)
+shuffled_data &lt;- map_dfc(cells, ~ sample(.x, size = 50))
+
+predict(stan_fit, shuffled_data) %&gt;% slice(1:3)
+```
+
+```
+## # A tibble: 3 x 1
+##   .pred_class
+##   &lt;fct&gt;      
+## 1 PS         
+## 2 PS         
+## 3 PS
+```
+
+```r
+predict(stan_fit, shuffled_data, type = "conf_int") %&gt;% 
+  select(contains("PS")) %&gt;% 
+  slice(1:3)
+```
+
+```
+## # A tibble: 3 x 2
+##   .pred_lower_PS .pred_upper_PS
+##            &lt;dbl&gt;          &lt;dbl&gt;
+## 1          0.676          0.734
+## 2          0.512          0.586
+## 3          0.641          0.694
+```
+
+---
+# The tidymodels prediction guarantee!
+
+
+.pull-left-a-lot[
+
+* The predictions will always be inside a **tibble**.
+* The column names and types are **unsurprising**.
+* The number of rows in `new_data` and the output **are the same**. 
+
+]
+.pull-right-a-little[
+
+&lt;img src="images/guarantee.png" width="352" style="display: block; margin: auto;" /&gt;
+
+]
+
+This enables the use of `bind_cols()` to combine the original data and the predictions. 
+
+
+---
+# Evaluating models
+
+tidymodels has a [lot of performance metrics](https://yardstick.tidymodels.org/reference/index.html) for different types of models (e.g. binary classification, regression, etc). 
+
+Each takes a tibble as an input along with the observed and predicted column names: 
+
+
+```r
+pred_results &lt;- 
+  predict(stan_fit, shuffled_data) %&gt;% 
+  bind_cols(shuffled_data)
+
+# Data was randomized; these results should be bad
+pred_results %&gt;% accuracy(truth = class, estimate = .pred_class)
+```
+
+```
+## # A tibble: 1 x 3
+##   .metric  .estimator .estimate
+##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
+## 1 accuracy binary          0.56
+```
+
+
+---
+# Multiple metrics/KPIs
+
+A _metric set_ can bundle multiple statistics: 
+
+
+```r
+cls_metrics &lt;- metric_set(accuracy, mcc, recall)
+
+# A tidy format of the results
+pred_results %&gt;% cls_metrics(truth = class, estimate = .pred_class)
+```
+
+```
+## # A tibble: 3 x 3
+##   .metric  .estimator .estimate
+##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
+## 1 accuracy binary        0.56  
+## 2 mcc      binary       -0.0444
+## 3 recall   binary        0.931
+```
+
+
+---
+# broom methods
+
+&lt;span class="pkg"&gt;parsnip&lt;/span&gt; and &lt;span class="pkg"&gt;workflow&lt;/span&gt; fits have corresponding &lt;span class="pkg"&gt;broom&lt;/span&gt; tidiers: 
+
+
+```r
+glance(glm_fit)
+```
+
+```
+## # A tibble: 1 x 8
+##   null.deviance df.null logLik   AIC   BIC deviance df.residual  nobs
+##           &lt;dbl&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt; &lt;int&gt;
+## 1         1971.    1513  -947. 1899. 1915.    1893.        1511  1514
+```
+
+```r
+tidy(glm_fit)
+```
+
+```
+## # A tibble: 3 x 5
+##   term            estimate std.error statistic  p.value
+##   &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)    -1.24      0.118       -10.5  5.55e-26
+## 2 area_ch_1       0.000542  0.000249      2.17 2.97e- 2
+## 3 avg_inten_ch_4  0.00321   0.000383      8.40 4.52e-17
+```
+
+---
+# broom methods
+
+For `augment()` we require the data to predict and attach
+
+
+```r
+augment(glm_fit, shuffled_data %&gt;% select(area_ch_1, avg_inten_ch_4, class))
+```
+
+```
+## # A tibble: 50 x 6
+##   area_ch_1 avg_inten_ch_4 class .pred_class .pred_PS .pred_WS
+##       &lt;int&gt;          &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;          &lt;dbl&gt;    &lt;dbl&gt;
+## 1       170           84.6 PS    PS             0.706    0.294
+## 2       213          288.  WS    PS             0.549    0.451
+## 3       386          103.  PS    PS             0.668    0.332
+## 4       368           95.8 WS    PS             0.675    0.325
+## 5       349          105.  WS    PS             0.671    0.329
+## 6       203           91.5 PS    PS             0.697    0.303
+## # … with 44 more rows
+```
+
+---
+# Tools to write tidymodels code
+
+An Rstudio add-in can be used to pick models: `parsnip_addin()`.
+
+The &lt;span class="pkg"&gt;usethis&lt;/span&gt; package can write out models along with appropriate preprocessing and workflows. 
+
+
+---
+layout: false
+class: inverse, middle, center
+
+# Feature engineering
+
+---
+# What is feature engineering?
+
+First thing's first: what's a feature? 
+
+I tend to think of a feature as some representation of a predictor that will be used in a model. 
+
+Old-school features: 
+
+ * Interactions
+ * Polynomial expansions/splines
+ * PCA feature extraction
+ 
+"Feature engineering" sounds pretty cool, but let's take a minute to talk about _preprocessing_ data.  
+
+---
+# Two types of preprocessing
+
+&lt;img src="images/fe_venn.svg" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+# Two types of preprocessing
+
+&lt;img src="images/fe_venn_info.svg" width="75%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# General definitions
+
+* _Data preprocessing_ are the steps that you take to make your model successful. 
+
+* _Feature engineering_ are what you do to the original predictors to make the model do the least work to predict the outcome as well as possible. 
+
+We'll demonstrate the &lt;span class="pkg"&gt;recipes&lt;/span&gt; package for all of your data needs. 
+
+---
+# Recipes prepare your data for modeling
+
+The package is extensible framework for pipeable sequences of feature engineering steps provides preprocessing tools to be applied to data. 
+    
+Statistical parameters for the steps can be estimated from an initial data set and then applied to other data sets. 
+    
+The resulting processed output can then be used as inputs for statistical or machine learning models.
+
+---
+# A first recipe
+
+
+```r
+cell_rec &lt;- 
+  recipe(class ~ ., data = cell_train)
+
+# If ncol(data) is large, you can use
+# recipe(data = cell_train)
+```
+
+Based on the formula, the function assigns columns to roles of "outcome" or "predictor"
+
+
+```r
+summary(cell_rec)
+```
+
+```
+## # A tibble: 57 x 4
+##   variable       type    role      source  
+##   &lt;chr&gt;          &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;   
+## 1 angle_ch_1     numeric predictor original
+## 2 area_ch_1      numeric predictor original
+## 3 avg_inten_ch_1 numeric predictor original
+## 4 avg_inten_ch_2 numeric predictor original
+## 5 avg_inten_ch_3 numeric predictor original
+## 6 avg_inten_ch_4 numeric predictor original
+## # … with 51 more rows
+```
+
+
+---
+# A first recipe - transformations
+
+
+```r
+cell_rec &lt;- 
+  recipe(class ~ ., data = cell_train) %&gt;% 
+* step_YeoJohnson(all_numeric_predictors())
+```
+
+When possible, this step estimates a transformation for each predictor to resolve skewness. 
+
+---
+# Resolving multicollinearity via filtering
+
+
+```r
+cell_rec &lt;- 
+  recipe(class ~ ., data = cell_train) %&gt;% 
+  step_YeoJohnson(all_numeric_predictors()) %&gt;% 
+* step_corr(all_numeric_predictors(), threshold = 0.50 )
+```
+
+Since there is significant correlation between predictors, _one way_ to resolve this is to filter out offending pairs of highly-correlated predictors. 
+
+
+---
+# Resolving multicollinearity via dim reduction
+
+
+```r
+cell_rec &lt;- 
+  recipe(class ~ ., data = cell_train) %&gt;% 
+  step_YeoJohnson(all_numeric_predictors()) %&gt;% 
+* step_normalize(all_numeric_predictors()) %&gt;%
+* step_pca(all_numeric_predictors(), num_comp = 20)
+```
+
+**...or** we could use principal component analysis for feature extraction. 
+
+First, we center and scale the data though (since PCA is affected by the units)
+
+---
+# Resolving multicollinearity via dim reduction
+
+
+```r
+pls_rec &lt;- 
+  recipe(class ~ ., data = cell_train) %&gt;% 
+  step_YeoJohnson(all_numeric_predictors()) %&gt;% 
+  step_normalize(all_numeric_predictors()) %&gt;%
+* step_pls(all_numeric_predictors(), outcome = "class", num_comp = 20)
+```
+
+**...or** supervised feature extraction. 
+
+---
+# Resolving multicollinearity via dim reduction
+
+
+```r
+cell_rec &lt;- 
+  recipe(class ~ ., data = cell_train) %&gt;% 
+  step_YeoJohnson(all_numeric_predictors()) %&gt;% 
+  step_normalize(all_numeric_predictors()) %&gt;%
+* step_umap(all_numeric_predictors(), outcome = class, num_comp = 5)
+```
+
+**...or** get really fancy (uses the &lt;span class="pkg"&gt;embed&lt;/span&gt; package)
+
+
+---
+# Re-balancing classes
+
+
+```r
+cell_rec &lt;- 
+  recipe(class ~ ., data = cell_train) %&gt;% 
+  step_YeoJohnson(all_numeric_predictors()) %&gt;% 
+* step_smote(class)
+```
+
+64.4% of our data are poorly segmented. This will re-balance the classes. 
+
+A controversial approach that changes the distribution of the predicted class probabilities. Uses the &lt;span class="pkg"&gt;themis&lt;/span&gt; package. 
+
+Note that this step is _not_ executed when predicting new samples (e.g. used [only during model building](https://recipes.tidymodels.org/articles/Skipping.html)). 
+
+---
+# Recipes are estimated
+
+_Every_ preprocessing step in a recipe that involved calculations uses the _training set_. For example: 
+
+ * Levels of a factor
+ * Determination of zero-variance
+ * Normalization
+ * Feature extraction
+ 
+and so on. 
+
+Once a a recipe is added to a workflow, this occurs when `fit()` is called. 
+
+
+---
+# Recipes follow this strategy
+
+&lt;img src="images/the-model.svg" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+# Adding recipes to workflows
+
+Let's stick to a linear model for now and add a recipe (instead of a formula):
+
+.code70[
+
+
+```r
+cell_wflow &lt;- 
+  workflow() %&gt;% 
+  add_model(spec_glm) %&gt;% 
+  add_recipe(pls_rec)  
+
+cell_wflow
+```
+
+```
+## ══ Workflow ═════════════════════════════════════════════════════════════════════════
+## Preprocessor: Recipe
+## Model: logistic_reg()
+## 
+## ── Preprocessor ─────────────────────────────────────────────────────────────────────
+## 3 Recipe Steps
+## 
+## • step_YeoJohnson()
+## • step_normalize()
+## • step_pls()
+## 
+## ── Model ────────────────────────────────────────────────────────────────────────────
+## Logistic Regression Model Specification (classification)
+## 
+## Computational engine: glm
+```
+
+]
+
+---
+# Estimate via `fit()`
+
+Let's stick to a linear model for now and add a recipe (instead of a formula):
+
+.code70[
+
+
+```r
+cell_fit &lt;- cell_wflow %&gt;% fit(cell_train)
+cell_fit
+```
+
+```
+## ══ Workflow [trained] ═══════════════════════════════════════════════════════════════
+## Preprocessor: Recipe
+## Model: logistic_reg()
+## 
+## ── Preprocessor ─────────────────────────────────────────────────────────────────────
+## 3 Recipe Steps
+## 
+## • step_YeoJohnson()
+## • step_normalize()
+## • step_pls()
+## 
+## ── Model ────────────────────────────────────────────────────────────────────────────
+## 
+## Call:  stats::glm(formula = ..y ~ ., family = stats::binomial, data = data)
+## 
+## Coefficients:
+## (Intercept)        PLS01        PLS02        PLS03        PLS04        PLS05  
+##     -1.1125       0.5761       0.2529       0.1641       0.1225       0.4280  
+##       PLS06        PLS07        PLS08        PLS09        PLS10        PLS11  
+##     -0.2502      -0.1776      -0.4128       0.3219       0.3247      -0.5661  
+##       PLS12        PLS13        PLS14        PLS15        PLS16        PLS17  
+##      0.4001      -0.1085      -0.0956       0.1190      -0.1597      -0.2318  
+##       PLS18        PLS19        PLS20  
+##      0.1481       0.0942      -0.2109  
+## 
+## Degrees of Freedom: 1513 Total (i.e. Null);  1493 Residual
+## Null Deviance:	    1970 
+## Residual Deviance: 1160 	AIC: 1210
+```
+
+]
+
+---
+# Prediction
+
+When `predict()` is called, the fitted recipe is applied to the new data before it is predicted by the model:
+
+
+```r
+predict(cell_fit, cell_test)
+```
+
+```
+## # A tibble: 505 x 1
+##   .pred_class
+##   &lt;fct&gt;      
+## 1 WS         
+## 2 WS         
+## 3 WS         
+## 4 PS         
+## 5 PS         
+## 6 WS         
+## # … with 499 more rows
+```
+
+You don't need to do anything else
+
+
+---
+# Tidying a recipe
+
+.pull-left[
+`tidy(recipe)` gives a summary of the steps:
+
+
+```r
+tidy(cell_rec)
+```
+
+```
+## # A tibble: 3 x 6
+##   number operation type       trained skip  id              
+##    &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;      &lt;lgl&gt;   &lt;lgl&gt; &lt;chr&gt;           
+## 1      1 step      YeoJohnson FALSE   FALSE YeoJohnson_0WJ2Q
+## 2      2 step      normalize  FALSE   FALSE normalize_0bFi9 
+## 3      3 step      pca        FALSE   FALSE pca_ILT44
+```
+
+After fitting the recipe, you might want access to the statistics from each step. We can pull the fitted recipe from the workflow and choose which step to tidy by number or `id`
+]
+.pull-right[
+
+
+
+```r
+cell_fit %&gt;% 
+  pull_workflow_prepped_recipe() %&gt;% 
+  tidy(number = 1) # For YJ trans
+```
+
+```
+## # A tibble: 52 x 3
+##   terms           value id              
+##   &lt;chr&gt;           &lt;dbl&gt; &lt;chr&gt;           
+## 1 angle_ch_1      0.781 YeoJohnson_VYicJ
+## 2 area_ch_1      -0.952 YeoJohnson_VYicJ
+## 3 avg_inten_ch_1 -0.324 YeoJohnson_VYicJ
+## 4 avg_inten_ch_2  0.444 YeoJohnson_VYicJ
+## 5 avg_inten_ch_3  0.205 YeoJohnson_VYicJ
+## 6 avg_inten_ch_4  0.210 YeoJohnson_VYicJ
+## # … with 46 more rows
+```
+]
+
+
+---
+
+# Resampling methods
+
+.pull-left[
+These are additional data splitting schemes that are applied to the _training_ set and are used for **estimating model performance**. 
+
+They attempt to simulate slightly different versions of the training set. These versions of the original are split into two model subsets:
+
+* The _analysis set_ is used to fit the model (analogous to the training set). 
+* Performance is determined using the _assessment set_. 
+
+This process is repeated many times. 
+
+]
+
+.pull-right[
+
+&lt;img src="images/resampling.svg" width="120%" style="display: block; margin: auto;" /&gt;
+
+]
+
+There are [different flavors of resampling](https://bookdown.org/max/FES/resampling.html) but we will focus on one method in these notes.
+
+---
+
+# The model workflow and resampling
+
+All resampling methods repeat this process multiple times: 
+
+
+&lt;img src="images/diagram-resampling.svg" width="65%" style="display: block; margin: auto;" /&gt;
+
+
+The final resampling estimate is the average of all of the estimated metrics (e.g. accuracy, etc).
+
+---
+
+# V-Fold cross-validation
+
+.pull-left[
+
+Here, we randomly split the training data into _V_ distinct blocks of roughly equal size (AKA the "folds").
+
+.font80[
+
+* We leave out the first block of analysis data and fit a model.
+* This model is used to predict the held-out block of assessment data.
+* We continue this process until we've predicted all _V_ assessment blocks
+
+The final performance is based on the hold-out predictions by _averaging_ the statistics from the _V_ blocks. 
+
+]
+
+]
+
+.pull-right[
+
+_V_ is usually taken to be 5 or 10 and leave-one-out cross-validation has each sample as a block. 
+
+**Repeated CV** can be used when training set sizes are small. 5 repeats of 10-fold CV averages for 50 sets of metrics.
+
+]
+
+---
+
+#  3-Fold cross-validation with _n_ = 30
+
+Randomly assign each sample to one of three folds
+
+&lt;img src="images/three-CV.svg" width="55%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+#  3-Fold cross-validation with _n_ = 30
+
+&lt;img src="images/three-CV-iter.svg" width="65%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Resampling results
+
+The goal of resampling is to produce a single estimate of performance for a model. 
+
+Even though we end up estimating _V_ models (for _V_ -fold CV), these models are discarded after we have our performance estimate. 
+
+Resampling is basically an empirical _simulation system_ used to understand how well the model would work on _new data_.
+
+---
+
+# Cross-validating using rsample
+
+rsample has a number of resampling functions built in. One is `vfold_cv()`, for performing V-Fold cross-validation like we've been discussing.
+
+
+```r
+set.seed(2453)
+
+cv_splits &lt;- vfold_cv(cell_train) #10-fold is default
+
+cv_splits
+```
+
+```
+## #  10-fold cross-validation 
+## # A tibble: 10 x 2
+##   splits             id    
+##   &lt;list&gt;             &lt;chr&gt; 
+## 1 &lt;split [1362/152]&gt; Fold01
+## 2 &lt;split [1362/152]&gt; Fold02
+## 3 &lt;split [1362/152]&gt; Fold03
+## 4 &lt;split [1362/152]&gt; Fold04
+## 5 &lt;split [1363/151]&gt; Fold05
+## 6 &lt;split [1363/151]&gt; Fold06
+## # … with 4 more rows
+```
+
+---
+
+# Cross-validating Using rsample 
+
+- Each individual split object is similar to the `initial_split()` example.
+
+- Use `analysis()` to extract the resample's data used for the fitting process.
+
+- Use `assessment()` to extract the resample's data used for the performance process.
+
+.pull-left[
+
+
+```r
+cv_splits$splits[[1]]
+```
+
+```
+## &lt;Analysis/Assess/Total&gt;
+## &lt;1362/152/1514&gt;
+```
+
+]
+
+.pull-right[
+
+
+```r
+cv_splits$splits[[1]] %&gt;% 
+  analysis() %&gt;%
+  dim()
+```
+
+```
+## [1] 1362   57
+```
+
+
+```r
+cv_splits$splits[[1]] %&gt;% 
+  assessment() %&gt;%
+  dim()
+```
+
+```
+## [1] 152  57
+```
+
+]
+
+---
+# Generating the resampling statistics
+
+Let's use the previous workflow from the last section (`cell_wflow`). 
+
+In tidymodels, there is a function called `fit_resamples()` that will do all of this for us:
+
+
+```r
+ctrl &lt;- control_resamples(save_pred = TRUE)
+
+cell_res &lt;-
+  cell_wflow %&gt;% 
+  fit_resamples(resamples = cv_splits, control = ctrl)
+cell_res
+```
+
+```
+## # Resampling results
+## # 10-fold cross-validation 
+## # A tibble: 10 x 5
+##   splits             id     .metrics         .notes           .predictions      
+##   &lt;list&gt;             &lt;chr&gt;  &lt;list&gt;           &lt;list&gt;           &lt;list&gt;            
+## 1 &lt;split [1362/152]&gt; Fold01 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 1]&gt; &lt;tibble [152 × 6]&gt;
+## 2 &lt;split [1362/152]&gt; Fold02 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 1]&gt; &lt;tibble [152 × 6]&gt;
+## 3 &lt;split [1362/152]&gt; Fold03 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 1]&gt; &lt;tibble [152 × 6]&gt;
+## 4 &lt;split [1362/152]&gt; Fold04 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 1]&gt; &lt;tibble [152 × 6]&gt;
+## 5 &lt;split [1363/151]&gt; Fold05 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 1]&gt; &lt;tibble [151 × 6]&gt;
+## 6 &lt;split [1363/151]&gt; Fold06 &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 1]&gt; &lt;tibble [151 × 6]&gt;
+## # … with 4 more rows
+```
+
+
+---
+# Getting the results
+
+To obtain the resampling estimates of performance: 
+
+
+```r
+collect_metrics(cell_res)
+```
+
+```
+## # A tibble: 2 x 6
+##   .metric  .estimator  mean     n std_err .config             
+##   &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+## 1 accuracy binary     0.805    10 0.0113  Preprocessor1_Model1
+## 2 roc_auc  binary     0.884    10 0.00803 Preprocessor1_Model1
+```
+
+To get the holdout predictions: 
+
+
+```r
+cell_pred &lt;- collect_predictions(cell_res)
+cell_pred %&gt;% slice(1:4)
+```
+
+```
+## # A tibble: 4 x 7
+##   id     .pred_PS .pred_WS  .row .pred_class class .config             
+##   &lt;chr&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt; &lt;fct&gt;       &lt;fct&gt; &lt;chr&gt;               
+## 1 Fold01    0.767    0.233     4 PS          PS    Preprocessor1_Model1
+## 2 Fold01    0.819    0.181    23 PS          PS    Preprocessor1_Model1
+## 3 Fold01    0.769    0.231    30 PS          PS    Preprocessor1_Model1
+## 4 Fold01    0.775    0.225    31 PS          PS    Preprocessor1_Model1
+```
+
+
+---
+# Plot _approximate_ ROC curve
+
+.pull-left[
+
+
+```r
+cell_pred %&gt;% 
+  roc_curve(truth = class, .pred_PS) %&gt;% 
+  autoplot()
+```
+
+```r
+# This is an approximate curve:
+cell_pred %&gt;% 
+  roc_auc(truth = class, .pred_PS)
+```
+
+```
+## # A tibble: 1 x 3
+##   .metric .estimator .estimate
+##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+## 1 roc_auc binary         0.883
+```
+
+```r
+# vs resampling estimate
+show_best(cell_res, metric = "roc_auc")
+```
+
+```
+## # A tibble: 1 x 6
+##   .metric .estimator  mean     n std_err .config             
+##   &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               
+## 1 roc_auc binary     0.884    10 0.00803 Preprocessor1_Model1
+```
+
+]
+.pull-right[
+
+&lt;img src="images/introduction-unnamed-chunk-31-1.svg" width="90%" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+
+---
+# Some notes
+
+* These models fits are independent of one another. [Parallel processing](https://www.tmwr.org/resampling.html#parallel) can be used to significantly speed up the training process. 
+* The individual models can [be saved](https://www.tmwr.org/resampling.html#extract) so you can look at variation in the model parameters or recipes steps. 
+* If you are interested in a [validation set](https://www.tmwr.org/resampling.html#validation), tidymodels considers that a single resample of the data. Everything else in this chapter works the same. 
+
+---
+# Next steps
+
+There is a lot more in tidymodels. Consider checking out:
+
+- [model tuning](https://www.tmwr.org/tuning.html)
+
+- [comparing models using Bayesian analysis](https://www.tmwr.org/compare.html)
+
+- [emsembles using &lt;span class="pkg"&gt;stacks&lt;/span&gt;](https://stacks.tidymodels.org/articles/basics.html)
+
+- [creating large number of models](https://www.tmwr.org/workflow-sets.html)
+
+- [analysis of text data](https://smltar.com/)
+
+- [explaining models](https://modeloriented.github.io/DALEXtra/reference/explain_tidymodels.html)
+
+---
+# Thanks
+
+Thanks for the invitation to speak! 
+
+Special thanks to the tidymodels team (Davis Vaughan, Julia Silge, and Hanna Frick) as well as Alison Hill. 
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "<div class=\"progress-bar-container\">\n  <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">\n  </div>\n</div>\n",
+"highlightStyle": "rainbow",
+"highlightLanguage": ["r", "css", "yaml"],
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

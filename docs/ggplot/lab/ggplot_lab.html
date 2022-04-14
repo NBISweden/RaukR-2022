@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Roy Francis" />
+
+
+<title>ggplot2: Beyond the Basics</title>
+
+<script src="ggplot_lab_files/header-attrs-2.8/header-attrs.js"></script>
+<script src="ggplot_lab_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="ggplot_lab_files/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
+<script src="ggplot_lab_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="ggplot_lab_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="ggplot_lab_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="ggplot_lab_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="ggplot_lab_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="ggplot_lab_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="ggplot_lab_files/navigation-1.1/tabsets.js"></script>
+<link href="ggplot_lab_files/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="ggplot_lab_files/highlightjs-9.12.0/highlight.js"></script>
+<link href="ggplot_lab_files/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="ggplot_lab_files/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="ggplot_lab_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="ggplot_lab_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link id="font-awesome-1-attachment" rel="attachment" href="ggplot_lab_files/font-awesome-5.1.0/fonts/fontawesome-webfont.ttf"/>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="assets/lab.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">ggplot2: Beyond the Basics</h1>
+<h3 class="subtitle">RaukR 2021 • Advanced R for Bioinformatics</h3>
+<h4 class="author">Roy Francis</h4>
+
+</div>
+
+
+<!-- rmd lab header -->
+<p><img src="assets/logo.svg" alt="logo_raukr" class="trlogo"></p>
+<!-- ------------ Only edit title, subtitle & author above this ------------ -->
+<br>
+<div class="abstract spaced">
+<p>This are practical exercises to compliment the lecture on <strong>ggplot2: Beyond the Basics</strong>. Attempt to solve the questions yourselves. If not, click the button to reveal the solution. There are likely multiple ways to solve the question. Answers mostly use functions from <code>ggplot2</code>, <code>dplyr</code> and <code>tidyr</code>. Additional packages are used occasionally.</p>
+</div>
+<p><br></p>
+<pre class="r"><code>library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(GGally)
+library(ggrepel)
+library(ggnewscale)
+library(patchwork)</code></pre>
+<div id="penguins" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Penguins</h1>
+<div id="install-data" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Install data</h2>
+<p>Install the penguins data set from <a href="https://allisonhorst.github.io/palmerpenguins/">palmerpenguins</a>.</p>
+<pre class="r"><code>install.packages(&quot;palmerpenguins&quot;)</code></pre>
+<p><img src="https://allisonhorst.github.io/palmerpenguins/reference/figures/lter_penguins.png" /></p>
+<pre class="r"><code>library(palmerpenguins)
+data(penguins)</code></pre>
+<p>Inspect the data set and make sure that the data types are correct and that you understand what the different variables are.</p>
+<pre class="r"><code>head(penguins)
+str(penguins)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["species"],"name":[1],"type":["fct"],"align":["left"]},{"label":["island"],"name":[2],"type":["fct"],"align":["left"]},{"label":["bill_length_mm"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["bill_depth_mm"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["flipper_length_mm"],"name":[5],"type":["int"],"align":["right"]},{"label":["body_mass_g"],"name":[6],"type":["int"],"align":["right"]},{"label":["sex"],"name":[7],"type":["fct"],"align":["left"]},{"label":["year"],"name":[8],"type":["int"],"align":["right"]}],"data":[{"1":"Adelie","2":"Torgersen","3":"39.1","4":"18.7","5":"181","6":"3750","7":"male","8":"2007"},{"1":"Adelie","2":"Torgersen","3":"39.5","4":"17.4","5":"186","6":"3800","7":"female","8":"2007"},{"1":"Adelie","2":"Torgersen","3":"40.3","4":"18.0","5":"195","6":"3250","7":"female","8":"2007"},{"1":"Adelie","2":"Torgersen","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","8":"2007"},{"1":"Adelie","2":"Torgersen","3":"36.7","4":"19.3","5":"193","6":"3450","7":"female","8":"2007"},{"1":"Adelie","2":"Torgersen","3":"39.3","4":"20.6","5":"190","6":"3650","7":"male","8":"2007"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre><code>## tibble [344 × 8] (S3: tbl_df/tbl/data.frame)
+##  $ species          : Factor w/ 3 levels &quot;Adelie&quot;,&quot;Chinstrap&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ island           : Factor w/ 3 levels &quot;Biscoe&quot;,&quot;Dream&quot;,..: 3 3 3 3 3 3 3 3 3 3 ...
+##  $ bill_length_mm   : num [1:344] 39.1 39.5 40.3 NA 36.7 39.3 38.9 39.2 34.1 42 ...
+##  $ bill_depth_mm    : num [1:344] 18.7 17.4 18 NA 19.3 20.6 17.8 19.6 18.1 20.2 ...
+##  $ flipper_length_mm: int [1:344] 181 186 195 NA 193 190 181 195 193 190 ...
+##  $ body_mass_g      : int [1:344] 3750 3800 3250 NA 3450 3650 3625 4675 3475 4250 ...
+##  $ sex              : Factor w/ 2 levels &quot;female&quot;,&quot;male&quot;: 2 1 1 NA 1 2 1 2 NA NA ...
+##  $ year             : int [1:344] 2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...</code></pre>
+</div>
+<div id="body-mass-and-species" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Body mass and species</h2>
+<p><i class='fa fa-clipboard-list'></i> Is it possible to differentiate the penguin species based on body mass alone? What kind of plot would you use?</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022295456" aria-expanded="false" aria-controls="acc2021061022295456">
+</button>
+</p>
+<div id="acc2021061022295456" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>ggplot(penguins,aes(species,body_mass_g,col=species))+
+  geom_violin()</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-51-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+</div>
+<div id="all-measurements-and-species" class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> All measurements and species</h2>
+<p><i class='fa fa-clipboard-list'></i> Are there any single continuous variable in this data set that can differentiate species? How would you visually explore this? What kind of plot would you use?</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022290026" aria-expanded="false" aria-controls="acc2021061022290026">
+</button>
+</p>
+<div id="acc2021061022290026" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>penguins %&gt;% 
+  tidyr::pivot_longer(where(is.numeric),names_to=&quot;metric&quot;,values_to=&quot;value&quot;) %&gt;%
+  ggplot(aes(species,value,col=species))+
+    geom_violin()+
+    facet_wrap(~metric,scales=&quot;free&quot;)</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-52-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+</div>
+<div id="bivariate-scatterplots" class="section level2" number="1.4">
+<h2><span class="header-section-number">1.4</span> Bivariate scatterplots</h2>
+<p><i class='fa fa-clipboard-list'></i> Perhaps it’s easier to differentiate species based on two variables. Create pairwise scatterplots between all numeric variables and colour by species.<br />
+<i class='fa fa-lightbulb'></i> This can be done using <code>ggplot2</code> alone, but in this example, we use a ggplot2 extension package <a href="https://ggobi.github.io/ggally/"><code>GGally</code></a>. This is similar to the base R function <code>pairs()</code>.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022297371" aria-expanded="false" aria-controls="acc2021061022297371">
+</button>
+</p>
+<div id="acc2021061022297371" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>select(penguins,species,bill_length_mm,bill_depth_mm,flipper_length_mm,body_mass_g) %&gt;%
+GGally::ggpairs(mapping = ggplot2::aes(color=species))</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-53-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-comments'></i> Which two variables do you think best differentiates the species?</p>
+</div>
+<div id="bill-length-bill-depth" class="section level2" number="1.5">
+<h2><span class="header-section-number">1.5</span> Bill length &amp; bill depth</h2>
+<p><i class='fa fa-clipboard-list'></i> Create a scatterplot of bill length on x axis and bill depth on y axis.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022328993" aria-expanded="false" aria-controls="acc2021061022328993">
+</button>
+</p>
+<div id="acc2021061022328993" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>p &lt;- ggplot(penguins,aes(bill_length_mm,bill_depth_mm))+
+  geom_point()
+p</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-54-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Draw a regression line to denote the relationship between bill length and bill depth.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022324550" aria-expanded="false" aria-controls="acc2021061022324550">
+</button>
+</p>
+<div id="acc2021061022324550" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>p+geom_smooth(method=&quot;lm&quot;)</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-55-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-comments'></i> What is the relationship between these two variables?</p>
+<p><i class='fa fa-clipboard-list'></i> Recreate the previous figure and colour the points by species.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022323263" aria-expanded="false" aria-controls="acc2021061022323263">
+</button>
+</p>
+<div id="acc2021061022323263" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>p &lt;- ggplot(penguins,aes(bill_length_mm,bill_depth_mm,col=species))+
+  geom_point()+
+  geom_smooth(method=&quot;lm&quot;)
+p</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-56-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-comments'></i> What is the relationship between these two variables now?</p>
+<p><i class='fa fa-clipboard-list'></i> Change the colours of the categories to these three custom colours: <code>c("#E69F00","#56B4E9","#009E73")</code>. Change the legend title from “species” to “Species” and in bold font face.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022335591" aria-expanded="false" aria-controls="acc2021061022335591">
+</button>
+</p>
+<div id="acc2021061022335591" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>p &lt;- p+scale_colour_manual(name=&quot;Species&quot;,values=c(&quot;#E69F00&quot;,&quot;#56B4E9&quot;,&quot;#009E73&quot;))+
+  theme(legend.title = element_text(face=&quot;bold&quot;))
+p</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-57-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Position the legend within the plot area as shown.</p>
+<p><img src="ggplot_lab_files/figure-html/unnamed-chunk-58-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022338216" aria-expanded="false" aria-controls="acc2021061022338216">
+</button>
+</p>
+<div id="acc2021061022338216" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>p &lt;- p+theme(legend.position=c(0.90,0.18))
+# legend justification can be set similarly
+# legend.justification=c(0,1)</code></pre>
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Disable the legend, but keep the point colours.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022331434" aria-expanded="false" aria-controls="acc2021061022331434">
+</button>
+</p>
+<div id="acc2021061022331434" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>p+theme(legend.position=&quot;none&quot;)</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-60-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+</div>
+<div id="geographical-distribution" class="section level2" number="1.6">
+<h2><span class="header-section-number">1.6</span> Geographical distribution</h2>
+<p><i class='fa fa-clipboard-list'></i> What is the geographical distribution of the species? Create a plot to illustrate this.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022337625" aria-expanded="false" aria-controls="acc2021061022337625">
+</button>
+</p>
+<div id="acc2021061022337625" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>ggplot(penguins,aes(species,island,color=species))+
+  geom_jitter()</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-61-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+</div>
+</div>
+<div id="gapminder" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Gapminder</h1>
+<p>Install and attach the gapminder package.</p>
+<pre class="r"><code>library(gapminder)
+g &lt;- gapminder</code></pre>
+<p>Inspect the data set and make sure the data types are correct and that you understand what these variables are.</p>
+<pre class="r"><code>head(g)
+str(g)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["country"],"name":[1],"type":["fct"],"align":["left"]},{"label":["continent"],"name":[2],"type":["fct"],"align":["left"]},{"label":["year"],"name":[3],"type":["int"],"align":["right"]},{"label":["lifeExp"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["pop"],"name":[5],"type":["int"],"align":["right"]},{"label":["gdpPercap"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"Afghanistan","2":"Asia","3":"1952","4":"28.801","5":"8425333","6":"779.4453"},{"1":"Afghanistan","2":"Asia","3":"1957","4":"30.332","5":"9240934","6":"820.8530"},{"1":"Afghanistan","2":"Asia","3":"1962","4":"31.997","5":"10267083","6":"853.1007"},{"1":"Afghanistan","2":"Asia","3":"1967","4":"34.020","5":"11537966","6":"836.1971"},{"1":"Afghanistan","2":"Asia","3":"1972","4":"36.088","5":"13079460","6":"739.9811"},{"1":"Afghanistan","2":"Asia","3":"1977","4":"38.438","5":"14880372","6":"786.1134"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre><code>## tibble [1,704 × 6] (S3: tbl_df/tbl/data.frame)
+##  $ country  : Factor w/ 142 levels &quot;Afghanistan&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ continent: Factor w/ 5 levels &quot;Africa&quot;,&quot;Americas&quot;,..: 3 3 3 3 3 3 3 3 3 3 ...
+##  $ year     : int [1:1704] 1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 ...
+##  $ lifeExp  : num [1:1704] 28.8 30.3 32 34 36.1 ...
+##  $ pop      : int [1:1704] 8425333 9240934 10267083 11537966 13079460 14880372 12881816 13867957 16317921 22227415 ...
+##  $ gdpPercap: num [1:1704] 779 821 853 836 740 ...</code></pre>
+<p><i class='fa fa-clipboard-list'></i> How has the global life expectancy changed over time? What trend do you observe? Create a scatterplot of life expectancy over time and add a trend line.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022340234" aria-expanded="false" aria-controls="acc2021061022340234">
+</button>
+</p>
+<div id="acc2021061022340234" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>ggplot(g,aes(year,lifeExp))+
+  geom_point()+
+  geom_smooth(method=&quot;lm&quot;)</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-64-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Does the life expectancy trend you previously identified, differ across continents?</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022343355" aria-expanded="false" aria-controls="acc2021061022343355">
+</button>
+</p>
+<div id="acc2021061022343355" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>ggplot(g,aes(year,lifeExp,col=continent))+
+  geom_point()+
+  geom_smooth(method=&quot;lm&quot;)</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-65-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Which continent has the highest variation in life expectancy in 2007?</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022348956" aria-expanded="false" aria-controls="acc2021061022348956">
+</button>
+</p>
+<div id="acc2021061022348956" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>g %&gt;%
+  filter(year==&quot;2007&quot;) %&gt;%
+  group_by(continent) %&gt;%
+  summarise(variance=var(lifeExp),sd=sd(lifeExp),diff=max(lifeExp)-min(lifeExp))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["continent"],"name":[1],"type":["fct"],"align":["left"]},{"label":["variance"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["diff"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"Africa","2":"92.7519364","3":"9.6307807","4":"36.829"},{"1":"Americas","2":"19.7220159","3":"4.4409476","4":"19.737"},{"1":"Asia","2":"63.4209074","3":"7.9637245","4":"38.775"},{"1":"Europe","2":"8.8792835","3":"2.9798127","4":"9.980"},{"1":"Oceania","2":"0.5314805","3":"0.7290271","4":"1.031"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022347149" aria-expanded="false" aria-controls="acc2021061022347149">
+</button>
+</p>
+<div id="acc2021061022347149" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>filter(g,year==&quot;2007&quot;) %&gt;%
+  ggplot(aes(x=lifeExp))+
+  geom_histogram()+
+  facet_wrap(~continent)</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-67-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Which are the top 10 countries by GDP per capita in 2007? Create a horizontal barplot.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022358617" aria-expanded="false" aria-controls="acc2021061022358617">
+</button>
+</p>
+<div id="acc2021061022358617" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>g %&gt;%
+  filter(year==&quot;2007&quot;) %&gt;%
+  slice_max(order_by=gdpPercap,n=10) %&gt;%
+  ggplot(aes(x=reorder(country,gdpPercap),y=gdpPercap))+
+  geom_col()+
+  coord_flip()</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-68-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Create a plot of the top 5 countries in each continent with the highest life expectancy in 2007 facetted by continent.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022352946" aria-expanded="false" aria-controls="acc2021061022352946">
+</button>
+</p>
+<div id="acc2021061022352946" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>g %&gt;%
+  filter(year==&quot;2007&quot;) %&gt;%
+  group_by(continent) %&gt;%
+  slice_max(order_by=lifeExp,n=5) %&gt;%
+  ggplot(aes(x=reorder(country,-lifeExp),y=lifeExp))+
+  geom_col()+
+  facet_wrap(~continent,scales=&quot;free&quot;)+
+  theme(axis.text.x = element_text(angle=45,hjust=1))</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-69-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Create a plot of the top 10 countries in each continent with the highest change in life expectancy between 1952 and 2007, facetted by continent.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022352831" aria-expanded="false" aria-controls="acc2021061022352831">
+</button>
+</p>
+<div id="acc2021061022352831" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>g %&gt;%
+  filter(year %in% c(&quot;1952&quot;,&quot;2007&quot;)) %&gt;%
+  select(year,country,continent,lifeExp) %&gt;%
+  pivot_wider(names_from=&quot;year&quot;,values_from=&quot;lifeExp&quot;) %&gt;%
+  mutate(diff=`2007`-`1952`) %&gt;%
+  group_by(continent) %&gt;%
+  slice_max(order_by=diff,n=10) %&gt;%
+  ggplot(aes(x=reorder(country,diff)))+
+  geom_segment(aes(xend=reorder(country,diff),y=`1952`,yend=`2007`,group=country),size=0.7,colour=&quot;grey60&quot;)+
+  geom_point(aes(y=`1952`),colour=&quot;firebrick&quot;)+
+  geom_point(aes(y=`2007`),colour=&quot;steelblue&quot;)+
+  facet_wrap(~continent,scales=&quot;free_y&quot;)+
+  labs(x=NULL,y=&quot;Life expectancy (years)&quot;)+
+  coord_flip()+
+  theme(axis.text.x = element_text(angle=45,hjust=1))</code></pre>
+</div>
+</div>
+<div id="life-expectancy-gdp" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Life expectancy &amp; GDP</h2>
+<p><i class='fa fa-clipboard-list'></i> What is the relationship between life expectancy and GDP per capita?</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022359433" aria-expanded="false" aria-controls="acc2021061022359433">
+</button>
+</p>
+<div id="acc2021061022359433" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>ggplot(g,aes(gdpPercap,lifeExp))+
+  geom_point()+
+  scale_x_log10()+
+  geom_smooth(method=&quot;lm&quot;)</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-71-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Using the same plot, filter to keep only values for the year 2007, remove the regression line, colour the points by continent and map the size of points to population.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022362684" aria-expanded="false" aria-controls="acc2021061022362684">
+</button>
+</p>
+<div id="acc2021061022362684" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>filter(g,year==&quot;2007&quot;) %&gt;%
+ggplot(aes(gdpPercap,lifeExp,size=pop,col=continent))+
+  geom_point()+
+  scale_x_log10()</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-72-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Annotate/label the following countries on the plot: United states, China, Oman
+<i class='fa fa-lightbulb'></i> You can use for example; <code>geom_label()</code> or <code>annotate()</code>, but in this example, <code>ggrepel::geom_text_repel()</code> is used.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022364361" aria-expanded="false" aria-controls="acc2021061022364361">
+</button>
+</p>
+<div id="acc2021061022364361" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>f &lt;- filter(g,year==&quot;2007&quot;,country %in% c(&quot;China&quot;,&quot;Oman&quot;,&quot;United States&quot;))
+
+filter(g,year==&quot;2007&quot;) %&gt;%
+ggplot(aes(gdpPercap,lifeExp,col=continent))+
+  geom_point(aes(size=pop))+
+  ggrepel::geom_text_repel(data=f,aes(label=country),point.padding =15,min.segment.length=0)+
+  scale_x_log10()</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-73-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Colour the three highlighted countries (point and label) in new colours.
+<i class='fa fa-lightbulb'></i> This is an example that uses multiple colour scales using the <code>ggnewscale()</code> package.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022360061" aria-expanded="false" aria-controls="acc2021061022360061">
+</button>
+</p>
+<div id="acc2021061022360061" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>f &lt;- filter(g,year==&quot;2007&quot;,country %in% c(&quot;China&quot;,&quot;Oman&quot;,&quot;United States&quot;))
+
+filter(g,year==&quot;2007&quot;) %&gt;%
+ggplot(aes(gdpPercap,lifeExp))+
+  geom_point(aes(size=pop,col=continent))+
+  ggnewscale::new_scale_color()+
+  ggnewscale::new_scale_fill()+
+  geom_point(data=f,aes(col=country,size=pop))+
+  ggrepel::geom_text_repel(data=f,aes(label=country,col=country),point.padding =15,min.segment.length=0,fontface=&quot;bold&quot;)+
+  scale_x_log10()+
+  scale_colour_brewer(type=&quot;qual&quot;)</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-74-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Try to customise the plot for production similar to that shown below.</p>
+<p><img src="ggplot_lab_files/figure-html/unnamed-chunk-75-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p>The changes made are as follows:</p>
+<ul>
+<li>Legend titles, legend text and axes labels are improved</li>
+<li>X axis text is dollar formatted</li>
+<li>Custom colours are used for continents and highlighted points</li>
+<li>Theme is changed</li>
+<li>Panel border and minor gridlines are removed</li>
+<li>Axes tick marks are removed</li>
+<li>Text colour is lighter to decrease contrast</li>
+</ul>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022378657" aria-expanded="false" aria-controls="acc2021061022378657">
+</button>
+</p>
+<div id="acc2021061022378657" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>f &lt;- filter(g,year==&quot;2007&quot;,country %in% c(&quot;China&quot;,&quot;Oman&quot;,&quot;United States&quot;))
+
+filter(g,year==&quot;2007&quot;) %&gt;%
+ggplot(aes(gdpPercap,lifeExp))+
+  geom_point(aes(size=pop,col=continent))+
+  scale_size_continuous(name=&quot;Population&quot;,
+                        breaks=c(10^6,10*10^6,100*10^6,500*10^6,1000*10^6),
+                        labels=c(&quot;1M&quot;,&quot;10M&quot;,&quot;100M&quot;,&quot;500M&quot;,&quot;1B&quot;))+
+  scale_color_brewer(name=&quot;Continent&quot;,type=&quot;qual&quot;,palette=4)+
+  scale_x_log10(labels=scales::dollar_format(accuracy=1))+
+  ggnewscale::new_scale_color()+
+  ggnewscale::new_scale_fill()+
+  geom_point(data=f,aes(col=country,size=pop),show.legend=FALSE)+
+  ggrepel::geom_text_repel(data=f,aes(label=country,col=country),point.padding =15,min.segment.length=0,fontface=&quot;bold&quot;,show.legend=FALSE)+
+
+  scale_color_manual(values=rev(c(&quot;#56B4E9&quot;,&quot;#009E73&quot;,&quot;#F0E442&quot;,&quot;#0072B2&quot;,&quot;#D55E00&quot;)))+
+  labs(x=&quot;GDP per capita (Log scale)&quot;,y=&quot;Life expectancy (years)&quot;)+
+  theme_bw()+
+  theme(panel.border = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.ticks = element_blank(),
+        legend.title = element_text(colour=&quot;grey30&quot;),
+        axis.text = element_text(colour=&quot;grey30&quot;),
+        axis.title = element_text(colour=&quot;grey30&quot;),
+        legend.text = element_text(colour=&quot;grey30&quot;),
+        plot.title = element_text(colour=&quot;grey30&quot;),
+        strip.text = element_text(colour=&quot;grey30&quot;))</code></pre>
+</div>
+</div>
+</div>
+<div id="subplots-facetting" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Subplots &amp; facetting</h2>
+<p><i class='fa fa-clipboard-list'></i> Create a scatterplot of GDP per capita on the x axis and life expectancy on the y axis. Facet by continent.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022372743" aria-expanded="false" aria-controls="acc2021061022372743">
+</button>
+</p>
+<div id="acc2021061022372743" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>ggplot(g,aes(gdpPercap,lifeExp))+
+  geom_point()+
+  scale_x_log10()+
+  facet_wrap(~continent)</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-77-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Add the full data in the background (as light grey points) for reference.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022389621" aria-expanded="false" aria-controls="acc2021061022389621">
+</button>
+</p>
+<div id="acc2021061022389621" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>ggplot(g,aes(gdpPercap,lifeExp))+
+  geom_point(data=select(g,-continent),col=&quot;grey80&quot;)+
+  geom_point()+
+  scale_x_log10()+
+  facet_wrap(~continent)</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-78-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Highlight the countries China and Oman on this plot. Connect these points as a line.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022392306" aria-expanded="false" aria-controls="acc2021061022392306">
+</button>
+</p>
+<div id="acc2021061022392306" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>ggplot(g,aes(gdpPercap,lifeExp))+
+  geom_point(data=select(g,-continent),col=&quot;grey80&quot;)+
+  geom_point()+
+  geom_line(data=filter(g,country %in% c(&quot;China&quot;,&quot;Oman&quot;)),aes(col=country))+
+  scale_x_log10()+
+  facet_wrap(~continent)</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-79-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Customise the plot to production quality as shown below.</p>
+<p><img src="ggplot_lab_files/figure-html/unnamed-chunk-80-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p>The changes made as as follows:</p>
+<ul>
+<li>X axis uses dollar formatting</li>
+<li>Axes labels are improved</li>
+<li>Axes tick marks are removed</li>
+<li>Panel border and gridlines are removed</li>
+<li>Strip panels are simplified</li>
+<li>Legend position is moved to top right</li>
+<li>Legend title is removed</li>
+<li>Theme is changed</li>
+<li>Text colour is lighter to decrease contrast</li>
+</ul>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022413452" aria-expanded="false" aria-controls="acc2021061022413452">
+</button>
+</p>
+<div id="acc2021061022413452" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>ggplot(g,aes(gdpPercap,lifeExp))+
+  geom_point(data=select(g,-continent),col=&quot;grey80&quot;,alpha=0.4)+
+  geom_point(alpha=0.7)+
+  geom_line(data=filter(g,country %in% c(&quot;China&quot;,&quot;Oman&quot;)),aes(col=country))+
+  scale_x_log10(labels=scales::dollar_format(accuracy=1))+
+  facet_wrap(~continent)+
+  labs(x=&quot;GDP per capita (Log scale))&quot;,y=&quot;Life expectancy (years)&quot;,title=&quot;&quot;)+
+  theme_bw()+
+  theme(panel.border = element_blank(),
+        panel.grid = element_blank(),
+        strip.background = element_blank(),
+        axis.ticks = element_blank(),
+        legend.position=&quot;top&quot;,
+        legend.justification=&quot;right&quot;,
+        legend.title = element_blank(),
+        axis.text = element_text(colour=&quot;grey30&quot;),
+        axis.title = element_text(colour=&quot;grey30&quot;),
+        legend.text = element_text(colour=&quot;grey30&quot;),
+        plot.title = element_text(colour=&quot;grey30&quot;),
+        strip.text = element_text(colour=&quot;grey30&quot;))</code></pre>
+</div>
+</div>
+</div>
+<div id="africa-life-expectancy-heatmap" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Africa life expectancy heatmap</h2>
+<p><i class='fa fa-clipboard-list'></i> Create a heatmap of life expectancy over time for African countries.</p>
+<pre class="r"><code>g %&gt;%
+  filter(continent==&quot;Africa&quot;) %&gt;%
+  ggplot(aes(year,country,fill=lifeExp))+
+  geom_tile()</code></pre>
+<p><img src="ggplot_lab_files/figure-html/unnamed-chunk-82-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><i class='fa fa-clipboard-list'></i> Order the countries by similar trends.
+<i class='fa fa-lightbulb'></i> This is tricky. You need to cluster by rows. You can use the function <code>hclust()</code> to perform the clustering, but the data needs to be reformatted to be suitable as input.</p>
+<pre class="r"><code>g1 &lt;- filter(na.omit(g),continent==&quot;Africa&quot;)
+
+# clustering
+g2 &lt;- g1 %&gt;%
+      select(country,year,lifeExp) %&gt;%
+      pivot_wider(names_from=&quot;year&quot;,values_from=&quot;lifeExp&quot;) %&gt;%
+      tibble::column_to_rownames(&quot;country&quot;)
+cn &lt;- rownames(g2)[hclust(dist(g2))$order]
+
+g1 %&gt;%
+  mutate(country=factor(as.character(country),levels=cn)) %&gt;%
+  ggplot(aes(year,country,fill=lifeExp))+
+  geom_tile()</code></pre>
+<p><img src="ggplot_lab_files/figure-html/unnamed-chunk-83-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><i class='fa fa-clipboard-list'></i> Customise the heatmap to production quality as shown below:</p>
+<p><img src="ggplot_lab_files/figure-html/unnamed-chunk-84-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p>The following adjustments have been made:</p>
+<ul>
+<li>Custom colour palette is used</li>
+<li>Title and subtitle is added</li>
+<li>X axis shows all years for which the data is available</li>
+<li>X and Y axes labels are hidden and bold title is added</li>
+<li>The colour bar legend is slimmer, horizontal and added to the top right</li>
+<li>Plot margin is increased on the top</li>
+</ul>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022421315" aria-expanded="false" aria-controls="acc2021061022421315">
+</button>
+</p>
+<div id="acc2021061022421315" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>cols &lt;- viridisLite::viridis(n=10)
+
+g1 &lt;- filter(na.omit(g),continent==&quot;Africa&quot;)
+
+# clustering
+g2 &lt;- g1 %&gt;%
+      select(country,year,lifeExp) %&gt;%
+      pivot_wider(names_from=&quot;year&quot;,values_from=&quot;lifeExp&quot;) %&gt;%
+      tibble::column_to_rownames(&quot;country&quot;)
+cn &lt;- rownames(g2)[hclust(dist(g2))$order]
+
+g1 %&gt;%
+  mutate(country=factor(as.character(country),levels=cn)) %&gt;%
+  ggplot(aes(year,country,fill=lifeExp))+
+  geom_tile(colour=&quot;white&quot;)+
+  labs(x=NULL,y=NULL,title=&quot;Africa: Life expectancy&quot;,subtitle=&quot;1952 - 2007&quot;)+
+  scale_y_discrete(expand=c(0,0))+
+  scale_x_continuous(expand=c(0,0),breaks=unique(g1$year))+
+  scale_fill_gradientn(name=NULL,colors=cols,na.value=&quot;grey95&quot;,
+                       guide=guide_colourbar(barheight=.5,barwidth=10,
+                                             label.position=&quot;top&quot;))+
+  scale_y_discrete(breaks=cn)+
+  theme(legend.position=c(1,1.035),
+        legend.justification=&quot;right&quot;,
+        legend.direction=&quot;horizontal&quot;,
+        plot.title = element_text(face=&quot;bold&quot;),
+        plot.margin=unit(c(1.3,0.5,0.5,0.5),&quot;cm&quot;))</code></pre>
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> The fill colour is continuous. Change this to a categorical scale with 5 levels <code>c("L","LM","M","MH","H")</code>. And use the following fill colours: <code>c("#fc8d59","#fee090","#e0f3f8","#91bfdb","#4575b4")</code>.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022428902" aria-expanded="false" aria-controls="acc2021061022428902">
+</button>
+</p>
+<div id="acc2021061022428902" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>cols &lt;- c(&quot;#fc8d59&quot;,&quot;#fee090&quot;,&quot;#e0f3f8&quot;,&quot;#91bfdb&quot;,&quot;#4575b4&quot;)
+
+g1 &lt;- filter(na.omit(g),continent==&quot;Africa&quot;)
+
+# clustering
+g2 &lt;- g1 %&gt;%
+      select(country,year,lifeExp) %&gt;%
+      pivot_wider(names_from=&quot;year&quot;,values_from=&quot;lifeExp&quot;) %&gt;%
+      tibble::column_to_rownames(&quot;country&quot;)
+cn &lt;- rownames(g2)[hclust(dist(g2))$order]
+
+g1 %&gt;%
+  mutate(country=factor(as.character(country),levels=cn),
+         lifeExp=cut(lifeExp,breaks=5,labels=c(&quot;L&quot;,&quot;LM&quot;,&quot;M&quot;,&quot;MH&quot;,&quot;H&quot;))) %&gt;%
+  ggplot(aes(year,country,fill=lifeExp))+
+  geom_tile(colour=&quot;white&quot;)+
+  labs(x=NULL,y=NULL,title=&quot;Africa: Life expectancy&quot;,subtitle=&quot;1952 - 2007&quot;)+
+  scale_y_discrete(expand=c(0,0))+
+  scale_x_continuous(expand=c(0,0),breaks=unique(g1$year))+
+  scale_fill_manual(name=NULL,values=cols,na.value=&quot;grey95&quot;)+
+  scale_y_discrete(breaks=cn)+
+  theme(legend.position=c(1,1.035),
+        legend.justification=&quot;right&quot;,
+        legend.direction=&quot;horizontal&quot;,
+        plot.title = element_text(face=&quot;bold&quot;),
+        plot.margin=unit(c(1.3,0.5,0.5,0.5),&quot;cm&quot;),
+        legend.key.size=unit(0.4,&quot;cm&quot;))</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-86-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-comment'></i> Does this make it easier to interpret the information?</p>
+</div>
+<div id="population-and-gdp" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Population and GDP</h2>
+<p><i class='fa fa-clipboard-list'></i> Create a line graph showing mean population in each continent over time. Colour the lines by continent.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022426729" aria-expanded="false" aria-controls="acc2021061022426729">
+</button>
+</p>
+<div id="acc2021061022426729" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>g %&gt;%
+  group_by(year,continent) %&gt;%
+  summarise(mean=mean(pop)) %&gt;%
+  ggplot(aes(x=year,y=mean,col=continent))+
+  geom_line()</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-87-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> What is the relationship between GDP per capita and population?</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022422331" aria-expanded="false" aria-controls="acc2021061022422331">
+</button>
+</p>
+<div id="acc2021061022422331" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>g %&gt;%
+ggplot(aes(gdpPercap,pop))+
+  geom_point(show.legend=FALSE)+
+  geom_smooth(method=&quot;lm&quot;)+
+  scale_x_log10()+
+  scale_y_log10()</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-88-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> What happens if you look at this relationship by country? Colour by continent and save the plot to a variable <code>p1</code>.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022432030" aria-expanded="false" aria-controls="acc2021061022432030">
+</button>
+</p>
+<div id="acc2021061022432030" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>p1 &lt;- g %&gt;%
+ggplot(aes(gdpPercap,pop,group=country,col=continent))+
+  geom_point(show.legend=FALSE)+
+  geom_smooth(method=&quot;lm&quot;,show.legend=F)+
+  scale_x_log10()+
+  scale_y_log10()
+p1</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-89-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Calculate the correlation and slope of these relationships for each country. Use log10 scale for both metrics.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022445404" aria-expanded="false" aria-controls="acc2021061022445404">
+</button>
+</p>
+<div id="acc2021061022445404" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>g1 &lt;- g %&gt;%
+  mutate(gdpPercap=log10(gdpPercap),pop=log10(pop)) %&gt;%
+  group_by(continent,country) %&gt;%
+  summarise(cor=cor(gdpPercap,pop,method=&quot;spearman&quot;),
+            slope=as.numeric(lm(pop~gdpPercap,cur_data())$coefficients[2]))
+head(g1)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["continent"],"name":[1],"type":["fct"],"align":["left"]},{"label":["country"],"name":[2],"type":["fct"],"align":["left"]},{"label":["cor"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["slope"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"Africa","2":"Algeria","3":"0.8461538","4":"1.2492722"},{"1":"Africa","2":"Angola","3":"-0.4335664","4":"-0.4454687"},{"1":"Africa","2":"Benin","3":"0.8461538","4":"3.4017758"},{"1":"Africa","2":"Botswana","3":"1.0000000","4":"0.4912558"},{"1":"Africa","2":"Burkina Faso","3":"0.9650350","4":"1.6144709"},{"1":"Africa","2":"Burundi","3":"0.5454545","4":"0.9747231"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Create a scatterplot between correlation and slope. Colour by continent. Save this plot to a variable <code>p2</code>.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022448194" aria-expanded="false" aria-controls="acc2021061022448194">
+</button>
+</p>
+<div id="acc2021061022448194" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>p2 &lt;- ggplot(g1,aes(cor,slope,col=continent))+
+  geom_point()
+p2</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-91-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<p><i class='fa fa-comment'></i> Are there any interesting insights from this plot? What can you infer?</p>
+<p><i class='fa fa-clipboard-list'></i> Can you summarise these messy results? What is the most common direction and strength of relationship between population and GDP per capita across countries? Is this trend consistent by continent? These are not plots.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022457982" aria-expanded="false" aria-controls="acc2021061022457982">
+</button>
+</p>
+<div id="acc2021061022457982" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>g1 %&gt;%
+  ungroup() %&gt;%
+  summarise(median_cor=median(cor),median_slope=median(abs(slope)))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["median_cor"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["median_slope"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.8601399","2":"0.7561924"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022452860" aria-expanded="false" aria-controls="acc2021061022452860">
+</button>
+</p>
+<div id="acc2021061022452860" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>g1 %&gt;%
+  group_by(continent) %&gt;%
+  summarise(median_cor=median(cor),median_slope=median(abs(slope)))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["continent"],"name":[1],"type":["fct"],"align":["left"]},{"label":["median_cor"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["median_slope"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"Africa","2":"0.5944056","3":"1.1996626"},{"1":"Americas","2":"0.8461538","3":"1.0088876"},{"1":"Asia","2":"0.9440559","3":"0.7233011"},{"1":"Europe","2":"0.9825175","3":"0.1827754"},{"1":"Oceania","2":"0.9965035","3":"0.7717840"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p><i class='fa fa-clipboard-list'></i> Combine the two previously saved plots <code>p1</code> and <code>p2</code> side by side using <code>patchwork</code>. Explore how these commands differ.</p>
+<pre class="r"><code>p1+p2
+p1|p2
+p1/p2
+wrap_plots(p1,p2)</code></pre>
+<p><img src="ggplot_lab_files/figure-html/unnamed-chunk-95-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><i class='fa fa-clipboard-list'></i> How would you move the legend to the top center and horizontal so that it is shared between the two plots?</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061022475416" aria-expanded="false" aria-controls="acc2021061022475416">
+</button>
+</p>
+<div id="acc2021061022475416" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>wrap_plots(p1,p2,guides=&quot;collect&quot;)&amp;
+  theme(legend.position=&quot;top&quot;,
+        legend.direction=&quot;horizontal&quot;)</code></pre>
+<img src="ggplot_lab_files/figure-html/unnamed-chunk-96-1.png" width="672" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+<!-- --------------------- Do not edit this and below ---------------------- -->
+</div>
+</div>
+<div id="session-info" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Session info</h1>
+<pre><code>## R version 4.0.2 (2020-06-22)
+## Platform: x86_64-conda_cos6-linux-gnu (64-bit)
+## Running under: Ubuntu 20.04.2 LTS
+## 
+## Matrix products: default
+## BLAS/LAPACK: /home/roy/miniconda3/envs/r-4.0/lib/libopenblasp-r0.3.10.so
+## 
+## locale:
+##  [1] LC_CTYPE=en_GB.UTF-8       LC_NUMERIC=C               LC_TIME=en_GB.UTF-8       
+##  [4] LC_COLLATE=en_GB.UTF-8     LC_MONETARY=en_GB.UTF-8    LC_MESSAGES=en_GB.UTF-8   
+##  [7] LC_PAPER=en_GB.UTF-8       LC_NAME=C                  LC_ADDRESS=C              
+## [10] LC_TELEPHONE=C             LC_MEASUREMENT=en_GB.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] patchwork_1.1.1      gapminder_0.3.0      fontawesome_0.2.1    captioner_2.2.3     
+##  [5] bookdown_0.22        knitr_1.33           ggnewscale_0.4.5     ggrepel_0.9.1       
+##  [9] GGally_2.1.1         tidyr_1.1.3          dplyr_1.0.6          palmerpenguins_0.1.0
+## [13] ggplot2_3.3.3       
+## 
+## loaded via a namespace (and not attached):
+##  [1] progress_1.2.2     tidyselect_1.1.1   xfun_0.23          bslib_0.2.5.1     
+##  [5] purrr_0.3.4        splines_4.0.2      lattice_0.20-44    colorspace_2.0-1  
+##  [9] vctrs_0.3.8        generics_0.1.0     htmltools_0.5.1.1  viridisLite_0.4.0 
+## [13] yaml_2.2.1         mgcv_1.8-36        utf8_1.2.1         rlang_0.4.11      
+## [17] jquerylib_0.1.4    pillar_1.6.1       glue_1.4.2         withr_2.4.2       
+## [21] DBI_1.1.1          RColorBrewer_1.1-2 lifecycle_1.0.0    plyr_1.8.6        
+## [25] stringr_1.4.0      munsell_0.5.0      gtable_0.3.0       evaluate_0.14     
+## [29] labeling_0.4.2     fansi_0.5.0        highr_0.9          Rcpp_1.0.6        
+## [33] scales_1.1.1       jsonlite_1.7.2     farver_2.1.0       hms_1.1.0         
+## [37] digest_0.6.27      stringi_1.6.2      grid_4.0.2         cli_2.5.0         
+## [41] tools_4.0.2        magrittr_2.0.1     sass_0.4.0         tibble_3.1.2      
+## [45] crayon_1.4.1       pkgconfig_2.0.3    ellipsis_0.3.2     Matrix_1.3-4      
+## [49] prettyunits_1.1.1  assertthat_0.2.1   rmarkdown_2.8      reshape_0.8.8     
+## [53] rstudioapi_0.13    R6_2.5.0           nlme_3.1-152       compiler_4.0.2</code></pre>
+<p style="text-align: left; font-size: small;">
+Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 10-Jun-2021 at <i class="fa fa-clock-o" aria-hidden="true"></i> 22:44:49.
+</p>
+<hr/>
+<div style="padding-bottom: 1.5em">
+<p><span style="float:left; vertical-align:middle">
+<b>2021</b> • <a href="https://www.scilifelab.se/">SciLifeLab</a> • <a href="https://nbis.se/">NBIS</a> • <a href="https://nbisweden.github.io/workshop-RaukR-2106/">RaukR</a>
+</span>
+<span style="float:right; vertical-align:middle">
+<span class="footericon" style="padding-right:4px; padding-left:4px">
+<a href="https://nbisweden.github.io/workshop-RaukR-2106/"><img src="assets/icons8-globe-26.png" alt="website" border="0" style="height:15px"></a>
+</span>
+<span class="footericon" style="padding-right:4px; padding-left:4px">
+<a href="https://twitter.com/hashtag/RaukR?src=hash"><img src="assets/icons8-twitter-26.png" alt="twitter" border="0" style="height:15px"></a>
+</span>
+</span></p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

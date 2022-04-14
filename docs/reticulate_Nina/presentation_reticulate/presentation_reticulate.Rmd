@@ -1,0 +1,411 @@
+---
+title: "Reticulate"
+subtitle: "RaukR 2021 • Advanced R for Bioinformatics"
+author: "<b>Nina Norgren</b>"
+institute: NBIS, SciLifeLab
+keywords: r, RaukR, markdown
+output:
+  xaringan::moon_reader:
+    encoding: 'UTF-8'
+    self_contained: false
+    chakra: 'assets/remark-latest.min.js'
+    css: 'assets/presentation.css'
+    lib_dir: libs
+    nature:
+      ratio: '4:3'
+      highlightLanguage: r
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: "RaukR 2021 • %current%/%total%"
+---
+exclude: true
+count: false
+
+```{r,echo=FALSE,child="assets/header-presentation.Rmd"}
+```
+
+<!-- ----------------- Only edit title & author above this ----------------- -->
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+# load the packages you need
+
+library(reticulate)
+use_condaenv("raukr", required = TRUE)
+library(tidyverse)
+```
+---
+name: contents
+
+## Contents
+
+* [Learning outcomes](#LOs)
+* [Introduction](#intro)
+* [Introducing reticulate](#reticulate)
+* [Importing modules](#importing_modules)
+* [Sourcing scripts](#sourcing_scripts)
+* [Executing Python code](#execute_code)
+* [Python in R Markdown](#python_rmarkdown)
+* [Type conversions](#type_conversions)
+* [Examples](#examples)
+
+---
+name: LOs
+
+## Learning outcomes
+
+<br>
+
+In this session we will learn to:
+
+* Understand the concepts needed for running Python in R
+* Understand the different object classes in Python and their equivalent in R
+* Apply our knowledge to:
+  + Import Python functions into R
+  + Use R objects as input to Python functions
+  + Translate between Python and R objects
+
+
+---
+name: intro
+
+## Introduction
+
+<br><br>
+.largest.center[**R versus Python**]
+###.center[The ultimate fight!]
+--
+name: intro2
+
+<br><br><br>
+###.center[Not anymore!] 
+
+
+
+---
+name:reticulate
+
+## Introducing reticulate
+
+* Combine Python and R code
+* Use R classes in Python functions and vice versa
+* Import Python functions into R code and run from R
+* Add Python code chunks to markdown documents
+
+```{r, eval= FALSE}
+library(reticulate)
+```
+
+---
+name:importing_modules
+
+## Importing Python modules
+
+```{r}
+datetime <- import("datetime")
+todays_r_date <- datetime$datetime$now()
+```
+
+--
+```{r}
+todays_r_date
+class(todays_r_date)
+```
+
+--
+Objects are automatically converted to R types, unless otherwise specified
+
+--
+```{r}
+datetime <- import("datetime", convert = FALSE)
+todays_py_date <- datetime$datetime$now()
+```
+
+--
+```{r}
+todays_py_date
+class(todays_py_date)
+```
+
+---
+## Importing built-in Python functions
+
+Access Python's built-in functions directly in R
+
+```{r}
+builtins <- import_builtins()
+r_vec <- c(1, 5, 3, 4, 2, 2, 3, 2)
+str(r_vec)
+```
+r_vec is an R object.
+
+--
+```{r}
+builtins$len(r_vec)
+builtins$max(r_vec)
+```
+Python built-in functions still working on R objects
+
+--
+```{r}
+max(r_vec)
+```
+Normal R way
+
+---
+name: sourcing_scripts
+
+## Sourcing scripts
+
+Import your own python functions for use in R. File `python_functions.py`:
+
+```{python, evaluate=FALSE}
+def add(x, y):
+  return x + y
+```
+
+--
+R code:
+
+```{r}
+source_python("python_functions.py")
+class(4)
+res <- add(4,5)
+res
+class(res)
+```
+--
+Type `numeric` in and type `numeric` out. But what happens in between?
+
+--
+File `python_functions.py`:
+```{python}
+def add_with_print(x, y):
+  print(x, 'is of the python type ', type(x))
+  return x + y
+```
+
+```{r}
+res2 <- add_with_print(4,5)
+py_capture_output(add_with_print(4,5))
+str(res2)
+```
+
+---
+name: execute_code
+
+## Execute Python code
+
+
+Run python string:
+```{r}
+py_run_string("result = [1,2,3]*2")
+py$result
+```
+All objects created by python are accessible using the `py` object exported by reticulate
+
+--
+
+Run python script `my_python_script.py`:
+
+```{python}
+def add(x, y):
+  return x + y
+
+def multiply_by_3(x):
+  return x*3
+
+def run_all():
+  x = 5
+  y = 8
+  added = add(x, y)
+  final = multiply_by_3(added)
+  return final
+
+final = run_all()
+```
+
+```{r}
+py_run_file("my_python_script.py")
+py$final
+```
+
+---
+name: python_rmarkdown
+
+## Python in R Markdown
+
+In R Markdown it is possible to mix in Python chunks:
+
+```{r,echo=FALSE,comment=""}
+cat(paste0("```{python}\n","import pandas as pd\n\n","movies = get_all_movies()\n",
+           "print(type(movies))\n", "``` \n"))
+```
+
+
+```{python, echo=FALSE}
+import pandas as pd
+from imdb_functions_pres import *
+
+movies = get_all_movies(fromYear = 1960)
+print(type(movies))
+```
+
+---
+## Python in R Markdown
+
+Access the movie object using the `py` object, which will convert movies to an R object:
+
+```{r, eval = FALSE}
+movies_r <- py$movies
+movies_r <- as_tibble(movies_r)
+subset <- movies_r %>% select(5:6, 8:10)
+```
+
+---
+## Python in R Markdown
+
+Access the movie object using the `py` object, which will convert movies to an R object:
+
+```{r}
+movies_r <- py$movies
+movies_r <- as_tibble(movies_r)
+subset <- movies_r %>% select(5:6, 8:10)
+knitr::kable(subset[1:7,],'html')
+```
+---
+## Python in R Markdown
+
+Continue working with the now converted R object in R
+
+```{r, eval = FALSE, tidy = FALSE}
+ggplot(movies_r, aes(x=startYear)) + geom_bar() + 
+                                     theme(axis.text.x = element_text(angle = 90)) +
+                                     ggtitle('Number of movies per year')
+```
+
+---
+## Python in R Markdown
+
+Continue working with the now converted R object in R
+
+```{r, fig.height = 4, fig.width = 8, tidy = FALSE}
+ggplot(movies_r, aes(x=startYear)) + geom_bar() + 
+                                     theme(axis.text.x = element_text(angle = 90)) +
+                                     ggtitle('Number of movies per year')
+```
+
+---
+name: type_conversions
+
+## Type conversions
+
+When calling python code from R, R data types are converted to Python types, and vice versa, when values are returned from Python to R they are converted back to R types.
+
+####.center[**Conversion table**]
+
+```{python, echo=FALSE}
+import pandas as pd
+d = {'R': ['Single-element vector', 'Multi-element vector', 'List of multiple types',
+           'Named list', 'Matrix/Array', 'Data Frame', 'Function', 'Raw', 'NULL, TRUE, FALSE'],
+     'Python': ['Scalar', 'List', 'Tuple', 'Dict', 'NumPy ndarray', 'Pandas DataFrame',
+                'Python function', 'Python bytearray', 'None, True, False'],
+     'Examples': [['1', '1L', 'TRUE', "foo"], ['c(1.0, 2.0, 3.0)', 'c(1L, 2L, 3L)'], ['list(1L, TRUE, "foo")'], 
+                  ['list(a = 1L, b = 2.0)', 'dict(x = x_data)'], ['matrix(c(1,2,3,4), nrow=2, ncol=2)'], 
+                  ['data.frame(x = c(1,2,3), y = c("a","b","c"))'], ['function(x) x +1'],
+                  ['as.raw(c(1:10))'], ['NULL, TRUE, FALSE']]            
+                }
+df = pd.DataFrame(data=d)
+```
+```{r, echo=FALSE}
+knitr::kable(py$df,'html')
+```
+---
+## Type conversions
+
+`python_functions.py`:
+
+```{python}
+def check_python_type(x):
+  print(type(x))
+  return x
+```
+
+--
+```{r}
+source_python("python_functions.py")
+
+r_var <- matrix(c(1,2,3,4),nrow=2, ncol=2)
+class(r_var)
+py_capture_output(check_python_type(r_var))
+r_var2 <- check_python_type(r_var)
+class(r_var2)
+```
+
+--
+```{r}
+source_python("python_functions.py", convert=FALSE)
+
+r_var <- matrix(c(1,2,3,4),nrow=2, ncol=2)
+class(r_var)
+py_capture_output(check_python_type(r_var))
+r_var2 <- check_python_type(r_var)
+class(r_var2)
+r_var3 <- py_to_r(r_var2)
+class(r_var3)
+```
+---
+## Type conversions
+
+- `42` in R is a floating point number. In Python it is an integer
+```{r}
+str(42)
+check_python_type(42)
+py_capture_output(check_python_type(42))
+```
+--
+```{r}
+str(42L)
+check_python_type(42L)
+py_capture_output(check_python_type(42L))
+```
+
+---
+## Type conversions
+
+- List conversions of single element vectors, automatically translated to Python scalar
+```{r}
+str(c(24))
+check_python_type(c(24))
+py_capture_output(check_python_type(c(24)))
+```
+--
+```{r}
+str(list(24))
+check_python_type(list(24))
+py_capture_output(check_python_type(list(24)))
+```
+
+---
+name: examples
+
+## Examples
+
+<!-- --------------------- Do not edit this and below --------------------- -->
+
+---
+name: end-slide
+class: end-slide, middle
+count: false
+
+# Thank you. Questions?
+
+```{r,echo=FALSE,child="assets/footer-presentation.Rmd"}
+```
+
+```{r,include=FALSE,eval=FALSE}
+# manually run this to render this document to HTML
+rmarkdown::render("presentation.Rmd")
+# manually run this to convert HTML to PDF
+#pagedown::chrome_print("presentation.html",output="presentation.pdf")
+```

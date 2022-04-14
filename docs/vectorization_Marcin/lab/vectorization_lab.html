@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Marcin Kierczak" />
+
+
+<title>Vectorization</title>
+
+<script src="vectorization_lab_files/header-attrs-2.8/header-attrs.js"></script>
+<script src="vectorization_lab_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="vectorization_lab_files/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
+<script src="vectorization_lab_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="vectorization_lab_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="vectorization_lab_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="vectorization_lab_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="vectorization_lab_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="vectorization_lab_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="vectorization_lab_files/navigation-1.1/tabsets.js"></script>
+<link href="vectorization_lab_files/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="vectorization_lab_files/highlightjs-9.12.0/highlight.js"></script>
+<link href="vectorization_lab_files/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="vectorization_lab_files/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="vectorization_lab_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="vectorization_lab_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link id="font-awesome-1-attachment" rel="attachment" href="vectorization_lab_files/font-awesome-5.1.0/fonts/fontawesome-webfont.ttf"/>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="assets/lab.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Vectorization</h1>
+<h3 class="subtitle">RaukR 2021 • Advanced R for Bioinformatics</h3>
+<h4 class="author">Marcin Kierczak</h4>
+
+</div>
+
+
+<!-- rmd lab header -->
+<p><img src="assets/logo.svg" alt="logo_raukr" class="trlogo"></p>
+<!-- ------------ Only edit title, subtitle & author above this ------------ -->
+<!-- rmd lab header -->
+<p><img src="assets/logo.svg" alt="logo_raukr" class="trlogo"></p>
+<div id="introduction" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>In programming languages loop structures, either with or without conditions, are used to repeat commands over multiple entities. For and while loops as well as if-else statements are also often used in R, but perhaps not as often as in many other programming languages. The reason for this is that in R, there is an alternative called vectorization which usually is more efficient..</p>
+<p>Vectorization implies that we can multiply all values in a vector in R by two by calling:</p>
+<pre class="r"><code>vec.a &lt;- c(1, 2, 3, 4)
+vec.a * 2</code></pre>
+<pre><code>## [1] 2 4 6 8</code></pre>
+<p>In many other and languages as well as in R, you can also create this with a loop instead</p>
+<pre class="r"><code>for (i in vec.a) {
+  vec.a[i] &lt;- vec.a[i] * 2
+}
+
+vec.a</code></pre>
+<pre><code>## [1] 2 4 6 8</code></pre>
+<p>As you saw in the lecture, this is far less efficient and not by any means easier to type and we hence tend to avoid loops when possible.</p>
+</div>
+<div id="task-1---a-large-matrix" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Task 1 - a large matrix</h1>
+<div id="looping-over-a-matrix" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Looping over a matrix</h2>
+<ul>
+<li>create a 100000 by 10 matrix with the numbers 1:1000000</li>
+<li>write a <code>for</code>-loop that calculates the sum for each row of the matrix.</li>
+<li>verify that your row counts are consistent with what you obtain with the <code>apply()</code> function</li>
+<li>verify that your row counts are consistent with what you obtain with the <code>apply()</code> function <code>rowSums()</code> function</li>
+</ul>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061515228265" aria-expanded="false" aria-controls="acc2021061515228265">
+</button>
+</p>
+<div id="acc2021061515228265" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>X &lt;- matrix(1:1000000, nrow = 100000, ncol = 10)
+for.sum &lt;- vector()
+# Note that this loop is much faster if you outside the loop create an empty vector of the right size.
+# rwmeans &lt;- vector(&#39;integer&#39;, 100000)
+for (i in 1:nrow(X)) {
+    for.sum[i] &lt;- sum(X[i,])
+}
+head(for.sum)</code></pre>
+<pre><code>## [1] 4500010 4500020 4500030 4500040 4500050 4500060</code></pre>
+<pre class="r"><code>app.sum &lt;- apply(X, MARGIN = 1, sum)
+head(app.sum)</code></pre>
+<pre><code>## [1] 4500010 4500020 4500030 4500040 4500050 4500060</code></pre>
+<pre class="r"><code>rowSums.sum &lt;- rowSums(X)
+head(rowSums.sum)</code></pre>
+<pre><code>## [1] 4500010 4500020 4500030 4500040 4500050 4500060</code></pre>
+<pre class="r"><code>identical(for.sum, app.sum)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>identical(for.sum, rowSums.sum)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>identical(for.sum, as.integer(rowSums.sum))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="task-2---fibonacci-sequence" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Task 2 - Fibonacci sequence</h1>
+<p>During the lecture an approach to calculate factorials was implemented using recursion (function calling itself). Here we should use recursion to generate a sequence of Fibonacci numbers. A Fibonacci number is part of a series of number with the following properties:</p>
+<p>The first two numbers in the Fibonacci sequence are either 1 and 1, or 0 and 1, depending on the chosen starting point of the sequence, and each subsequent number is the sum of the previous two. Hence:</p>
+<p><code>0, 1, 1, 2, 3, 5, 8, 13, 21, ...</code></p>
+<p>or</p>
+<p><code>1, 1, 2, 3, 5, 8, 13, 21, ...</code></p>
+<div id="n-th-fibonacci-number" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> N-th Fibonacci number</h2>
+<p>Write a function that generates Fibonacci number using a recursive approach.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061515225152" aria-expanded="false" aria-controls="acc2021061515225152">
+</button>
+</p>
+<div id="acc2021061515225152" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>fib_rec &lt;- function(n) {
+    if (n == 0 || n == 1) { 
+        return(n) 
+    } else {
+        return(fib_rec(n - 1) + fib_rec(n - 2))
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div id="generate-fibonacci-sequence" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Generate Fibonacci sequence</h2>
+<p>Generate Fibonacci numbers from 0 to 10 using <code>*apply*</code> approach.</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061515229004" aria-expanded="false" aria-controls="acc2021061515229004">
+</button>
+</p>
+<div id="acc2021061515229004" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>sapply(0:10, FUN = fib_rec)</code></pre>
+<pre><code>##  [1]  0  1  1  2  3  5  8 13 21 34 55</code></pre>
+</div>
+</div>
+</div>
+<div id="vectorized-fibonacci-generator" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Vectorized Fibonacci generator</h2>
+Vectorize your Fibonacci number generating function.
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2021061515227402" aria-expanded="false" aria-controls="acc2021061515227402">
+</button>
+</p>
+<div id="acc2021061515227402" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>vec_fib_rec &lt;- Vectorize(fib_rec)
+vec_fib_rec(0:10)</code></pre>
+<pre><code>##  [1]  0  1  1  2  3  5  8 13 21 34 55</code></pre>
+</div>
+</div>
+<!-- --------------------- Do not edit this and below ---------------------- -->
+</div>
+</div>
+<div id="session-info" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Session info</h1>
+<pre><code>## R version 4.0.3 (2020-10-10)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Big Sur 10.16
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] fontawesome_0.2.1 captioner_2.2.3   bookdown_0.22     knitr_1.33       
+## 
+## loaded via a namespace (and not attached):
+##  [1] compiler_4.0.3    magrittr_2.0.1    tools_4.0.3       htmltools_0.5.1.1
+##  [5] yaml_2.2.1        stringi_1.6.2     rmarkdown_2.8     stringr_1.4.0    
+##  [9] xfun_0.23         digest_0.6.27     rlang_0.4.11      evaluate_0.14</code></pre>
+<p style="text-align: left; font-size: small;">
+Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 15-Jun-2021 at <i class="fa fa-clock-o" aria-hidden="true"></i> 15:30:23.
+</p>
+<hr/>
+<div style="padding-bottom: 1.5em">
+<p><span style="float:left; vertical-align:middle">
+<b>2021</b> • <a href="https://www.scilifelab.se/">SciLifeLab</a> • <a href="https://nbis.se/">NBIS</a> • <a href="https://nbisweden.github.io/workshop-RaukR-2106/">RaukR</a>
+</span>
+<span style="float:right; vertical-align:middle">
+<span class="footericon" style="padding-right:4px; padding-left:4px">
+<a href="https://nbisweden.github.io/workshop-RaukR-2106/"><img src="assets/icons8-globe-26.png" alt="website" border="0" style="height:15px"></a>
+</span>
+<span class="footericon" style="padding-right:4px; padding-left:4px">
+<a href="https://twitter.com/hashtag/RaukR?src=hash"><img src="assets/icons8-twitter-26.png" alt="twitter" border="0" style="height:15px"></a>
+</span>
+</span></p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

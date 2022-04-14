@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Reticulate</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Nina Norgren" />
+    <meta name="keywords" content="r, RaukR, markdown" />
+    <script src="libs/header-attrs-2.8/header-attrs.js"></script>
+    <link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link id="font-awesome-1-attachment" rel="attachment" href="libs/font-awesome-5.1.0/fonts/fontawesome-webfont.ttf"/>
+    <link rel="stylesheet" href="assets/presentation.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Reticulate
+## RaukR 2021 • Advanced R for Bioinformatics
+### <b>Nina Norgren</b>
+### NBIS, SciLifeLab
+
+---
+
+exclude: true
+count: false
+
+
+&lt;link href="https://fonts.googleapis.com/css?family=Roboto|Source+Sans+Pro:300,400,600|Ubuntu+Mono&amp;amp;subset=latin-ext" rel="stylesheet"&gt;
+&lt;link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"&gt;
+
+
+
+
+
+&lt;!-- ----------------- Only edit title &amp; author above this ----------------- --&gt;
+
+
+---
+name: contents
+
+## Contents
+
+* [Learning outcomes](#LOs)
+* [Introduction](#intro)
+* [Introducing reticulate](#reticulate)
+* [Importing modules](#importing_modules)
+* [Sourcing scripts](#sourcing_scripts)
+* [Executing Python code](#execute_code)
+* [Python in R Markdown](#python_rmarkdown)
+* [Type conversions](#type_conversions)
+* [Examples](#examples)
+
+---
+name: LOs
+
+## Learning outcomes
+
+&lt;br&gt;
+
+In this session we will learn to:
+
+* Understand the concepts needed for running Python in R
+* Understand the different object classes in Python and their equivalent in R
+* Apply our knowledge to:
+  + Import Python functions into R
+  + Use R objects as input to Python functions
+  + Translate between Python and R objects
+
+
+---
+name: intro
+
+## Introduction
+
+&lt;br&gt;&lt;br&gt;
+.largest.center[**R versus Python**]
+###.center[The ultimate fight!]
+--
+name: intro2
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+###.center[Not anymore!] 
+
+
+
+---
+name:reticulate
+
+## Introducing reticulate
+
+* Combine Python and R code
+* Use R classes in Python functions and vice versa
+* Import Python functions into R code and run from R
+* Add Python code chunks to markdown documents
+
+
+```r
+library(reticulate)
+```
+
+---
+name:importing_modules
+
+## Importing Python modules
+
+
+```r
+datetime &lt;- import("datetime")
+todays_r_date &lt;- datetime$datetime$now()
+```
+
+--
+
+```r
+todays_r_date
+class(todays_r_date)
+```
+
+```
+## [1] "2021-06-14 06:53:28 UTC"
+## [1] "POSIXct" "POSIXt"
+```
+
+--
+Objects are automatically converted to R types, unless otherwise specified
+
+--
+
+```r
+datetime &lt;- import("datetime", convert = FALSE)
+todays_py_date &lt;- datetime$datetime$now()
+```
+
+--
+
+```r
+todays_py_date
+class(todays_py_date)
+```
+
+```
+## 2021-06-14 08:53:28.930472
+## [1] "datetime.datetime"     "datetime.date"         "python.builtin.object"
+```
+
+---
+## Importing built-in Python functions
+
+Access Python's built-in functions directly in R
+
+
+```r
+builtins &lt;- import_builtins()
+r_vec &lt;- c(1, 5, 3, 4, 2, 2, 3, 2)
+str(r_vec)
+```
+
+```
+##  num [1:8] 1 5 3 4 2 2 3 2
+```
+r_vec is an R object.
+
+--
+
+```r
+builtins$len(r_vec)
+builtins$max(r_vec)
+```
+
+```
+## [1] 8
+## [1] 5
+```
+Python built-in functions still working on R objects
+
+--
+
+```r
+max(r_vec)
+```
+
+```
+## [1] 5
+```
+Normal R way
+
+---
+name: sourcing_scripts
+
+## Sourcing scripts
+
+Import your own python functions for use in R. File `python_functions.py`:
+
+
+```python
+def add(x, y):
+  return x + y
+```
+
+--
+R code:
+
+
+```r
+source_python("python_functions.py")
+class(4)
+res &lt;- add(4,5)
+res
+class(res)
+```
+
+```
+## [1] "numeric"
+## [1] 9
+## [1] "numeric"
+```
+--
+Type `numeric` in and type `numeric` out. But what happens in between?
+
+--
+File `python_functions.py`:
+
+```python
+def add_with_print(x, y):
+  print(x, 'is of the python type ', type(x))
+  return x + y
+```
+
+
+```r
+res2 &lt;- add_with_print(4,5)
+py_capture_output(add_with_print(4,5))
+str(res2)
+```
+
+```
+## [1] "4.0 is of the python type  &lt;class 'float'&gt;\n\n"
+##  num 9
+```
+
+---
+name: execute_code
+
+## Execute Python code
+
+
+Run python string:
+
+```r
+py_run_string("result = [1,2,3]*2")
+py$result
+```
+
+```
+## [1] 1 2 3 1 2 3
+```
+All objects created by python are accessible using the `py` object exported by reticulate
+
+--
+
+Run python script `my_python_script.py`:
+
+
+```python
+def add(x, y):
+  return x + y
+
+def multiply_by_3(x):
+  return x*3
+
+def run_all():
+  x = 5
+  y = 8
+  added = add(x, y)
+  final = multiply_by_3(added)
+  return final
+
+final = run_all()
+```
+
+
+```r
+py_run_file("my_python_script.py")
+py$final
+```
+
+```
+## [1] 39
+```
+
+---
+name: python_rmarkdown
+
+## Python in R Markdown
+
+In R Markdown it is possible to mix in Python chunks:
+
+
+````
+```{python}
+import pandas as pd
+
+movies = get_all_movies()
+print(type(movies))
+``` 
+````
+
+
+
+```
+## &lt;class 'pandas.core.frame.DataFrame'&gt;
+```
+
+---
+## Python in R Markdown
+
+Access the movie object using the `py` object, which will convert movies to an R object:
+
+
+```r
+movies_r &lt;- py$movies
+movies_r &lt;- as_tibble(movies_r)
+subset &lt;- movies_r %&gt;% select(5:6, 8:10)
+```
+
+---
+## Python in R Markdown
+
+Access the movie object using the `py` object, which will convert movies to an R object:
+
+
+```r
+movies_r &lt;- py$movies
+movies_r &lt;- as_tibble(movies_r)
+subset &lt;- movies_r %&gt;% select(5:6, 8:10)
+knitr::kable(subset[1:7,],'html')
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; originalTitle &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; startYear &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; runtimeMinutes &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; genres &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; averageRating &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Kate &amp;amp; Leopold &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2001 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 118 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Comedy,Fantasy,Romance &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Brain That Wouldn't Die &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1962 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 82 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Horror,Sci-Fi &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Fugitive Kind &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1960 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 119 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Drama,Romance &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Les yeux sans visage &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1960 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 90 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Drama,Horror &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; À bout de souffle &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1960 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 90 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Crime,Drama &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 13 Ghosts &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1960 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 85 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Horror,Mystery &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Alamo &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1960 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 162 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Adventure,Drama,History &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.8 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+---
+## Python in R Markdown
+
+Continue working with the now converted R object in R
+
+
+```r
+ggplot(movies_r, aes(x=startYear)) + geom_bar() + 
+                                     theme(axis.text.x = element_text(angle = 90)) +
+                                     ggtitle('Number of movies per year')
+```
+
+---
+## Python in R Markdown
+
+Continue working with the now converted R object in R
+
+
+```r
+ggplot(movies_r, aes(x=startYear)) + geom_bar() + 
+                                     theme(axis.text.x = element_text(angle = 90)) +
+                                     ggtitle('Number of movies per year')
+```
+
+&lt;img src="presentation_reticulate_files/figure-html/unnamed-chunk-23-1.svg" style="display: block; margin: auto auto auto 0;" /&gt;
+
+---
+name: type_conversions
+
+## Type conversions
+
+When calling python code from R, R data types are converted to Python types, and vice versa, when values are returned from Python to R they are converted back to R types.
+
+####.center[**Conversion table**]
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; R &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Python &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Examples &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Single-element vector &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Scalar &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1   , 1L  , TRUE, foo &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Multi-element vector &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; List &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; c(1.0, 2.0, 3.0), c(1L, 2L, 3L) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; List of multiple types &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Tuple &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; list(1L, TRUE, &amp;quot;foo&amp;quot;) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Named list &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Dict &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; list(a = 1L, b = 2.0), dict(x = x_data) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Matrix/Array &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NumPy ndarray &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; matrix(c(1,2,3,4), nrow=2, ncol=2) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Data Frame &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Pandas DataFrame &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; data.frame(x = c(1,2,3), y = c(&amp;quot;a&amp;quot;,&amp;quot;b&amp;quot;,&amp;quot;c&amp;quot;)) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Function &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Python function &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; function(x) x +1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Raw &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Python bytearray &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; as.raw(c(1:10)) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; NULL, TRUE, FALSE &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; None, True, False &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; NULL, TRUE, FALSE &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+---
+## Type conversions
+
+`python_functions.py`:
+
+
+```python
+def check_python_type(x):
+  print(type(x))
+  return x
+```
+
+--
+
+```r
+source_python("python_functions.py")
+
+r_var &lt;- matrix(c(1,2,3,4),nrow=2, ncol=2)
+class(r_var)
+py_capture_output(check_python_type(r_var))
+r_var2 &lt;- check_python_type(r_var)
+class(r_var2)
+```
+
+```
+## [1] "matrix" "array" 
+## [1] "&lt;class 'numpy.ndarray'&gt;\n\n"
+## [1] "matrix" "array"
+```
+
+--
+
+```r
+source_python("python_functions.py", convert=FALSE)
+
+r_var &lt;- matrix(c(1,2,3,4),nrow=2, ncol=2)
+class(r_var)
+py_capture_output(check_python_type(r_var))
+r_var2 &lt;- check_python_type(r_var)
+class(r_var2)
+r_var3 &lt;- py_to_r(r_var2)
+class(r_var3)
+```
+
+```
+## [1] "matrix" "array" 
+## [1] "&lt;class 'numpy.ndarray'&gt;\n\n"
+## [1] "numpy.ndarray"         "python.builtin.object"
+## [1] "matrix" "array"
+```
+---
+## Type conversions
+
+- `42` in R is a floating point number. In Python it is an integer
+
+```r
+str(42)
+check_python_type(42)
+py_capture_output(check_python_type(42))
+```
+
+```
+##  num 42
+## 42.0
+## [1] "&lt;class 'float'&gt;\n\n"
+```
+--
+
+```r
+str(42L)
+check_python_type(42L)
+py_capture_output(check_python_type(42L))
+```
+
+```
+##  int 42
+## 42
+## [1] "&lt;class 'int'&gt;\n\n"
+```
+
+---
+## Type conversions
+
+- List conversions of single element vectors, automatically translated to Python scalar
+
+```r
+str(c(24))
+check_python_type(c(24))
+py_capture_output(check_python_type(c(24)))
+```
+
+```
+##  num 24
+## 24.0
+## [1] "&lt;class 'float'&gt;\n\n"
+```
+--
+
+```r
+str(list(24))
+check_python_type(list(24))
+py_capture_output(check_python_type(list(24)))
+```
+
+```
+## List of 1
+##  $ : num 24
+## [24.0]
+## [1] "&lt;class 'list'&gt;\n\n"
+```
+
+---
+name: examples
+
+## Examples
+
+&lt;!-- --------------------- Do not edit this and below --------------------- --&gt;
+
+---
+name: end-slide
+class: end-slide, middle
+count: false
+
+# Thank you. Questions?
+
+
+&lt;p&gt;R version 4.1.0 (2021-05-18)&lt;br&gt;&lt;p&gt;Platform: x86_64-w64-mingw32/x64 (64-bit)&lt;/p&gt;&lt;p&gt;OS: Windows 10 x64 (build 19042)&lt;/p&gt;&lt;br&gt;
+
+Built on : &lt;i class='fa fa-calendar' aria-hidden='true'&gt;&lt;/i&gt; 14-Jun-2021 at &lt;i class='fa fa-clock-o' aria-hidden='true'&gt;&lt;/i&gt; 08:53:32  
+
+&lt;b&gt;2021&lt;/b&gt; • [SciLifeLab](https://www.scilifelab.se/) • [NBIS](https://nbis.se/) • [RaukR](https://nbisweden.github.io/workshop-RaukR-2106/)
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="assets/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "4:3",
+"highlightLanguage": "r",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "RaukR 2021 • %current%/%total%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

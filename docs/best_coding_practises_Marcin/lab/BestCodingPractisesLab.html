@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Marcin Kierczak" />
+
+
+<title>Best Coding Practices — tidy, neat and efficient code</title>
+
+<script src="BestCodingPractisesLab_files/header-attrs-2.8/header-attrs.js"></script>
+<script src="BestCodingPractisesLab_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="BestCodingPractisesLab_files/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
+<script src="BestCodingPractisesLab_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="BestCodingPractisesLab_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="BestCodingPractisesLab_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="BestCodingPractisesLab_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="BestCodingPractisesLab_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="BestCodingPractisesLab_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="BestCodingPractisesLab_files/navigation-1.1/tabsets.js"></script>
+<script src="BestCodingPractisesLab_files/navigation-1.1/codefolding.js"></script>
+<link href="BestCodingPractisesLab_files/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="BestCodingPractisesLab_files/highlightjs-9.12.0/highlight.js"></script>
+<link href="BestCodingPractisesLab_files/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="BestCodingPractisesLab_files/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="BestCodingPractisesLab_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="BestCodingPractisesLab_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link id="font-awesome-1-attachment" rel="attachment" href="BestCodingPractisesLab_files/font-awesome-5.1.0/fonts/fontawesome-webfont.ttf"/>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="assets/lab.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Best Coding Practices — tidy, neat and efficient code</h1>
+<h3 class="subtitle">RaukR 2021 • Advanced R for Bioinformatics</h3>
+<h4 class="author">Marcin Kierczak</h4>
+
+</div>
+
+
+<!-- rmd lab header -->
+<p><img src="assets/logo.svg" alt="logo_raukr" class="trlogo"></p>
+<p><img src="assets/logo.svg" alt="logo_raukr" class="trlogo"></p>
+<hr />
+<p class="abstract">
+The objective of this lab is to improve your coding skills by focusing on coding style, code benchmarking and optimization. Below, you will find a number of tasks connected to the topics covered in the <em>Best Coding Practices</em> lecture. Some tasks extend lectures content and require you to find some more information online. Please, note that while we are providing example solutions to many tasks, these are only <strong>examples</strong>. If you solve a task in a different way it does not matter your solution is wrong. In fact, it may be better than our solution. If in doubt, ask PI for help. We are here for you!
+</p>
+<hr />
+<div id="coding-style" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Coding Style</h1>
+<div id="task-valid-variable-names." class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Task: Valid Variable Names.</h2>
+<p>Which of the following are valid/good variable names in R. What is wrong with the ones that are invalid/bad?
+<code>var1</code>, <code>3way_handshake</code>, <code>.password</code>, <code>__test__</code>, <code>my-matrix-M</code>, <code>three.dimensional.array</code>, <code>3D.distance</code>, <code>.2objects</code>, <code>wz3gei92</code>, <code>next</code>, <code>P</code>, <code>Q</code>, <code>R</code>, <code>S</code>, <code>T</code>, <code>X</code>, <code>is.larger?</code></p>
+</div>
+<div id="task-obscure-code." class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Task: Obscure Code.</h2>
+<p>The code below works, but can be improved. Do improve it!</p>
+<pre><code>myIterAtoR.max &lt;- 5
+second_iterator.max&lt;-7
+col.NUM= 10
+row.cnt =10
+fwzy45 &lt;- matrix(rep(1, col.NUM*row.cnt),nrow=row.cnt)
+for(haystack in (2-1):col.NUM){
+  for(needle in 1:row.cnt) {
+if(haystack&gt;=myIterAtoR.max){
+fwzy45[haystack, needle]&lt;-NA}
+}}</code></pre>
+<pre class="r"><code>iter_max &lt;- 5
+col_num &lt;- 10
+row_num &lt;- 10
+A &lt;- matrix(rep(1, col_num * row_num), nrow = row_num)
+for (i in 1:col_num) {
+  for (j in 1:row_num) {
+    if (i &gt;= iter_max) {
+      A[i, j] &lt;- NA
+    }
+  }
+}
+
+# Can you improve the code more by eliminating loops or at least one of them?</code></pre>
+</div>
+<div id="task-better-formatting." class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> Task: Better Formatting.</h2>
+<p>Improve formatting and style of the following code:</p>
+<pre><code>simulate_genotype &lt;- function( q, N=100 ) {
+  if( length(q)==1 ){
+    p &lt;- (1 - q)
+    f_gt &lt;- c(p^2, 2*p*q, q^2) # AA, AB, BB
+  }else{
+    f_gt&lt;-q
+  }
+  tmp &lt;- sample( c(&#39;AA&#39;,&#39;AB&#39;,&#39;BB&#39;), size =N, prob=f_gt, replace=T )
+  return(tmp)
+}</code></pre>
+<pre class="r"><code>simulate_genotype &lt;- function(q, N = 100) {
+  if (length(q) == 1) {
+    p &lt;- (1 - q)
+    f_gt &lt;- c(p^2, 2*p*q, q^2) # AA, AB, BB
+  } else {
+    f_gt &lt;- q
+  }
+  genotype &lt;- sample(c(&#39;AA&#39;, &#39;AB&#39;, &#39;BB&#39;), 
+                     size = N, 
+                     prob = f_gt, 
+                     replace = T)
+  return(genotype)
+}</code></pre>
+</div>
+<div id="task-hidden-variable." class="section level2" number="1.4">
+<h2><span class="header-section-number">1.4</span> Task: Hidden Variable.</h2>
+<p>Assign a vector of three last months (abbreviated in English) in a year to a hidden variable <code>my_months</code>.</p>
+<pre class="r"><code>.my_months &lt;- rev(rev(month.abb)[1:3])</code></pre>
+</div>
+<div id="task-pipeline-friendly-function." class="section level2" number="1.5">
+<h2><span class="header-section-number">1.5</span> Task: Pipeline-friendly Function.</h2>
+<p>Modify the function below so that it works with R pipes <code>%&gt;%</code>:</p>
+<pre><code>my_filter &lt;- function(threshold = 1, data, scalar = 5) {
+  data[data &gt;= threshold] &lt;- NA 
+  data &lt;- data * scalar
+  return(data)
+}</code></pre>
+<p><strong>Note</strong> you need to have the <code>magrittr</code> or <code>tidyverse</code> package loaded in order to be able to use the pipe <code>%&gt;%</code>!</p>
+<pre class="r"><code>my_filter &lt;- function(data, threshold = 1, scalar = 5) {
+  data[data &gt;= threshold] &lt;- NA 
+  data &lt;- data * scalar
+  return(data)
+}
+
+# Test:
+c(-5, 5) %&gt;% my_filter()</code></pre>
+</div>
+<div id="task-untidy-code" class="section level2" number="1.6">
+<h2><span class="header-section-number">1.6</span> Task: Untidy Code?</h2>
+<p>Is the code below correct? Can it be improved?</p>
+<pre><code>simulate_phenotype &lt;- function(pop_params, gp_map, gtype) {
+  pop_mean &lt;- pop_params[1]
+  pop_var &lt;- pop_params[2]
+  pheno &lt;- rnorm(n = N, mean = pop_mean, sd = sqrt(pop_var))
+  effect &lt;- rep(0, times = length(N))
+  for (gt_iter in c(&#39;AA&#39;, &#39;AB&#39;, &#39;BB&#39;)) {
+    effect[gtype == gt_iter] &lt;- rnorm(n = sum(gtype == gt_iter), 
+                                      mean = gp_map[gt_iter, &#39;mean_eff&#39;], 
+                                      sd = sqrt(gp_map[gt_iter, &#39;var_eff&#39;]))
+  }
+  dat &lt;- data.frame(gt = gtype, raw_pheno = pheno, effect = effect, pheno = pheno + effect)
+  return(dat)
+}</code></pre>
+<pre class="r"><code>Maybe some small improvements can be done, but in principle the code is clean! Except that... the N is not initialized anywhere.</code></pre>
+</div>
+</div>
+<div id="structuring-the-code" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Structuring the Code</h1>
+<div id="task-computing-variance." class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Task: Computing Variance.</h2>
+<p>Write a modular code (function or functions) that computes the sample standard deviation given a vector of numbers. Decide how to logically structure the code. Assume there are no built-in R functions for computing mean and variance available. The formula for variance is: <span class="math inline">\(SD = \sqrt{\frac{\Sigma_{i=1}^{N}(x_i - \bar{x})^2}{N-1}}\)</span>. Standard deviation is <span class="math inline">\(Var=SD^2\)</span>.<br />
+<br>
+<strong>Hint:</strong> consider that you may want to re-use some computed values in future, e.g. variance.</p>
+<pre class="r"><code>sample_mean &lt;- function(x) {
+  mean &lt;- sum(x) / length(x)
+  return(mean)
+} 
+
+sum_squared_deviations &lt;- function(x) {
+  tmp &lt;- (x - sample_mean(x)) ^ 2
+  sum_sq_dev &lt;- sum(tmp)
+  return(sum_sq_dev)
+}
+
+std_dev &lt;- function(x) {
+  variance &lt;- sqrt(sum_squared_deviations(x) / (length(x) - 1))
+  return(variance)
+}
+
+variance &lt;- function(x) {
+  return(std_dev(x) ^ 2)
+}</code></pre>
+</div>
+<div id="task-writing-a-wrapper-function." class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Task: Writing a Wrapper Function.</h2>
+<p>You found two functions in two different packages: the <code>randomSampleInt</code> function that generates a random sample of integer numbers and the <code>randomSampleLetter</code> function for generating a random sample of letters. Unfortunately, the functions are called in different ways which you want to unify in order to use them interchangeably in your code. Write a wrapper function around the <code>randomSampleLetter</code> that will provide the same interface to the function as the <code>randomSampleInt</code>. Also, the <code>randomSampleLetter</code> cannot handle the seed. Can you add this feature to your wrapper?</p>
+<pre><code>randomSampleInt &lt;- function(x, verbose, length, seed = 42) {
+  if (verbose) {
+    print(paste0(&#39;Generating random sample of &#39;, length, &#39; integers using seed &#39;, seed))
+  }
+  set.seed(seed)
+  sampleInt &lt;- sample(x = x, size = length, replace = TRUE)
+  return(sampleInt)
+} 
+
+randomSampleLetter &lt;- function(N, silent=T, lett) {
+  if (!silent) {
+    print(paste0(&#39;Generating random sample of &#39;, N, &#39; letters.&#39;))
+  }
+  sample &lt;- sample(x = lett, size = N, replace = TRUE)
+  return(sample)
+}</code></pre>
+<pre class="r"><code>randomSampleLetterWrapper &lt;- function(x, verbose, length, seed = 42) {
+  set.seed(seed)
+  result &lt;- randomSampleLetter(N = length, silent = !verbose, lett = x)
+  return(result)
+}</code></pre>
+</div>
+<div id="task-customizing-plot." class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Task: Customizing <code>plot</code>.</h2>
+<p>Write a wrapper around the <code>graphics::plot</code> function that modifies its default behaviour so that it plots red crosses instead of black points. Do it in a way that enables the user to modify other function arguments. <strong>Hint:</strong> you may want to have a look at <code>graphics::plot.default</code>.</p>
+<pre class="r"><code>my_plot &lt;- function(x, ...) {
+  plot(x, pch = 3, color = &#39;red&#39;, ...) 
+}</code></pre>
+</div>
+<div id="task-adding-arguments-to-a-function." class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Task: Adding Arguments to a Function.</h2>
+<p>What if you want to pass some additional parameters to a function and, sadly, the authors forgot to add <code>...</code> to the list of function arguments. There is a way out – you can bind extra arguments supplied as <code>alist</code> structure to the original function arguments retrieved by <code>formals</code>. Try to fix the function below, so that the call <code>red_plot(1, 1, col='red', pch=19)</code> will result in points being represented by red circles. Do use <code>alist</code> and <code>formals</code> and do not edit the <code>red_plot</code> itself! <strong>Hint:</strong> read help for <code>alist</code> and <code>formals</code>. Original function:</p>
+<pre><code>red_plot &lt;- function(x, y) { 
+  plot(x, y, las=1, cex.axis=.8, ...)
+}</code></pre>
+<pre class="r"><code>red_plot &lt;- function(x, y) { 
+  plot(x, y, las=1, cex.axis=.8, ...)
+}
+
+red_plot(1, 1, col=&#39;red&#39;, pch=19) # Does not work.
+formals(red_plot) &lt;- c(formals(red_plot), alist(... = )) # Fix.
+red_plot(1, 1, col=&#39;red&#39;, pch=19) # Works!</code></pre>
+</div>
+<div id="task-using-options." class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Task: Using <code>options</code>.</h2>
+<p>Use <code>options</code> to change the default prompt in R to <code>hello :-) &gt;</code>.
+Check what options are stored in the <strong>hidden</strong> variable called <em>Options</em>.</p>
+<pre class="r"><code>options(prompt = &quot;hello :-) &gt; &quot;)
+.Options
+options(prompt = &quot;&gt; &quot;) # restoring the default</code></pre>
+</div>
+</div>
+<div id="session-info" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Session Info</h1>
+<ul>
+<li>This document has been created in RStudio using R Markdown and related packages.</li>
+<li>For R Markdown, see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a></li>
+<li>For details about the OS, packages and versions, see detailed information below:</li>
+</ul>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>## R version 4.0.3 (2020-10-10)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Big Sur 10.16
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] bsplus_0.1.2      fontawesome_0.2.1 captioner_2.2.3   bookdown_0.22    
+## [5] knitr_1.33       
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_1.0.6        lubridate_1.7.10  digest_0.6.27     magrittr_2.0.1   
+##  [5] evaluate_0.14     rlang_0.4.11      stringi_1.6.2     generics_0.1.0   
+##  [9] rmarkdown_2.8     tools_4.0.3       stringr_1.4.0     xfun_0.23        
+## [13] yaml_2.2.1        compiler_4.0.3    htmltools_0.5.1.1</code></pre>
+<p style="text-align: left; font-size: small;">
+Page built on: <i class="fa fa-calendar" aria-hidden="true"></i> 11-Jun-2021 at <i class="fa fa-clock-o" aria-hidden="true"></i> 14:54:03.
+</p>
+<hr/>
+<div style="padding-bottom: 1.5em">
+<p><span style="float:left; vertical-align:middle">
+<b>2018</b> | <a href="https://www.scilifelab.se/">SciLifeLab</a> &gt; <a href="https://nbis.se/">NBIS</a> &gt; <a href="https://nbisweden.github.io/workshop-RaukR-1806/">RaukR</a>
+</span>
+<span style="float:right; vertical-align:middle">
+<span class="footericon" style="padding-right:4px; padding-left:4px">
+<a href="https://nbisweden.github.io/workshop-RaukR-1806/"><img src="assets/icons8-globe-26.png" alt="website" border="0" style="height:15px"></a>
+</span>
+<span class="footericon" style="padding-right:4px; padding-left:4px">
+<a href="https://twitter.com/hashtag/RaukR?src=hash"><img src="assets/icons8-twitter-26.png" alt="twitter" border="0" style="height:15px"></a>
+</span>
+</span></p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>ggplot2: Beyond the Basics</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Roy Francis" />
+    <meta name="keywords" content="r, RaukR, markdown" />
+    <script src="libs/header-attrs-2.8/header-attrs.js"></script>
+    <link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link id="font-awesome-1-attachment" rel="attachment" href="libs/font-awesome-5.1.0/fonts/fontawesome-webfont.ttf"/>
+    <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+    <script src="libs/plotly-binding-4.9.3/plotly.js"></script>
+    <script src="libs/typedarray-0.1/typedarray.min.js"></script>
+    <script src="libs/jquery-3.5.1/jquery.min.js"></script>
+    <link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+    <script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+    <link href="libs/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
+    <script src="libs/plotly-main-1.57.1/plotly-latest.min.js"></script>
+    <script src="libs/d3-bundle-5.16.0/d3-bundle.min.js"></script>
+    <script src="libs/d3-lasso-0.0.5/d3-lasso.min.js"></script>
+    <script src="libs/save-svg-as-png-1.4.17/save-svg-as-png.min.js"></script>
+    <link href="libs/ggiraphjs-0.4.1/ggiraphjs.min.css" rel="stylesheet" />
+    <script src="libs/ggiraphjs-0.4.1/ggiraphjs.min.js"></script>
+    <script src="libs/girafe-binding-0.7.10/girafe.js"></script>
+    <link rel="stylesheet" href="assets/presentation.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# ggplot2: Beyond the Basics
+## RaukR 2021 • Advanced R for Bioinformatics
+### <b>Roy Francis</b>
+### NBIS, SciLifeLab
+
+---
+
+exclude: true
+count: false
+
+
+&lt;link href="https://fonts.googleapis.com/css?family=Roboto|Source+Sans+Pro:300,400,600|Ubuntu+Mono&amp;amp;subset=latin-ext" rel="stylesheet"&gt;
+&lt;link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"&gt;
+
+
+
+
+
+&lt;!-- ----------------- Only edit title &amp; author above this ----------------- --&gt;
+
+
+
+---
+name: contents
+
+## Contents
+
+- [Disabling legends](#legend-disable-by-aesthetics)
+- [Positioning legends](#legend-position)
+- [Ordering legends](#legend-ordering)
+- [Customising legend formatting](#legend-formatting)
+- [Disabling all theme elements](#disable-all-theme)
+- [Facets with custom labels](#facet-custom-label-1)
+- [Facets with shared background](#facet-shared-background)
+- [Overplotting and ordering points](#overplotting-order-points)
+- [Overplotting and adding transparency](#overplotting-transparency)
+- [Overplotting and binning](#overplotting-bin)
+- [Overplotting and 2d density](#overplotting-density-2d)
+- [Overplotting and point density](#overplotting-point-density)
+- [Types of axes limits](#axes-limits)
+- [Overplotting and univariate data](#overplotting-univariate)
+- [Discrete and continuous colour palettes](#colour-palette)
+- [Discretize continuous variable for clarity](#colour-continuous-discrete)
+- [Add additional scales using ggnewscale](#ggnewscale)
+- [Combining plots using patchwork](#patchwork-1)
+- [Interactive ggplot using plotly](#interactive-ggplotly)
+- [Interactive ggplot using ggiraph](#interactive-ggiraph)
+
+---
+name: intro
+
+## Syntax
+
+
+```r
+(p &lt;- ggplot(data=diamonds,mapping=aes(x=price,y=carat,colour=depth,shape=cut))+
+  geom_point())
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+[ggplot2 basics](https://nbisweden.github.io/RaukR-2019/ggplot/presentation/ggplot_presentation.html)
+
+---
+name: legend-disable-by-aesthetics
+
+## Legend: Disable by aesthetics
+
+
+```r
+p+guides(colour=FALSE)
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+--
+
+
+```r
+p+guides(shape=FALSE)
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+???
+
+Legends can be selectively disabled. One way of doing it is through disabling which aesthetics have legends.
+
+---
+name: legend-disable-by-geom
+
+## Legend: Disable by geom
+
+.pull-left[
+
+```r
+ggplot(diamonds,aes(cut,price))+
+  geom_boxplot(aes(fill=color))+
+  geom_point(aes(colour=clarity))
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+--
+
+.pull-right[
+
+```r
+ggplot(diamonds,aes(cut,price))+
+  geom_boxplot(aes(fill=color))+
+  geom_point(aes(colour=clarity),show.legend=FALSE)
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+???
+
+Legends can be selectively disabled. Another way of doing it is through disabling which geoms have legends.
+
+---
+name: legend-disable-all
+
+## Legend: Disable all legend
+
+.pull-left-40[
+
+Do we always need legends?
+
+![](ggplot_presentation_assets/pie.jpg)
+
+]
+
+--
+
+.pull-right-60[
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+
+```r
+ggplot(diamonds,aes(cut,price))+
+  geom_boxplot(aes(fill=color))+
+  facet_grid(~color)+
+  theme(legend.position="none")
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+???
+
+Legends can be completely removed if the figure is self explanatory without the legend.
+
+---
+name: legend-position
+
+## Legend: Position
+
+.pull-left[
+Default position on the right.
+
+
+```r
+(p &lt;- ggplot(diamonds,aes(price,carat,shape=cut))+
+   geom_point())
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+Position legend to the left.
+
+
+```r
+p+theme(legend.position="left")
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+--
+
+.pull-right[
+Position legend to the top.
+
+
+```r
+p+theme(legend.position="top")
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+Custom position.
+
+
+```r
+p+theme(legend.position=c(0.15,0.6))
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+???
+
+The legend(s) can be repositioned as needed to the top, bottom, right or left of the plot. Horizontal and vertical justification can be adjusted as well as direction of the legend. The legend can also be placed directly on the plot area using numeric coordinates. The coordinates range from 0 to 1 (left to right or bottom to top) and unrelated to the data displayed.
+
+---
+name: legend-ordering
+
+## Legend: Order
+
+
+```r
+(p &lt;- ggplot(diamonds,aes(price,carat,shape=cut)) + geom_point())
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+--
+
+
+```r
+p+scale_shape_discrete(limits=c("Premium","Good","Very Good","Ideal","Fair"))
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+--
+
+
+```r
+diamonds %&gt;%
+  mutate(cut=factor(as.character(cut),levels=c("Premium","Good","Very Good","Ideal","Fair"))) %&gt;%
+  ggplot(aes(price,carat,shape=cut)) + geom_point()
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+???
+
+Items (breaks) in the legend can be controlled through scales or the input data directly.
+
+---
+name: legend-formatting
+
+## Legend: Formatting
+
+
+```r
+(p1 &lt;- ggplot(iris,aes(Sepal.Length,Petal.Length,colour=Species))+
+      geom_point())
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+--
+
+
+```r
+p1+guides(colour=guide_legend(title="New title",
+                              override.aes=list(size=5)))
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+???
+
+Visual aspects of the legend can be adjusted using `guides()` or through `theme()`.
+
+---
+name: disable-all-theme
+
+## Theme: Disable all elements
+
+
+```r
+ggplot(diamonds,aes(price,carat,colour=color,shape=cut))+
+  geom_point()+
+  labs(x=NULL,y=NULL)+
+  theme(legend.position="none",
+        panel.background=element_blank(),
+        panel.grid=element_blank(),
+        axis.title=element_blank(),
+        axis.text=element_blank(),
+        axis.ticks=element_blank())
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+???
+
+Theme elements are disabled using `element_blank()`.
+
+---
+name: facet-custom-label-1
+
+## Facet: Custom labels
+
+
+```r
+p1 &lt;- ggplot(diamonds,aes(price,carat))+geom_point()
+p1+facet_grid(~color)
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+--
+
+
+```r
+labels_color &lt;- c(`D`="Colourless 1",`E`="Colourless 2",`F`="Colourless 3",
+            `G`="Near Colourless 1",`H`="Near Colourless 2",`I`="Near Colourless 3",`J`="Near Colourless 4")
+p1+facet_grid(~color,labeller=as_labeller(labels_color))
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+???
+
+Facet labels can be renamed using `as_labeller()` function.
+
+---
+name: facet-custom-label-2
+
+## Facet: Custom labels
+
+
+```r
+p1 &lt;- ggplot(diamonds,aes(price,carat))+geom_point()
+p1+facet_grid(color~clarity)
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+--
+
+
+```r
+labels_clarity &lt;- c(`I1`="Included 1",`SI1`="Slightly included 1",`SI2`="Slightly included 2",`VS1`="Very slightly included 1",`VS2`="Very slightly included 2",`VVS1`="Very very slightly included 1",`VVS2`="Very very slightly included 2",`IF`="Internally flawless")
+p1+facet_grid(color~clarity,labeller=labeller(color=labels_color,clarity=labels_clarity))
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+???
+
+When multiple facet are in use, the labels can be renamed using `labeller()` function.
+
+---
+name: facet-shared-background
+
+## Facet: Shared background
+
+
+```r
+ggplot(iris,aes(Sepal.Length,Petal.Length,col=Species))+
+  geom_point()+
+  facet_grid(~Species)
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+--
+
+
+```r
+ggplot()+
+  geom_point(data=select(iris,-Species),aes(Sepal.Length,Petal.Length),col="grey80")+
+  geom_point(data=iris,aes(Sepal.Length,Petal.Length,col=Species))+
+  facet_grid(~Species)
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+???
+
+Facets split the data into subplots. Sometimes, it is useful to have the complete data displayed on the background for reference. This can be achieved by using a dataframe without the facetting variable.
+
+---
+name: overplotting-order-points
+
+## Overplotting: Ordering points
+
+.pull-left[
+
+```r
+ggplot(diamonds,aes(depth,carat,col=price))+
+  geom_point()
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+--
+
+.pull-right[
+
+```r
+diamonds %&gt;% arrange(price) %&gt;%
+  ggplot(aes(depth,carat,col=price))+geom_point()
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+
+```r
+diamonds %&gt;% arrange(-price) %&gt;%
+  ggplot(aes(depth,carat,col=price))+geom_point()
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+???
+
+Points are plotted in the order in which they are arranged in the input dataframe. The dataframe can be re-arranged for a different plotting order.
+
+---
+name: overplotting-transparency
+
+## Overplotting: Transparency
+
+.pull-left[
+
+```r
+ggplot(diamonds,aes(price,carat))+
+  geom_point()
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-29-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+--
+
+.pull-right[
+
+```r
+ggplot(diamonds,aes(price,carat))+
+  geom_point(alpha=0.3)
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-30-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+???
+
+Adding transparency to the points can help to some extend with low to medium overplotting.
+
+---
+name: overplotting-bin
+
+## Overplotting: Binning
+
+.pull-left[
+
+```r
+ggplot(diamonds,aes(price,carat))+
+  geom_hex()
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-31-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+--
+
+.pull-right[
+
+```r
+ggplot(diamonds,aes(price,carat))+
+  geom_bin2d()
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-32-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+???
+
+With extreme amounts of overplotting, binning the data can help to visualise patterns.
+
+---
+name: overplotting-density-2d
+
+## Overplotting: 2D density
+
+.pull-left[
+
+```r
+ggplot(diamonds,aes(price,carat))+
+  geom_point(alpha=0.3)+
+  geom_density2d()
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+.pull-right[
+
+```r
+ggplot(diamonds,aes(price,carat))+
+  geom_point(alpha=0.2,col="grey70")+
+  stat_density_2d(geom="polygon",aes(alpha=..level..),fill="firebrick")
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+???
+
+2D density can used to visualise structure in highly overplotted data.
+
+---
+name: overplotting-point-density
+
+## Overplotting: Point density
+
+- [Point density](https://github.com/LKremer/ggpointdensity) computes 2d point cloud density and maps the density back to individual points.
+
+
+```r
+library(ggpointdensity)
+(p &lt;- ggplot(diamonds,aes(price,carat))+
+        geom_pointdensity()+
+        scale_color_viridis_c())
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-35-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+???
+
+R package `ggpointdensity()` computes 2D kernal density and maps the density back to the original points.
+
+---
+name: axes-limits
+
+## Axes limits
+
+.pull-left[
+
+- Points outside the limits are discarded
+
+
+```r
+p+scale_x_continuous(limits=c(300,2000))
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-36-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+
+```r
+p+xlim(c(300,2000))
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-37-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+--
+
+.pull-right[
+
+- All points are retained
+
+
+```r
+p+coord_cartesian(xlim=c(300,2000))
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-38-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+]
+
+???
+
+When "zooming in" on a plot, `coord_cartesian()` retains points outside the plot area while `scale_x_continuous()` discards points outside the plot area.
+
+---
+name: overplotting-univariate
+
+## Overplotting: Univariate
+
+.pull-left[
+
+```r
+ggplot(diamonds,aes(cut,price))+geom_point(alpha=0.3)
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-39-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+
+```r
+ggplot(diamonds,aes(cut,price))+geom_jitter(alpha=0.3)
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-40-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+--
+
+.pull-right[
+
+```r
+ggplot(diamonds,aes(cut,price))+geom_boxplot()
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-41-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+
+```r
+ggplot(diamonds,aes(cut,price))+geom_violin()
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-42-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+???
+
+For univariate data, jittering the points can help to avoid overplotting. `geom_volin()` can be more informative than `geom_boxplot()` for some datasets.
+
+---
+name: colour
+
+## Colours
+
+- Default colours?
+
+
+```r
+ggplot(iris,aes(Petal.Width,Petal.Length,col=Species))+geom_point()
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-43-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+--
+
+- Custom colours?
+
+
+```r
+ggplot(iris,aes(Petal.Width,Petal.Length,col=Species))+geom_point()+
+  scale_colour_manual(values=c("red","green","blue"))
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-44-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+---
+name: colour-palette
+
+## Colours: Palette
+
+- [Colorbrewer](https://colorbrewer2.org) `ggplot2::scale_colour_brewer()`
+- RColorBrewer
+
+
+```r
+par(mar=c(0,3,0,0))
+RColorBrewer::display.brewer.all()
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-45-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+???
+
+[Colorbrewer](https://colorbrewer2.org) is a good source of colours for scientific use.
+
+---
+name: colour-custom-palette
+
+## Colours: Custom palettes
+
+
+```r
+cols &lt;- c("#999999","#E69F00","#56B4E9","#009E73","#F0E442","#0072B2","#D55E00","#CC79A7")
+par(mar=c(0.1,0,0.1,0))
+barplot(rep(1,length(cols)),col=cols,axes=F)
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-46-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+
+```r
+cols &lt;- c('#FF410DFF','#6EE2FFFF','#F7C530FF','#95CC5EFF','#D0DFE6FF','#F79D1EFF','#748AA6FF',
+          "#5C88DAFF","#01948E","#EC687D","#8888FFFF","#FF8989FF")
+par(mar=c(0.1,0,0.1,0))
+barplot(rep(1,length(cols)),col=cols,axes=F)
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-47-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+- [r-color-palette](https://github.com/EmilHvitfeldt/r-color-palettes): Comprehensive list of sources for colour palettes
+
+???
+
+Custom colours can help to make your plots stand out and make your plot look less "default".
+
+---
+name: colour-qualitative
+
+## Random qualitative colours
+
+.pull-left[
+
+```r
+(p &lt;- ggplot(iris,aes(Petal.Width,Petal.Length,col=Species))+
+        geom_point()+theme_bw())
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-48-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+--
+
+.pull-right[
+
+```r
+cols &lt;- randomcoloR::distinctColorPalette(3)
+p+scale_colour_manual(values=cols)
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-49-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+???
+
+R package `randomcoloR` is useful to generate random distinct qualitative colours.
+
+---
+name: colour-qualitative-2
+
+## Random qualitative colours
+
+.size-60[![](ggplot_presentation_assets/umap.png)]
+
+---
+name: colour-continuous-1
+
+## Colours: Continuous colours
+
+.pull-left[
+- Wide colour range
+- Perceptually uniform
+- Colourblind friendly
+- Visually appealing
+]
+
+--
+
+.pull-right[
+- Viridis R package [vignette](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html)
+- Cividis corrected Viridis colormap [publication](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0199239)
+- Turbo color map [web article](https://ai.googleblog.com/2019/08/turbo-improved-rainbow-colormap-for.html)
+]
+
+--
+
+.size-60[![](ggplot_presentation_assets/colours-continuous.png)]
+
+.size-90[![](ggplot_presentation_assets/colour-cividis.png)]
+
+???
+
+Modern colour maps are carefully designed to help the viewer perceive the information in the figure as closely as possible to the underlying data.
+
+Some of the considerations for a good colour map
+
+- Wide colour range
+- Perceptually uniform
+- Colourblind friendly
+- Visually appealing
+
+---
+name: colour-continuous-2
+
+## Colours: Continuous colours
+
+.pull-left[
+
+
+```r
+(p &lt;- ggplot(arrange(diamonds,price),aes(depth,carat,col=price))+
+        geom_point())
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-50-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+
+```r
+p+scale_colour_viridis_c(option="viridis")
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-51-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+]
+
+--
+
+.pull-right[
+
+
+```r
+p+scale_colour_viridis_c(option="inferno")
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-52-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+
+```r
+p+scale_colour_viridis_c(option="cividis")
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-53-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+]
+
+???
+
+Examples showing some of the colour maps.
+
+---
+name: colour-continuous-discrete
+
+## Colours: Discretize continuous variables
+
+.pull-left[
+
+```r
+p+scale_colour_viridis_c(option="viridis")
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-54-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+
+```r
+p+scale_colour_viridis_b(option="viridis")
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-55-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+--
+
+.pull-right[
+
+```r
+diamonds %&gt;%
+  mutate(price=cut(price,breaks=c(-Inf,500,1500,10000,Inf),labels=c("Low","Medium","Medium-High","High"))) %&gt;%
+  ggplot(aes(depth,carat,col=price))+
+        geom_point()
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-56-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+???
+
+In some situations, categorising the data/colours from a continuous scale to a discrete scale can make it easier to interpret the data.
+
+---
+name: ggnewscale
+
+## Additional scales
+
+.pull-left[
+
+```r
+ggplot(diamonds,aes(price,carat))+
+  geom_point(aes(col=cut))+
+  scale_color_viridis_d(option="viridis")+
+  geom_smooth(aes(col=clarity))+
+  scale_color_viridis_d(option="inferno")
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-57-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+]
+
+--
+
+.pull-right[
+
+
+```r
+library(ggnewscale)
+ggplot(diamonds,aes(price,carat))+
+  geom_point(aes(col=cut))+
+  scale_color_viridis_d(option="viridis")+
+  new_scale_color()+
+  geom_smooth(aes(col=clarity))+
+  scale_color_viridis_d(option="inferno")
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-58-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+]
+
+???
+
+R package `ggnewscale` helps you to add additional scales of the same aesthetic.
+
+---
+name: patchwork-1
+
+## Combining plots: Patchwork
+
+- [Patchwork](https://patchwork.data-imaginist.com/)
+
+.size-90[![](ggplot_presentation_assets/patchwork.jpg)]
+
+---
+name: patchwork-2
+
+## Combining plots: Patchwork
+
+
+```r
+library(patchwork)
+p1 &lt;- ggplot(diamonds,aes(depth,carat,col=clarity))+geom_point()
+p2 &lt;- ggplot(diamonds,aes(price,carat,col=clarity))+geom_point()
+p1|p2
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-59-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+
+```r
+wrap_plots(p1,p2,guides="collect") &amp;
+  guides(colour=guide_legend(nrow=1)) &amp;
+  theme(legend.position="top")
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-60-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+???
+
+R package `patchwork` is a comprehensive solution to combining two or more plots generated from ggplot2.
+
+---
+name: patchwork-3
+
+## Combining plots: Patchwork
+
+
+```r
+p3 &lt;- ggplot(diamonds,aes(depth,carat,col=clarity))+geom_point()
+(p1|p2)/p3
+```
+
+&lt;img src="ggplot_presentation_files/figure-html/unnamed-chunk-61-1.png" style="display: block; margin: auto auto auto 0;" /&gt;
+
+---
+name: interactive-ggplotly
+
+## Interactive ggplot: ggplotly
+
+R package `plotly` has a function called `ggplotly` which converts a static ggplot2 object into an interactive plot.
+
+
+```r
+library(plotly)
+p &lt;- ggplot(iris,aes(x=Sepal.Length,y=Sepal.Width,col=Species))+
+  geom_point()+
+  labs(x="Sepal Length",y="Sepal Width")+
+  theme_bw(base_size=12)
+
+plotly::ggplotly(p,width=460,height=360)
+```
+
+<div id="htmlwidget-91aabb31ec3ac7d8d0c1" style="width:460px;height:360px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-91aabb31ec3ac7d8d0c1">{"x":{"data":[{"x":[5.1,4.9,4.7,4.6,5,5.4,4.6,5,4.4,4.9,5.4,4.8,4.8,4.3,5.8,5.7,5.4,5.1,5.7,5.1,5.4,5.1,4.6,5.1,4.8,5,5,5.2,5.2,4.7,4.8,5.4,5.2,5.5,4.9,5,5.5,4.9,4.4,5.1,5,4.5,4.4,5,5.1,4.8,5.1,4.6,5.3,5],"y":[3.5,3,3.2,3.1,3.6,3.9,3.4,3.4,2.9,3.1,3.7,3.4,3,3,4,4.4,3.9,3.5,3.8,3.8,3.4,3.7,3.6,3.3,3.4,3,3.4,3.5,3.4,3.2,3.1,3.4,4.1,4.2,3.1,3.2,3.5,3.6,3,3.4,3.5,2.3,3.2,3.5,3.8,3,3.8,3.2,3.7,3.3],"text":["Sepal.Length: 5.1<br />Sepal.Width: 3.5<br />Species: setosa","Sepal.Length: 4.9<br />Sepal.Width: 3.0<br />Species: setosa","Sepal.Length: 4.7<br />Sepal.Width: 3.2<br />Species: setosa","Sepal.Length: 4.6<br />Sepal.Width: 3.1<br />Species: setosa","Sepal.Length: 5.0<br />Sepal.Width: 3.6<br />Species: setosa","Sepal.Length: 5.4<br />Sepal.Width: 3.9<br />Species: setosa","Sepal.Length: 4.6<br />Sepal.Width: 3.4<br />Species: setosa","Sepal.Length: 5.0<br />Sepal.Width: 3.4<br />Species: setosa","Sepal.Length: 4.4<br />Sepal.Width: 2.9<br />Species: setosa","Sepal.Length: 4.9<br />Sepal.Width: 3.1<br />Species: setosa","Sepal.Length: 5.4<br />Sepal.Width: 3.7<br />Species: setosa","Sepal.Length: 4.8<br />Sepal.Width: 3.4<br />Species: setosa","Sepal.Length: 4.8<br />Sepal.Width: 3.0<br />Species: setosa","Sepal.Length: 4.3<br />Sepal.Width: 3.0<br />Species: setosa","Sepal.Length: 5.8<br />Sepal.Width: 4.0<br />Species: setosa","Sepal.Length: 5.7<br />Sepal.Width: 4.4<br />Species: setosa","Sepal.Length: 5.4<br />Sepal.Width: 3.9<br />Species: setosa","Sepal.Length: 5.1<br />Sepal.Width: 3.5<br />Species: setosa","Sepal.Length: 5.7<br />Sepal.Width: 3.8<br />Species: setosa","Sepal.Length: 5.1<br />Sepal.Width: 3.8<br />Species: setosa","Sepal.Length: 5.4<br />Sepal.Width: 3.4<br />Species: setosa","Sepal.Length: 5.1<br />Sepal.Width: 3.7<br />Species: setosa","Sepal.Length: 4.6<br />Sepal.Width: 3.6<br />Species: setosa","Sepal.Length: 5.1<br />Sepal.Width: 3.3<br />Species: setosa","Sepal.Length: 4.8<br />Sepal.Width: 3.4<br />Species: setosa","Sepal.Length: 5.0<br />Sepal.Width: 3.0<br />Species: setosa","Sepal.Length: 5.0<br />Sepal.Width: 3.4<br />Species: setosa","Sepal.Length: 5.2<br />Sepal.Width: 3.5<br />Species: setosa","Sepal.Length: 5.2<br />Sepal.Width: 3.4<br />Species: setosa","Sepal.Length: 4.7<br />Sepal.Width: 3.2<br />Species: setosa","Sepal.Length: 4.8<br />Sepal.Width: 3.1<br />Species: setosa","Sepal.Length: 5.4<br />Sepal.Width: 3.4<br />Species: setosa","Sepal.Length: 5.2<br />Sepal.Width: 4.1<br />Species: setosa","Sepal.Length: 5.5<br />Sepal.Width: 4.2<br />Species: setosa","Sepal.Length: 4.9<br />Sepal.Width: 3.1<br />Species: setosa","Sepal.Length: 5.0<br />Sepal.Width: 3.2<br />Species: setosa","Sepal.Length: 5.5<br />Sepal.Width: 3.5<br />Species: setosa","Sepal.Length: 4.9<br />Sepal.Width: 3.6<br />Species: setosa","Sepal.Length: 4.4<br />Sepal.Width: 3.0<br />Species: setosa","Sepal.Length: 5.1<br />Sepal.Width: 3.4<br />Species: setosa","Sepal.Length: 5.0<br />Sepal.Width: 3.5<br />Species: setosa","Sepal.Length: 4.5<br />Sepal.Width: 2.3<br />Species: setosa","Sepal.Length: 4.4<br />Sepal.Width: 3.2<br />Species: setosa","Sepal.Length: 5.0<br />Sepal.Width: 3.5<br />Species: setosa","Sepal.Length: 5.1<br />Sepal.Width: 3.8<br />Species: setosa","Sepal.Length: 4.8<br />Sepal.Width: 3.0<br />Species: setosa","Sepal.Length: 5.1<br />Sepal.Width: 3.8<br />Species: setosa","Sepal.Length: 4.6<br />Sepal.Width: 3.2<br />Species: setosa","Sepal.Length: 5.3<br />Sepal.Width: 3.7<br />Species: setosa","Sepal.Length: 5.0<br />Sepal.Width: 3.3<br />Species: setosa"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"setosa","legendgroup":"setosa","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[7,6.4,6.9,5.5,6.5,5.7,6.3,4.9,6.6,5.2,5,5.9,6,6.1,5.6,6.7,5.6,5.8,6.2,5.6,5.9,6.1,6.3,6.1,6.4,6.6,6.8,6.7,6,5.7,5.5,5.5,5.8,6,5.4,6,6.7,6.3,5.6,5.5,5.5,6.1,5.8,5,5.6,5.7,5.7,6.2,5.1,5.7],"y":[3.2,3.2,3.1,2.3,2.8,2.8,3.3,2.4,2.9,2.7,2,3,2.2,2.9,2.9,3.1,3,2.7,2.2,2.5,3.2,2.8,2.5,2.8,2.9,3,2.8,3,2.9,2.6,2.4,2.4,2.7,2.7,3,3.4,3.1,2.3,3,2.5,2.6,3,2.6,2.3,2.7,3,2.9,2.9,2.5,2.8],"text":["Sepal.Length: 7.0<br />Sepal.Width: 3.2<br />Species: versicolor","Sepal.Length: 6.4<br />Sepal.Width: 3.2<br />Species: versicolor","Sepal.Length: 6.9<br />Sepal.Width: 3.1<br />Species: versicolor","Sepal.Length: 5.5<br />Sepal.Width: 2.3<br />Species: versicolor","Sepal.Length: 6.5<br />Sepal.Width: 2.8<br />Species: versicolor","Sepal.Length: 5.7<br />Sepal.Width: 2.8<br />Species: versicolor","Sepal.Length: 6.3<br />Sepal.Width: 3.3<br />Species: versicolor","Sepal.Length: 4.9<br />Sepal.Width: 2.4<br />Species: versicolor","Sepal.Length: 6.6<br />Sepal.Width: 2.9<br />Species: versicolor","Sepal.Length: 5.2<br />Sepal.Width: 2.7<br />Species: versicolor","Sepal.Length: 5.0<br />Sepal.Width: 2.0<br />Species: versicolor","Sepal.Length: 5.9<br />Sepal.Width: 3.0<br />Species: versicolor","Sepal.Length: 6.0<br />Sepal.Width: 2.2<br />Species: versicolor","Sepal.Length: 6.1<br />Sepal.Width: 2.9<br />Species: versicolor","Sepal.Length: 5.6<br />Sepal.Width: 2.9<br />Species: versicolor","Sepal.Length: 6.7<br />Sepal.Width: 3.1<br />Species: versicolor","Sepal.Length: 5.6<br />Sepal.Width: 3.0<br />Species: versicolor","Sepal.Length: 5.8<br />Sepal.Width: 2.7<br />Species: versicolor","Sepal.Length: 6.2<br />Sepal.Width: 2.2<br />Species: versicolor","Sepal.Length: 5.6<br />Sepal.Width: 2.5<br />Species: versicolor","Sepal.Length: 5.9<br />Sepal.Width: 3.2<br />Species: versicolor","Sepal.Length: 6.1<br />Sepal.Width: 2.8<br />Species: versicolor","Sepal.Length: 6.3<br />Sepal.Width: 2.5<br />Species: versicolor","Sepal.Length: 6.1<br />Sepal.Width: 2.8<br />Species: versicolor","Sepal.Length: 6.4<br />Sepal.Width: 2.9<br />Species: versicolor","Sepal.Length: 6.6<br />Sepal.Width: 3.0<br />Species: versicolor","Sepal.Length: 6.8<br />Sepal.Width: 2.8<br />Species: versicolor","Sepal.Length: 6.7<br />Sepal.Width: 3.0<br />Species: versicolor","Sepal.Length: 6.0<br />Sepal.Width: 2.9<br />Species: versicolor","Sepal.Length: 5.7<br />Sepal.Width: 2.6<br />Species: versicolor","Sepal.Length: 5.5<br />Sepal.Width: 2.4<br />Species: versicolor","Sepal.Length: 5.5<br />Sepal.Width: 2.4<br />Species: versicolor","Sepal.Length: 5.8<br />Sepal.Width: 2.7<br />Species: versicolor","Sepal.Length: 6.0<br />Sepal.Width: 2.7<br />Species: versicolor","Sepal.Length: 5.4<br />Sepal.Width: 3.0<br />Species: versicolor","Sepal.Length: 6.0<br />Sepal.Width: 3.4<br />Species: versicolor","Sepal.Length: 6.7<br />Sepal.Width: 3.1<br />Species: versicolor","Sepal.Length: 6.3<br />Sepal.Width: 2.3<br />Species: versicolor","Sepal.Length: 5.6<br />Sepal.Width: 3.0<br />Species: versicolor","Sepal.Length: 5.5<br />Sepal.Width: 2.5<br />Species: versicolor","Sepal.Length: 5.5<br />Sepal.Width: 2.6<br />Species: versicolor","Sepal.Length: 6.1<br />Sepal.Width: 3.0<br />Species: versicolor","Sepal.Length: 5.8<br />Sepal.Width: 2.6<br />Species: versicolor","Sepal.Length: 5.0<br />Sepal.Width: 2.3<br />Species: versicolor","Sepal.Length: 5.6<br />Sepal.Width: 2.7<br />Species: versicolor","Sepal.Length: 5.7<br />Sepal.Width: 3.0<br />Species: versicolor","Sepal.Length: 5.7<br />Sepal.Width: 2.9<br />Species: versicolor","Sepal.Length: 6.2<br />Sepal.Width: 2.9<br />Species: versicolor","Sepal.Length: 5.1<br />Sepal.Width: 2.5<br />Species: versicolor","Sepal.Length: 5.7<br />Sepal.Width: 2.8<br />Species: versicolor"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,186,56,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,186,56,1)"}},"hoveron":"points","name":"versicolor","legendgroup":"versicolor","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[6.3,5.8,7.1,6.3,6.5,7.6,4.9,7.3,6.7,7.2,6.5,6.4,6.8,5.7,5.8,6.4,6.5,7.7,7.7,6,6.9,5.6,7.7,6.3,6.7,7.2,6.2,6.1,6.4,7.2,7.4,7.9,6.4,6.3,6.1,7.7,6.3,6.4,6,6.9,6.7,6.9,5.8,6.8,6.7,6.7,6.3,6.5,6.2,5.9],"y":[3.3,2.7,3,2.9,3,3,2.5,2.9,2.5,3.6,3.2,2.7,3,2.5,2.8,3.2,3,3.8,2.6,2.2,3.2,2.8,2.8,2.7,3.3,3.2,2.8,3,2.8,3,2.8,3.8,2.8,2.8,2.6,3,3.4,3.1,3,3.1,3.1,3.1,2.7,3.2,3.3,3,2.5,3,3.4,3],"text":["Sepal.Length: 6.3<br />Sepal.Width: 3.3<br />Species: virginica","Sepal.Length: 5.8<br />Sepal.Width: 2.7<br />Species: virginica","Sepal.Length: 7.1<br />Sepal.Width: 3.0<br />Species: virginica","Sepal.Length: 6.3<br />Sepal.Width: 2.9<br />Species: virginica","Sepal.Length: 6.5<br />Sepal.Width: 3.0<br />Species: virginica","Sepal.Length: 7.6<br />Sepal.Width: 3.0<br />Species: virginica","Sepal.Length: 4.9<br />Sepal.Width: 2.5<br />Species: virginica","Sepal.Length: 7.3<br />Sepal.Width: 2.9<br />Species: virginica","Sepal.Length: 6.7<br />Sepal.Width: 2.5<br />Species: virginica","Sepal.Length: 7.2<br />Sepal.Width: 3.6<br />Species: virginica","Sepal.Length: 6.5<br />Sepal.Width: 3.2<br />Species: virginica","Sepal.Length: 6.4<br />Sepal.Width: 2.7<br />Species: virginica","Sepal.Length: 6.8<br />Sepal.Width: 3.0<br />Species: virginica","Sepal.Length: 5.7<br />Sepal.Width: 2.5<br />Species: virginica","Sepal.Length: 5.8<br />Sepal.Width: 2.8<br />Species: virginica","Sepal.Length: 6.4<br />Sepal.Width: 3.2<br />Species: virginica","Sepal.Length: 6.5<br />Sepal.Width: 3.0<br />Species: virginica","Sepal.Length: 7.7<br />Sepal.Width: 3.8<br />Species: virginica","Sepal.Length: 7.7<br />Sepal.Width: 2.6<br />Species: virginica","Sepal.Length: 6.0<br />Sepal.Width: 2.2<br />Species: virginica","Sepal.Length: 6.9<br />Sepal.Width: 3.2<br />Species: virginica","Sepal.Length: 5.6<br />Sepal.Width: 2.8<br />Species: virginica","Sepal.Length: 7.7<br />Sepal.Width: 2.8<br />Species: virginica","Sepal.Length: 6.3<br />Sepal.Width: 2.7<br />Species: virginica","Sepal.Length: 6.7<br />Sepal.Width: 3.3<br />Species: virginica","Sepal.Length: 7.2<br />Sepal.Width: 3.2<br />Species: virginica","Sepal.Length: 6.2<br />Sepal.Width: 2.8<br />Species: virginica","Sepal.Length: 6.1<br />Sepal.Width: 3.0<br />Species: virginica","Sepal.Length: 6.4<br />Sepal.Width: 2.8<br />Species: virginica","Sepal.Length: 7.2<br />Sepal.Width: 3.0<br />Species: virginica","Sepal.Length: 7.4<br />Sepal.Width: 2.8<br />Species: virginica","Sepal.Length: 7.9<br />Sepal.Width: 3.8<br />Species: virginica","Sepal.Length: 6.4<br />Sepal.Width: 2.8<br />Species: virginica","Sepal.Length: 6.3<br />Sepal.Width: 2.8<br />Species: virginica","Sepal.Length: 6.1<br />Sepal.Width: 2.6<br />Species: virginica","Sepal.Length: 7.7<br />Sepal.Width: 3.0<br />Species: virginica","Sepal.Length: 6.3<br />Sepal.Width: 3.4<br />Species: virginica","Sepal.Length: 6.4<br />Sepal.Width: 3.1<br />Species: virginica","Sepal.Length: 6.0<br />Sepal.Width: 3.0<br />Species: virginica","Sepal.Length: 6.9<br />Sepal.Width: 3.1<br />Species: virginica","Sepal.Length: 6.7<br />Sepal.Width: 3.1<br />Species: virginica","Sepal.Length: 6.9<br />Sepal.Width: 3.1<br />Species: virginica","Sepal.Length: 5.8<br />Sepal.Width: 2.7<br />Species: virginica","Sepal.Length: 6.8<br />Sepal.Width: 3.2<br />Species: virginica","Sepal.Length: 6.7<br />Sepal.Width: 3.3<br />Species: virginica","Sepal.Length: 6.7<br />Sepal.Width: 3.0<br />Species: virginica","Sepal.Length: 6.3<br />Sepal.Width: 2.5<br />Species: virginica","Sepal.Length: 6.5<br />Sepal.Width: 3.0<br />Species: virginica","Sepal.Length: 6.2<br />Sepal.Width: 3.4<br />Species: virginica","Sepal.Length: 5.9<br />Sepal.Width: 3.0<br />Species: virginica"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(97,156,255,1)","opacity":1,"size":5.66929133858268,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(97,156,255,1)"}},"hoveron":"points","name":"virginica","legendgroup":"virginica","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.1840321018403,"r":7.97011207970112,"b":42.8614916286149,"l":47.0236612702366},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.9402241594022},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[4.12,8.08],"tickmode":"array","ticktext":["5","6","7","8"],"tickvals":[5,6,7,8],"categoryorder":"array","categoryarray":["5","6","7","8"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.98505603985056,"tickwidth":0.724555643609193,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.724555643609193,"zeroline":false,"anchor":"y","title":{"text":"Sepal Length","font":{"color":"rgba(0,0,0,1)","family":"","size":15.9402241594022}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[1.88,4.52],"tickmode":"array","ticktext":["2.0","2.5","3.0","3.5","4.0","4.5"],"tickvals":[2,2.5,3,3.5,4,4.5],"categoryorder":"array","categoryarray":["2.0","2.5","3.0","3.5","4.0","4.5"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.98505603985056,"tickwidth":0.724555643609193,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.724555643609193,"zeroline":false,"anchor":"x","title":{"text":"Sepal Width","font":{"color":"rgba(0,0,0,1)","family":"","size":15.9402241594022}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.724555643609193,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.06156048675734,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218},"y":0.905511811023622},"annotations":[{"text":"Species","x":1.02,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":15.9402241594022},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"left","yanchor":"bottom","legendTitle":true}],"hovermode":"closest","width":460,"height":360,"barmode":"relative"},"config":{"doubleClick":"reset","showSendToCloud":false},"source":"A","attrs":{"2638d6f410c51":{"x":{},"y":{},"colour":{},"type":"scatter"}},"cur_data":"2638d6f410c51","visdat":{"2638d6f410c51":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+
+???
+
+R package `plotly` helps you to add interactivity to a standard ggplot graph with minimal overhead.
+
+---
+name: interactive-ggiraph
+
+## Interactive ggplot: ggiraph
+
+- R package [ggiraph](https://davidgohel.github.io/ggiraph/articles/offcran/using_ggiraph.html) converts a static ggplot2 object into an interactive plot.
+
+
+```r
+library(ggiraph)
+p &lt;- ggplot(iris,aes(x=Sepal.Length,y=Petal.Length,colour=Species))+
+      geom_point_interactive(aes(tooltip=Species),size=1)+
+      theme_bw()
+
+ggiraph(code=print(p),zoom_max=5,tooltip_opacity=0.7,height_svg=2,width_svg=4,width=0.9)
+```
+
+<div id="htmlwidget-792e9f6af3e4eaf29e67" style="width:432px;height:288px;" class="girafe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-792e9f6af3e4eaf29e67">{"x":{"html":"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906' viewBox='0 0 288.00 144.00'>\n  <g>\n    <defs>\n      <clipPath id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_1'>\n        <rect x='0.00' y='0.00' width='288.00' height='144.00'/>\n      <\/clipPath>\n    <\/defs>\n    <rect x='0.00' y='0.00' width='288.00' height='144.00' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_1' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_1)' fill='#FFFFFF' fill-opacity='1' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.75' stroke-linejoin='round' stroke-linecap='round'/>\n    <defs>\n      <clipPath id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_2'>\n        <rect x='0.00' y='0.00' width='288.00' height='144.00'/>\n      <\/clipPath>\n    <\/defs>\n    <rect x='0.00' y='0.00' width='288.00' height='144.00' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_2' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_2)' fill='#FFFFFF' fill-opacity='1' stroke='#FFFFFF' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n    <defs>\n      <clipPath id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3'>\n        <rect x='29.06' y='5.48' width='165.85' height='106.82'/>\n      <\/clipPath>\n    <\/defs>\n    <rect x='29.06' y='5.48' width='165.85' height='106.82' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_3' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n    <polyline points='29.06,107.44 194.90,107.44' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_4' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='29.06,74.52 194.90,74.52' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_5' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='29.06,41.61 194.90,41.61' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_6' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='29.06,8.69 194.90,8.69' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_7' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='44.97,112.29 44.97,5.48' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_8' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='86.85,112.29 86.85,5.48' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_9' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='128.73,112.29 128.73,5.48' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_10' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='170.61,112.29 170.61,5.48' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_11' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.53' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='29.06,90.98 194.90,90.98' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_12' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='29.06,58.06 194.90,58.06' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_13' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='29.06,25.15 194.90,25.15' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_14' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='65.91,112.29 65.91,5.48' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_15' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='107.79,112.29 107.79,5.48' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_16' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='149.67,112.29 149.67,5.48' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_17' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='191.55,112.29 191.55,5.48' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_18' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n    <circle cx='70.10' cy='100.86' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_19' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='61.72' cy='100.86' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_20' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='53.35' cy='102.50' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_21' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='49.16' cy='99.21' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_22' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='65.91' cy='100.86' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_23' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='82.66' cy='95.92' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_24' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='49.16' cy='100.86' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_25' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='65.91' cy='99.21' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_26' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='40.78' cy='100.86' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_27' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='61.72' cy='99.21' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_28' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='82.66' cy='99.21' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_29' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='57.53' cy='97.56' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_30' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='57.53' cy='100.86' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_31' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='36.59' cy='105.79' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_32' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='99.41' cy='104.15' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_33' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='95.23' cy='99.21' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_34' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='82.66' cy='102.50' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_35' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='70.10' cy='100.86' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_36' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='95.23' cy='95.92' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_37' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='70.10' cy='99.21' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_38' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='82.66' cy='95.92' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_39' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='70.10' cy='99.21' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_40' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='49.16' cy='107.44' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_41' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='70.10' cy='95.92' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_42' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='57.53' cy='92.63' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_43' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='65.91' cy='97.56' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_44' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='65.91' cy='97.56' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_45' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='74.29' cy='99.21' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_46' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='74.29' cy='100.86' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_47' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='53.35' cy='97.56' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_48' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='57.53' cy='97.56' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_49' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='82.66' cy='99.21' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_50' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='74.29' cy='99.21' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_51' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='86.85' cy='100.86' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_52' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='61.72' cy='99.21' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_53' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='65.91' cy='104.15' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_54' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='86.85' cy='102.50' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_55' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='61.72' cy='100.86' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_56' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='40.78' cy='102.50' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_57' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='70.10' cy='99.21' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_58' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='65.91' cy='102.50' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_59' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='44.97' cy='102.50' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_60' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='40.78' cy='102.50' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_61' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='65.91' cy='97.56' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_62' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='70.10' cy='92.63' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_63' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='57.53' cy='100.86' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_64' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='70.10' cy='97.56' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_65' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='49.16' cy='100.86' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_66' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='78.47' cy='99.21' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_67' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='65.91' cy='100.86' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_68' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='setosa'/>\n    <circle cx='149.67' cy='46.54' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_69' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='124.54' cy='49.84' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_70' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='145.48' cy='43.25' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_71' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='86.85' cy='58.06' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_72' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='128.73' cy='48.19' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_73' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='95.23' cy='49.84' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_74' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='120.36' cy='46.54' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_75' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='61.72' cy='69.59' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_76' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='132.92' cy='48.19' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_77' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='74.29' cy='59.71' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_78' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='65.91' cy='66.29' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_79' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='103.60' cy='54.77' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_80' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='107.79' cy='58.06' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_81' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='111.98' cy='46.54' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_82' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='91.04' cy='64.65' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_83' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='137.11' cy='51.48' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_84' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='91.04' cy='49.84' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_85' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='99.41' cy='56.42' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_86' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='116.17' cy='49.84' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_87' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='91.04' cy='59.71' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_88' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='103.60' cy='44.90' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_89' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='111.98' cy='58.06' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_90' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='120.36' cy='43.25' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_91' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='111.98' cy='46.54' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_92' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='124.54' cy='53.13' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_93' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='132.92' cy='51.48' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_94' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='141.30' cy='44.90' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_95' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='137.11' cy='41.61' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_96' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='107.79' cy='49.84' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_97' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='95.23' cy='66.29' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_98' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='86.85' cy='61.36' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_99' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='86.85' cy='63.00' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_100' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='99.41' cy='59.71' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_101' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='107.79' cy='39.96' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_102' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='82.66' cy='49.84' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_103' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='107.79' cy='49.84' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_104' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='137.11' cy='46.54' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_105' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='120.36' cy='51.48' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_106' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='91.04' cy='56.42' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_107' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='86.85' cy='58.06' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_108' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='86.85' cy='51.48' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_109' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='111.98' cy='48.19' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_110' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='99.41' cy='58.06' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_111' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='65.91' cy='69.59' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_112' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='91.04' cy='54.77' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_113' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='95.23' cy='54.77' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_114' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='95.23' cy='54.77' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_115' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='116.17' cy='53.13' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_116' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='70.10' cy='74.52' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_117' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='95.23' cy='56.42' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_118' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='versicolor'/>\n    <circle cx='120.36' cy='25.15' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_119' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='99.41' cy='39.96' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_120' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='153.86' cy='26.79' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_121' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='120.36' cy='31.73' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_122' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='128.73' cy='28.44' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_123' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='174.80' cy='15.27' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_124' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='61.72' cy='49.84' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_125' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='162.24' cy='20.21' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_126' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='137.11' cy='28.44' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_127' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='158.05' cy='23.50' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_128' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='128.73' cy='39.96' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_129' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='124.54' cy='36.67' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_130' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='141.30' cy='33.38' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_131' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='95.23' cy='41.61' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_132' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='99.41' cy='39.96' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_133' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='124.54' cy='36.67' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_134' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='128.73' cy='33.38' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_135' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='178.99' cy='13.63' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_136' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='178.99' cy='10.33' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_137' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='107.79' cy='41.61' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_138' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='145.48' cy='30.08' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_139' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='91.04' cy='43.25' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_140' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='178.99' cy='13.63' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_141' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='120.36' cy='43.25' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_142' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='137.11' cy='30.08' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_143' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='158.05' cy='25.15' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_144' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='116.17' cy='44.90' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_145' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='111.98' cy='43.25' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_146' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='124.54' cy='31.73' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_147' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='158.05' cy='28.44' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_148' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='166.42' cy='23.50' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_149' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='187.36' cy='18.56' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_150' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='124.54' cy='31.73' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_151' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='120.36' cy='39.96' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_152' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='111.98' cy='31.73' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_153' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='178.99' cy='23.50' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_154' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='120.36' cy='31.73' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_155' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='124.54' cy='33.38' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_156' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='107.79' cy='44.90' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_157' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='145.48' cy='35.02' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_158' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='137.11' cy='31.73' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_159' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='145.48' cy='39.96' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_160' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='99.41' cy='39.96' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_161' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='141.30' cy='26.79' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_162' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='137.11' cy='30.08' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_163' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='137.11' cy='38.31' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_164' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='120.36' cy='41.61' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_165' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='128.73' cy='38.31' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_166' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='116.17' cy='35.02' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_167' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <circle cx='103.60' cy='39.96' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_168' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='virginica'/>\n    <rect x='29.06' y='5.48' width='165.85' height='106.82' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_169' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_3)' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='round'/>\n    <defs>\n      <clipPath id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4'>\n        <rect x='0.00' y='0.00' width='288.00' height='144.00'/>\n      <\/clipPath>\n    <\/defs>\n    <g clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)'>\n      <text x='18.53' y='94.19' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_170' font-size='6.60pt' fill='#4D4D4D' fill-opacity='1' font-family='DejaVu Sans'>2<\/text>\n    <\/g>\n    <g clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)'>\n      <text x='18.53' y='61.27' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_171' font-size='6.60pt' fill='#4D4D4D' fill-opacity='1' font-family='DejaVu Sans'>4<\/text>\n    <\/g>\n    <g clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)'>\n      <text x='18.53' y='28.35' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_172' font-size='6.60pt' fill='#4D4D4D' fill-opacity='1' font-family='DejaVu Sans'>6<\/text>\n    <\/g>\n    <polyline points='26.32,90.98 29.06,90.98' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_173' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='26.32,58.06 29.06,58.06' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_174' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='26.32,25.15 29.06,25.15' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_175' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='65.91,115.03 65.91,112.29' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_176' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='107.79,115.03 107.79,112.29' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_177' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='149.67,115.03 149.67,112.29' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_178' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n    <polyline points='191.55,115.03 191.55,112.29' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_179' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)' fill='none' stroke='#333333' stroke-opacity='1' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n    <g clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)'>\n      <text x='63.11' y='123.64' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_180' font-size='6.60pt' fill='#4D4D4D' fill-opacity='1' font-family='DejaVu Sans'>5<\/text>\n    <\/g>\n    <g clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)'>\n      <text x='104.99' y='123.64' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_181' font-size='6.60pt' fill='#4D4D4D' fill-opacity='1' font-family='DejaVu Sans'>6<\/text>\n    <\/g>\n    <g clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)'>\n      <text x='146.87' y='123.64' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_182' font-size='6.60pt' fill='#4D4D4D' fill-opacity='1' font-family='DejaVu Sans'>7<\/text>\n    <\/g>\n    <g clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)'>\n      <text x='188.75' y='123.64' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_183' font-size='6.60pt' fill='#4D4D4D' fill-opacity='1' font-family='DejaVu Sans'>8<\/text>\n    <\/g>\n    <g clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)'>\n      <text x='75.99' y='136.23' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_184' font-size='8.25pt' font-family='DejaVu Sans'>Sepal.Length<\/text>\n    <\/g>\n    <g clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)'>\n      <text transform='translate(13.50,93.17) rotate(-90.00)' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_185' font-size='8.25pt' font-family='DejaVu Sans'>Petal.Length<\/text>\n    <\/g>\n    <rect x='205.86' y='19.59' width='76.66' height='78.59' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_186' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n    <g clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)'>\n      <text x='211.34' y='34.24' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_187' font-size='8.25pt' font-family='DejaVu Sans'>Species<\/text>\n    <\/g>\n    <rect x='211.34' y='40.86' width='17.28' height='17.28' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_188' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n    <circle cx='219.98' cy='49.50' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_189' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)' fill='#F8766D' fill-opacity='1' stroke='#F8766D' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round'/>\n    <rect x='211.34' y='58.14' width='17.28' height='17.28' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_190' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n    <circle cx='219.98' cy='66.78' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_191' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)' fill='#00BA38' fill-opacity='1' stroke='#00BA38' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round'/>\n    <rect x='211.34' y='75.42' width='17.28' height='17.28' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_192' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n    <circle cx='219.98' cy='84.06' r='1.07pt' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_193' clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)' fill='#619CFF' fill-opacity='1' stroke='#619CFF' stroke-opacity='1' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round'/>\n    <g clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)'>\n      <text x='234.10' y='52.71' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_194' font-size='6.60pt' font-family='DejaVu Sans'>setosa<\/text>\n    <\/g>\n    <g clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)'>\n      <text x='234.10' y='69.99' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_195' font-size='6.60pt' font-family='DejaVu Sans'>versicolor<\/text>\n    <\/g>\n    <g clip-path='url(#svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_cl_4)'>\n      <text x='234.10' y='87.27' id='svg_094f8244-dcb8-4e65-8bfd-31d5f5047906_el_196' font-size='6.60pt' font-family='DejaVu Sans'>virginica<\/text>\n    <\/g>\n  <\/g>\n<\/svg>","js":null,"uid":"svg_094f8244-dcb8-4e65-8bfd-31d5f5047906","ratio":2,"settings":{"tooltip":{"css":".tooltip_SVGID_ { padding:5px;background:black;color:white;border-radius:2px 2px 2px 2px;text-align:left; ; position:absolute;pointer-events:none;z-index:999;}\n","placement":"container","offx":10,"offy":0,"use_cursor_pos":true,"opacity":0.7,"usefill":false,"usestroke":false,"delay":{"over":200,"out":500}},"hover":{"css":".hover_SVGID_ { fill:orange;stroke:gray; }","reactive":false},"hoverkey":{"css":".hover_key_SVGID_ { stroke:red; }","reactive":false},"hovertheme":{"css":".hover_theme_SVGID_ { fill:green; }","reactive":false},"hoverinv":{"css":""},"zoom":{"min":1,"max":5},"capture":{"css":".selected_SVGID_ { fill:red;stroke:gray; }","type":"multiple","only_shiny":true,"selected":[]},"capturekey":{"css":".selected_key_SVGID_ { stroke:gray; }","type":"single","only_shiny":true,"selected":[]},"capturetheme":{"css":".selected_theme_SVGID_ { stroke:gray; }","type":"single","only_shiny":true,"selected":[]},"toolbar":{"position":"top","saveaspng":false,"pngname":"diagram"},"sizing":{"rescale":true,"width":0.9}}},"evals":[],"jsHooks":[]}</script>
+
+&lt;!-- --------------------- Do not edit this and below --------------------- --&gt;
+
+???
+
+R package `ggiraph` also helps you to add interactivity to a standard ggplot graph without too much additional code.
+
+---
+name: useful-links
+
+## Useful links
+
+- [ggplot extensions](https://exts.ggplot2.tidyverse.org/)
+- [ggplot book](https://ggplot2-book.org/index.html)
+- [R graphics cookbook](https://r-graphics.org/)
+
+---
+name: end-slide
+class: end-slide, middle
+count: false
+
+# Thank you. Questions?
+
+
+&lt;p&gt;R version 4.0.2 (2020-06-22)&lt;br&gt;&lt;p&gt;Platform: x86_64-conda_cos6-linux-gnu (64-bit)&lt;/p&gt;&lt;p&gt;OS: Ubuntu 20.04.2 LTS&lt;/p&gt;&lt;br&gt;
+
+Built on : &lt;i class='fa fa-calendar' aria-hidden='true'&gt;&lt;/i&gt; 16-Jun-2021 at &lt;i class='fa fa-clock-o' aria-hidden='true'&gt;&lt;/i&gt; 21:22:06  
+
+&lt;b&gt;2021&lt;/b&gt; • [SciLifeLab](https://www.scilifelab.se/) • [NBIS](https://nbis.se/) • [RaukR](https://nbisweden.github.io/workshop-RaukR-2106/)
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="assets/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "4:3",
+"highlightLanguage": "r",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "RaukR 2021 • %current%/%total%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
