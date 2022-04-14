@@ -1,6 +1,6 @@
-# RaukR 2021 • Teaching Materials
+# RaukR 2022 • Teaching Materials
 
-Welcome to the RaukR 2021 Teaching Materials GitHub repository.
+Welcome to the RaukR 2022 Teaching Materials GitHub repository.
 
 ## How to add my own materials?
 
