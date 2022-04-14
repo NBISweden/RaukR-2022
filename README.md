@@ -30,7 +30,7 @@ Welcome to the RaukR 2022 Teaching Materials GitHub repository.
 
 ## Seeing the content.
 
-If you add to links to your rendered html files to `docs/index.md`, the content can be seen at: https://nbisweden.github.io/RaukR-2021/
+If you add to links to your rendered html files to `docs/index.md`, the content can be seen at: https://nbisweden.github.io/RaukR-2022/
 
 ## Large files (datasets)
 If you have files larger than 100Mb in your materials, e.g. a dataset:
