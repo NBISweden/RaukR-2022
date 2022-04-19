@@ -1,0 +1,8 @@
+title: RaukR 2022
+description: Teaching Materials
+repository: NBISweden/RaukR-2022
+theme: jekyll-theme-cayman
+github:
+  is_project_page: false
+exclude:
+  - "**/*.Rmd"
