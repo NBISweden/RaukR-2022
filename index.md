@@ -27,8 +27,8 @@ description: Advanced R for Bioinformatics
 ## 14-Jun-2022 (Tue)
 
 - **Debugging, Profiling and Optimization** (Ashfaq Ali and Marcin Kierczak)
-    - Presentation
-    - Lab
+    - [Presentation](debugging/presentation/debugging_profiling_optimization.html)
+    - [Lab](debugging/lab/DebuggingProfilingOptimization.html)
 
 - **R Packages** (Sebastian DiLorenzo)
     - Presentation
