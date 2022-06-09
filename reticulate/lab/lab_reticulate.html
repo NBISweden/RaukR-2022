@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Nina Norgren" />
+
+
+<title>reticulate</title>
+
+<script src="lab_reticulate_files/header-attrs-2.14/header-attrs.js"></script>
+<script src="lab_reticulate_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="lab_reticulate_files/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
+<script src="lab_reticulate_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="lab_reticulate_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="lab_reticulate_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="lab_reticulate_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="lab_reticulate_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="lab_reticulate_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="lab_reticulate_files/navigation-1.1/tabsets.js"></script>
+<link href="lab_reticulate_files/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="lab_reticulate_files/highlightjs-9.12.0/highlight.js"></script>
+<link href="lab_reticulate_files/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="lab_reticulate_files/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="lab_reticulate_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="lab_reticulate_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link id="font-awesome-1-attachment" rel="attachment" href="lab_reticulate_files/font-awesome-5.1.0/fonts/fontawesome-webfont.ttf"/>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="assets/lab.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">reticulate</h1>
+<h3 class="subtitle">RaukR 2022 • Advanced R for Bioinformatics</h3>
+<h4 class="author">Nina Norgren</h4>
+
+</div>
+
+
+<!-- rmd lab header -->
+<p><img src="assets/logo.svg" alt="logo_raukr" class="trlogo"></p>
+<!-- ------------ Only edit title, subtitle & author above this ------------ -->
+<br>
+<div class="abstract spaced">
+<p>These are exercises for practicing to use the <code>reticulate</code> package in R. Try to do the exercises yourself before looking at the answers. Some sections have more pure Python code than others, if you feel that your Python skills are rusty, feel free to look at the answers and try your best to follow along. We will be writing some Python code chunks, so use R Markdown for this exercise.</p>
+</div>
+<p><br></p>
+<div id="setup" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Setup</h1>
+Install and load the <code>reticulate</code> package from CRAN, as well as the <code>ggplot2</code> package for plotting.
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>install.packages(&quot;reticulate&quot;)
+install.packages(&quot;ggplot2&quot;)
+install.packages(&quot;tidyverse&quot;)</code></pre>
+</div>
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>library(reticulate)
+library(ggplot2)
+library(tidyverse)</code></pre>
+</div>
+Create and activate an environment using Conda
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>## INSTALL CONDA!!!! otherwise this won&#39;t work, use install_miniconda
+conda_create(&quot;raukr&quot;, python_version = &quot;3.9&quot;)
+conda_install(&quot;raukr&quot;, &quot;pandas&quot;)             # install pandas
+conda_install(&quot;raukr&quot;, &quot;sqlalchemy&quot;)         # install sqlalchemy</code></pre>
+</div>
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>use_condaenv(&quot;raukr&quot;, required = TRUE)       # activate environment</code></pre>
+</div>
+<p><br></p>
+<p>To make sure you will use the correct Python version (and the libraries associated with it), use the keyword <code>required</code> when starting your conda environment. The <code>reticulate</code> package will figure out which Python version to use, using a specified order. For more information, read the documentation for <a href="https://rstudio.github.io/reticulate/articles/versions.html">Python versions</a> and <a href="https://rstudio.github.io/reticulate/articles/python_packages.html">package installation</a>.</p>
+<p><br></p>
+</div>
+<div id="imdb" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> IMdB</h1>
+<div id="preparations" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Preparations</h2>
+<p>The International Movie Database is a large database containing all information about movies, tv series, actors, producers, etc, and the ratings they received. If you are not aware of it, check out their website <a href="https://www.imdb.com/">imdb.com</a> for more information.</p>
+<p>You will be working on a smaller subset of some of the data listed, which consists of movies, ratings, and the principal actors playing in the movies. You will receive a file with python functions used to query this small database from R, where you will further process the data to answer questions related to different movies and actors. The underlying Python code uses the <code>sqlalchemy</code> library for querying the <code>sqlite</code> database.</p>
+<p>In preparation for using the Python code in R, make sure that the following files are all located in your working directory:</p>
+<ol style="list-style-type: decimal">
+<li><code>imdb.db</code></li>
+<li><code>model.py</code></li>
+<li><code>imdb_functions.py</code></li>
+</ol>
+<p><br>
+<i class="fas fa-clipboard-list"></i> Start by loading all the python functions into R</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811506229" aria-expanded="false" aria-controls="acc2022060811506229">
+</button>
+</p>
+<div id="acc2022060811506229" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>source_python(&quot;imdb_functions.py&quot;)</code></pre>
+</div>
+</div>
+</div>
+<p>First, inspecting which functions got imported when you sourced your python file. You can find them in the <strong>Environment</strong> table in RStudio. Some of the functions listed are part of the SQLAlchemy package used, but one example to look at is the function <code>get_actors()</code>.</p>
+<p>As you can see, R creates a wrapper function in R, for calling the underlying Python function. This specific function takes a movie title as input, and returns the principal actors of the movie. You can further study what the function does by looking at the code in the <code>imdb_functions.py</code> file. You can see that it queries the database for a specific movie, and returns the principal actors in it.</p>
+<p><br></p>
+</div>
+<div id="get-to-know-the-data" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Get to know the data</h2>
+<p><i class="fas fa-clipboard-list"></i> Let’s try out the <code>get_actors()</code> function. Get the principal actors for the movie <strong>Gattaca</strong>, and inspect the output type</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811528595" aria-expanded="false" aria-controls="acc2022060811528595">
+</button>
+</p>
+<div id="acc2022060811528595" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>actors &lt;- get_actors(&#39;Gattaca&#39;)
+str(actors)</code></pre>
+<pre><code>## List of 1
+##  $ Gattaca: chr [1:4] &quot;Ethan Hawke (Vincent,Jerome)&quot; &quot;Uma Thurman (Irene)&quot; &quot;Jude Law (Jerome,Eugene)&quot; &quot;Gore Vidal (Director Josef)&quot;</code></pre>
+</div>
+</div>
+</div>
+<p><br>
+<i class="fas fa-clipboard-list"></i> Next let’s do the same with the function <code>get_movies()</code>. List movies that <strong>Brent Spiner</strong> has been in</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811522036" aria-expanded="false" aria-controls="acc2022060811522036">
+</button>
+</p>
+<div id="acc2022060811522036" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>movies &lt;- get_movies(&#39;Brent Spiner&#39;)
+str(movies)</code></pre>
+<pre><code>## List of 1
+##  $ Brent Spiner: chr [1:3] &quot;Star Trek: First Contact&quot; &quot;Star Trek: Insurrection&quot; &quot;Star Trek: Nemesis&quot;</code></pre>
+</div>
+</div>
+</div>
+<p><br>
+<i class="fas fa-clipboard-list"></i> For printing some basic information about a movie, without saving anything to an R object, use the <code>print_movie_info</code> function. Here, find out information about the <strong>Avengers</strong> movies</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811527798" aria-expanded="false" aria-controls="acc2022060811527798">
+</button>
+</p>
+<div id="acc2022060811527798" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>print_movie_info(&#39;Avengers&#39;)</code></pre>
+</div>
+</div>
+</div>
+<p><br>
+<i class="fas fa-clipboard-list"></i> Capture the output from the previous function and save it as a variable</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811526738" aria-expanded="false" aria-controls="acc2022060811526738">
+</button>
+</p>
+<div id="acc2022060811526738" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>output &lt;- py_capture_output(print_movie_info(&#39;Avengers&#39;))
+cat(output)</code></pre>
+<pre><code>## Title:  The Avengers
+## Year:  1998
+## Runtime (min):  89
+## Genres:  Action,Adventure,Sci-Fi
+## Average rating:  3.8
+## Number of votes:  41414 
+## 
+## Title:  The Avengers
+## Year:  2012
+## Runtime (min):  143
+## Genres:  Action,Adventure,Sci-Fi
+## Average rating:  8.0
+## Number of votes:  1283281 
+## 
+## Title:  Avengers: Age of Ultron
+## Year:  2015
+## Runtime (min):  141
+## Genres:  Action,Adventure,Sci-Fi
+## Average rating:  7.3
+## Number of votes:  769172 
+## 
+## Title:  Avengers: Infinity War
+## Year:  2018
+## Runtime (min):  149
+## Genres:  Action,Adventure,Sci-Fi
+## Average rating:  8.4
+## Number of votes:  881191 
+## 
+## Title:  Avengers: Endgame
+## Year:  2019
+## Runtime (min):  181
+## Genres:  Action,Adventure,Drama
+## Average rating:  8.4
+## Number of votes:  880234</code></pre>
+</div>
+</div>
+</div>
+<p><br></p>
+<p><i class="fas fa-clipboard-list"></i> Inspect the types of the variables <code>actors</code> and <code>movies</code>. What type are they? What type where they converted from in Python?</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811520968" aria-expanded="false" aria-controls="acc2022060811520968">
+</button>
+</p>
+<div id="acc2022060811520968" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>str(actors)
+str(movies)
+
+# Both are of the R type `named list`, which is the type a Python `dictionary` gets converted to/from.</code></pre>
+<pre><code>## List of 1
+##  $ Gattaca: chr [1:4] &quot;Ethan Hawke (Vincent,Jerome)&quot; &quot;Uma Thurman (Irene)&quot; &quot;Jude Law (Jerome,Eugene)&quot; &quot;Gore Vidal (Director Josef)&quot;
+## List of 1
+##  $ Brent Spiner: chr [1:3] &quot;Star Trek: First Contact&quot; &quot;Star Trek: Insurrection&quot; &quot;Star Trek: Nemesis&quot;</code></pre>
+</div>
+</div>
+</div>
+<p><i class="fas fa-clipboard-list"></i> Source the python file again, but set <code>convert=FALSE</code>. What are the types now?</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811524649" aria-expanded="false" aria-controls="acc2022060811524649">
+</button>
+</p>
+<div id="acc2022060811524649" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>source_python(&quot;imdb_functions.py&quot;, convert = FALSE)
+
+actors &lt;- get_actors(&#39;Gattaca&#39;)
+class(actors)
+
+movies &lt;- get_movies(&#39;Brent Spiner&#39;)
+class(movies)
+
+# Now actors and movies are both of the python type dictionary</code></pre>
+<pre><code>## [1] &quot;python.builtin.dict&quot;   &quot;python.builtin.object&quot;
+## [1] &quot;python.builtin.dict&quot;   &quot;python.builtin.object&quot;</code></pre>
+</div>
+</div>
+</div>
+<p><i class="fas fa-clipboard-list"></i> Convert the types manually back to R types</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811538525" aria-expanded="false" aria-controls="acc2022060811538525">
+</button>
+</p>
+<div id="acc2022060811538525" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>actors.r &lt;- py_to_r(actors)
+str(actors.r)
+
+movies.r &lt;- py_to_r(movies)
+str(movies.r)</code></pre>
+<pre><code>## List of 1
+##  $ Gattaca: chr [1:4] &quot;Ethan Hawke (Vincent,Jerome)&quot; &quot;Uma Thurman (Irene)&quot; &quot;Jude Law (Jerome,Eugene)&quot; &quot;Gore Vidal (Director Josef)&quot;
+## List of 1
+##  $ Brent Spiner: chr [1:3] &quot;Star Trek: First Contact&quot; &quot;Star Trek: Insurrection&quot; &quot;Star Trek: Nemesis&quot;</code></pre>
+</div>
+</div>
+</div>
+<p><br></p>
+</div>
+<div id="working-with-dataframes" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Working with Dataframes</h2>
+<p>In the following sections we will be working with pandas dataframes in R. The answers we show will mostly be using the Python <code>pandas</code> library from R, but there are of course pure R ways of doing the following exercises once we have converted the output from the python functions. You are free to choose how you solve the following exercises, either only python in R, a mix, or pure R. But we encourage you to mix, as you will then practice the type conversions and usages of the <code>reticulate</code> library, especially for those of you that are more fluent in Python.</p>
+<div id="the-highest-ranked-movie" class="section level3" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> The highest ranked movie</h3>
+<p>The function <code>get_all_movies()</code> from the file <code>imdb_functions.py</code> can be used to retrieve all movies, either within a specified time period, or all of the movies in the database. If the imported function has a docstring, you can view the help documentation with:</p>
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>py_help(get_all_movies)</code></pre>
+</div>
+<p><br>
+<i class="fas fa-clipboard-list"></i> Start by importing all movies into a pandas dataframe, by sourcing the python functions into R. Do <em>not</em> convert the result into an R dataframe:</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811537830" aria-expanded="false" aria-controls="acc2022060811537830">
+</button>
+</p>
+<div id="acc2022060811537830" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>source_python(&quot;imdb_functions.py&quot;, convert = FALSE)
+movies_py &lt;- get_all_movies()
+class(movies_py)</code></pre>
+<pre><code>## [1] &quot;pandas.core.frame.DataFrame&quot;        &quot;pandas.core.generic.NDFrame&quot;       
+## [3] &quot;pandas.core.base.PandasObject&quot;      &quot;pandas.core.accessor.DirNamesMixin&quot;
+## [5] &quot;pandas.core.indexing.IndexingMixin&quot; &quot;pandas.core.arraylike.OpsMixin&quot;    
+## [7] &quot;python.builtin.object&quot;</code></pre>
+</div>
+</div>
+</div>
+<p>Inspecting the <code>movies_py</code> variable we can see that it is of the type <code>pandas.dataframe</code>.</p>
+<p>Now we are ready to answer our first question:</p>
+<h4>
+<strong>Which movie/movies are the highest ranked of all times?</strong>
+</h4>
+<p>We will try to answer this with a pandas method <em>directly</em> in a Python chunk. To do this we first have to make our <code>movies_py</code> variable visible to Python. Even though it is a Python object, since it was created within a R code chunk, Python code chunks cannot directly access them. To make R variables accessible in Python code chunks we use the <code>r</code> object. Remember that to access a Python variable from R, we used <code>py$</code>, to do the opposite we use <code>r.</code>. The $ and the . denotes the different ways in which Python and R represents methods.</p>
+<p>Use the method <code>.max()</code> from the <code>pandas</code> module to find and filter out the top movie/movies</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811534865" aria-expanded="false" aria-controls="acc2022060811534865">
+</button>
+</p>
+<div id="acc2022060811534865" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+python
+</div>
+<pre class="python"><code># the code below is python code written in a python code chunk
+movies = r.movies_py
+
+# inspect what columns are present
+movies.columns
+
+# find movies that has the highest averageRating
+top_movies = movies[movies.averageRating == movies.averageRating.max()]
+
+top_movies[&#39;primaryTitle&#39;]</code></pre>
+<pre><code>## Index([&#39;id&#39;, &#39;tconst&#39;, &#39;titleType&#39;, &#39;primaryTitle&#39;, &#39;originalTitle&#39;,
+##        &#39;startYear&#39;, &#39;endYear&#39;, &#39;runtimeMinutes&#39;, &#39;genres&#39;, &#39;averageRating&#39;,
+##        &#39;numVotes&#39;],
+##       dtype=&#39;object&#39;)
+## 3822    The Shawshank Redemption
+## 5450             The Chaos Class
+## Name: primaryTitle, dtype: object</code></pre>
+</div>
+</div>
+</div>
+<p><br>
+Above we are using pure pandas code directly in our RMarkdown document.</p>
+<p><i class="fas fa-clipboard-list"></i> Save <code>top_movies</code> as an R object, and find out from what years these movies are, and how many votes they got</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811544953" aria-expanded="false" aria-controls="acc2022060811544953">
+</button>
+</p>
+<div id="acc2022060811544953" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>movies_r &lt;- py$top_movies
+df &lt;- data.frame(movies_r$primaryTitle, movies_r$startYear, movies_r$numVotes)
+df</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["movies_r.primaryTitle"],"name":[1],"type":["chr"],"align":["left"]},{"label":["movies_r.startYear"],"name":[2],"type":["chr"],"align":["left"]},{"label":["movies_r.numVotes"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"The Shawshank Redemption","2":"1994","3":"2399394"},{"1":"The Chaos Class","2":"1975","3":"38290"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</div>
+<p><br>
+So the answer to which are the highest ranked movies of all times is <strong>The Shawshank Redemption</strong> and <strong>The Chaos Class</strong>. Although, The Chaos Class did not get as many votes as The Shawshank Redemption.
+<br></p>
+</div>
+<div id="average-ratings-over-time" class="section level3" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> Average ratings over time</h3>
+<p>Next we want to explore how the average ratings for movies has changed over time. This one we will solve in normal R chunks, by importing the required python functions from the file <code>imdb_functions.py</code>, and also load <code>pandas</code> into R. As we will be using pandas in R, import the Python file without converting it</p>
+<p><i class="fas fa-clipboard-list"></i> Get all movies and save into a pandas dataframe</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811543856" aria-expanded="false" aria-controls="acc2022060811543856">
+</button>
+</p>
+<div id="acc2022060811543856" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>source_python(&quot;imdb_functions.py&quot;, convert = FALSE)
+movies_py &lt;- get_all_movies()
+class(movies_py)</code></pre>
+</div>
+</div>
+</div>
+<p><i class="fas fa-clipboard-list"></i> Import pandas into R</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811549239" aria-expanded="false" aria-controls="acc2022060811549239">
+</button>
+</p>
+<div id="acc2022060811549239" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>pandas &lt;- import(&quot;pandas&quot;)</code></pre>
+</div>
+</div>
+</div>
+<p><i class="fas fa-clipboard-list"></i> Use pandas to group the data by startYear, and calculate the average ratings. Next, convert the result back into an R dataframe</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811549804" aria-expanded="false" aria-controls="acc2022060811549804">
+</button>
+</p>
+<div id="acc2022060811549804" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code># use pandas to group columns by startYear
+movies_grouped &lt;- movies_py$groupby(&#39;startYear&#39;)$mean()
+
+# convert the pandas dataframe to r dataframe
+movies_grouped_r &lt;- py_to_r(movies_grouped)
+str(movies_grouped_r)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    105 obs. of  4 variables:
+##  $ id            : num  1 2 3 5.5 9 ...
+##  $ runtimeMinutes: num  195 163 90 91.5 90.7 ...
+##  $ averageRating : num  6.3 7.7 7.3 7.42 8 ...
+##  $ numVotes      : num  23130 14472 9597 18906 44311 ...
+##  - attr(*, &quot;pandas.index&quot;)=Index([&#39;1915&#39;, &#39;1916&#39;, &#39;1919&#39;, &#39;1920&#39;, &#39;1921&#39;, &#39;1922&#39;, &#39;1923&#39;, &#39;1924&#39;, &#39;1925&#39;,
+##        &#39;1926&#39;,
+##        ...
+##        &#39;2012&#39;, &#39;2013&#39;, &#39;2014&#39;, &#39;2015&#39;, &#39;2016&#39;, &#39;2017&#39;, &#39;2018&#39;, &#39;2019&#39;, &#39;2020&#39;,
+##        &#39;2021&#39;],
+##       dtype=&#39;object&#39;, name=&#39;startYear&#39;, length=105)</code></pre>
+</div>
+</div>
+</div>
+<p><i class="fas fa-clipboard-list"></i> In this case the conversion seems to have done something to our startYear column. To fix this, add startYear column back into the dataframe, using R</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811541900" aria-expanded="false" aria-controls="acc2022060811541900">
+</button>
+</p>
+<div id="acc2022060811541900" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code># add Year column back to dataframe, and rename columns
+movies_grouped_r &lt;- cbind(rownames(movies_grouped_r), movies_grouped_r)
+colnames(movies_grouped_r) &lt;- c(&quot;startYear&quot;,&quot;id&quot;,&quot;runtimeMinutes&quot;, &quot;averageRating&quot;, &quot;numVotes&quot;)
+movies_grouped_r[1:5,1:4]</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["startYear"],"name":[1],"type":["chr"],"align":["left"]},{"label":["id"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["runtimeMinutes"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["averageRating"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"1915","2":"1.0","3":"195.00000","4":"6.300","_rn_":"1915"},{"1":"1916","2":"2.0","3":"163.00000","4":"7.700","_rn_":"1916"},{"1":"1919","2":"3.0","3":"90.00000","4":"7.300","_rn_":"1919"},{"1":"1920","2":"5.5","3":"91.50000","4":"7.425","_rn_":"1920"},{"1":"1921","2":"9.0","3":"90.66667","4":"8.000","_rn_":"1921"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+</div>
+<p>Make sure to inspect that the dataframe looks like it is supposed to, and that the values make sense. Once we are sure we have managed to transform the data, we can proceed.</p>
+<p><i class="fas fa-clipboard-list"></i> Plot the average ratings for each year</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811541784" aria-expanded="false" aria-controls="acc2022060811541784">
+</button>
+</p>
+<div id="acc2022060811541784" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>ggplot(movies_grouped_r, aes(x=startYear, y=averageRating)) + 
+                              geom_point() + 
+                              theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+                              ggtitle(&#39;Average ratings over years&#39;)</code></pre>
+<img src="lab_reticulate_files/figure-html/unnamed-chunk-23-1.png" width="1344" style="display: block; margin: auto auto auto 0;" />
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="bonus-exercise" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Bonus exercise</h2>
+<p>This is a bonus exercise if you have time left in the end of the exercise. This one is more tricky!</p>
+<p><i class="fas fa-clipboard-list"></i> Which actors have played together with both Ian McKellen and Patrick Stewart, but when they were in separate movies? Or rephrased, which actor has played with Ian McKellen Lee in one movie, and Patrick Stewart in another movie?</p>
+<p>For example:</p>
+<ol style="list-style-type: decimal">
+<li>Actor 1 has played with IM in movie a, and with PS in movie b. PS was not in movie a, and IM was not in movie b</li>
+<li>Actor 2 has played with IM in movie c, and with PS in movie c. </li>
+</ol>
+<p>Scenario 1 would count, while scenario 2 would not, as IM and PS was in this movie both together.</p>
+<p>To solve this one you need to think in several steps. There are of course several solutions, and you are free to approach this exercise however you want. We will give you a suggestion to one approach that could be used below:</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811540138" aria-expanded="false" aria-controls="acc2022060811540138">
+</button>
+</p>
+<div id="acc2022060811540138" class="collapse">
+<div class="card card-body">
+<pre class="r"><code>- Get a list of movies where Ian McKellen has played
+- Get a list of movies where Patrick Stewart has played
+- Remove intersections
+- Get all actors for all movies that Ian McKellen was in
+- Get all actors for all movies that Patrick Stewart was in 
+- Remove duplicates
+- Get intersection of actors</code></pre>
+</div>
+</div>
+<div class="abstract spaced">
+<p>Remember that this database only has the PRINCIPAL actor of movies, meaning you might have results where an actor has a minor role and is not listed here. If you are unsure if your results are correct, we provide you with a Python function to check your results.</p>
+</div>
+<p><br>
+To find out if your answer is correct, your can import and use the function <code>check_results</code> from the <code>imdb_functions.py</code> file. Replace <code>'Actor Name'</code> with the name of the actor that you think is the answer to the question above.</p>
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>source_python(&quot;imdb_functions.py&quot;)
+res_actor &lt;- &#39;Actor Name&#39;
+check_results(res_actor, &#39;Ian McKellen&#39;, &#39;Patrick Stewart&#39;)</code></pre>
+</div>
+<p><br>
+And if you want to see one suggested solution to this problem:</p>
+<p>
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811558126" aria-expanded="false" aria-controls="acc2022060811558126">
+</button>
+</p>
+<div id="acc2022060811558126" class="collapse">
+<div class="card card-body">
+<div class="block-title-parent">
+<div class="block-title small">
+R
+</div>
+<pre class="r"><code>source_python(&quot;imdb_functions.py&quot;, convert = FALSE)
+act1 &lt;- &#39;Ian McKellen&#39;
+act2 &lt;- &#39;Patrick Stewart&#39;
+
+# get movies for Patrick Stewart
+act1_movies &lt;- get_movies(act1)
+act1_movies
+movies1_lst &lt;- py_to_r(act1_movies[act1])
+
+# get movies for Ian McKellen
+act2_movies &lt;- get_movies(act2)
+act2_movies
+movies2_lst &lt;- py_to_r(act2_movies[act2])
+
+# get movies both has played in
+overlap &lt;- intersect(movies1_lst, movies2_lst)
+
+# remove overlap from each movielist
+new_movies1_lst &lt;- setdiff(movies1_lst, overlap)
+new_movies2_lst &lt;- setdiff(movies2_lst, overlap)
+
+# get all actors that has played in those movies
+# below we do things the functional way for the first 
+# movie list
+actors_lst &lt;- purrr::map(new_movies1_lst, 
+             ~ .x %&gt;% 
+             get_actors() %&gt;% 
+             py_to_r() %&gt;% 
+             .[[.x]] %&gt;% 
+             unlist() %&gt;% 
+             str_remove(&#39; \\(.*\\)&#39;)) %&gt;% 
+  unlist() 
+
+# remove all duplicates
+actors_lst_uniq &lt;- actors_lst %&gt;% unique()
+
+
+# and now, the same for the second movie list, but the 
+# non-functional way, using Python-inspired syntax. 
+
+actors_lst2 &lt;- character()
+
+for (movie in new_movies2_lst) {
+  actors &lt;- get_actors(movie)
+  actors_r &lt;- py_to_r(actors[movie])
+  for (actor in actors_r) {
+    a &lt;- strsplit(as.character(actor), &#39;\\s*[()]&#39;)[[1]]
+    actors_lst2 &lt;- append(actors_lst2, a[1])
+  }
+}
+
+actors_lst2_uniq &lt;- unique(actors_lst2)
+
+# finally, intersect the two lists with actors to
+# find the ones that played with both actors
+intersect(actors_lst_uniq, actors_lst2_uniq)</code></pre>
+<pre><code>## {&#39;Ian McKellen&#39;: [&#39;The Keep&#39;, &#39;Six Degrees of Separation&#39;, &#39;Richard III&#39;, &#39;Apt Pupil&#39;, &#39;Gods and Monsters&#39;, &#39;The Lord of the Rings: The Fellowship of the Ring&#39;, &#39;X-Men&#39;, &#39;The Lord of the Rings: The Return of the King&#39;, &#39;The Lord of the Rings: The Two Towers&#39;, &#39;X2: X-Men United&#39;, &#39;The Da Vinci Code&#39;, &#39;Neverwas&#39;, &#39;Flushed Away&#39;, &#39;Stardust&#39;, &#39;The Hobbit: An Unexpected Journey&#39;, &#39;The Hobbit: The Desolation of Smaug&#39;, &#39;X-Men: Days of Future Past&#39;, &#39;The Hobbit: The Battle of the Five Armies&#39;, &#39;Mr. Holmes&#39;, &#39;The Good Liar&#39;]}
+## {&#39;Patrick Stewart&#39;: [&#39;Star Trek: Generations&#39;, &#39;Star Trek: First Contact&#39;, &#39;Conspiracy Theory&#39;, &#39;Star Trek: Insurrection&#39;, &#39;X-Men&#39;, &#39;Star Trek: Nemesis&#39;, &#39;X2: X-Men United&#39;, &#39;Steamboy&#39;, &#39;X-Men: The Last Stand&#39;, &#39;Earth&#39;, &#39;TMNT&#39;, &#39;African Cats&#39;, &#39;X-Men: Days of Future Past&#39;, &#39;Logan&#39;, &#39;Green Room&#39;]}
+## [1] &quot;Hugh Jackman&quot;</code></pre>
+</div>
+</div>
+</div>
+<p>Try some other actors and see what you find. For example, try actors that have played with <em>Johnny Depp</em> and <em>Helena Bonham Carter</em>.</p>
+<!-- --------------------- Do not edit this and below ---------------------- -->
+</div>
+</div>
+<div id="session-info" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Session info</h1>
+<pre><code>## R version 4.1.0 (2021-05-18)
+## Platform: x86_64-w64-mingw32/x64 (64-bit)
+## Running under: Windows 10 x64 (build 19044)
+## 
+## Matrix products: default
+## 
+## locale:
+## [1] LC_COLLATE=English_United Kingdom.1252 
+## [2] LC_CTYPE=English_United Kingdom.1252   
+## [3] LC_MONETARY=English_United Kingdom.1252
+## [4] LC_NUMERIC=C                           
+## [5] LC_TIME=English_United Kingdom.1252    
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] reticulate_1.20   forcats_0.5.1     stringr_1.4.0     dplyr_1.0.6      
+##  [5] purrr_0.3.4       readr_1.4.0       tidyr_1.1.3       tibble_3.1.2     
+##  [9] ggplot2_3.3.3     tidyverse_1.3.1   fontawesome_0.2.1 captioner_2.2.3  
+## [13] bookdown_0.22     knitr_1.33       
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_1.0.6       lattice_0.20-44  lubridate_1.7.10 png_0.1-7       
+##  [5] assertthat_0.2.1 digest_0.6.27    utf8_1.2.1       R6_2.5.0        
+##  [9] cellranger_1.1.0 backports_1.2.1  reprex_2.0.0     evaluate_0.14   
+## [13] highr_0.9        httr_1.4.2       pillar_1.6.1     rlang_0.4.11    
+## [17] readxl_1.3.1     rstudioapi_0.13  jquerylib_0.1.4  Matrix_1.3-3    
+## [21] rmarkdown_2.14   labeling_0.4.2   munsell_0.5.0    broom_0.7.6     
+## [25] compiler_4.1.0   modelr_0.1.8     xfun_0.23        pkgconfig_2.0.3 
+## [29] htmltools_0.5.2  tidyselect_1.1.1 fansi_0.4.2      crayon_1.4.1    
+## [33] dbplyr_2.1.1     withr_2.4.2      rappdirs_0.3.3   grid_4.1.0      
+## [37] jsonlite_1.7.2   gtable_0.3.0     lifecycle_1.0.0  DBI_1.1.1       
+## [41] magrittr_2.0.1   scales_1.1.1     cli_2.5.0        stringi_1.6.1   
+## [45] farver_2.1.0     fs_1.5.0         xml2_1.3.2       bslib_0.3.1     
+## [49] ellipsis_0.3.2   generics_0.1.0   vctrs_0.3.8      tools_4.1.0     
+## [53] glue_1.4.2       hms_1.1.0        fastmap_1.1.0    yaml_2.2.1      
+## [57] colorspace_2.0-1 rvest_1.0.0      haven_2.4.1      sass_0.4.1</code></pre>
+<p style="text-align: left; font-size: small;">
+Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 08-Jun-2022 at <i class="fa fa-clock-o" aria-hidden="true"></i> 11:10:59.
+</p>
+<hr/>
+<div style="padding-bottom: 1.5em">
+<p><span style="float:left; vertical-align:middle">
+<b>2022</b> • <a href="https://www.scilifelab.se/">SciLifeLab</a> • <a href="https://nbis.se/">NBIS</a> • <a href="https://nbisweden.github.io/workshop-RaukR-2206/">RaukR</a>
+</span>
+<span style="float:right; vertical-align:middle">
+<span class="footericon" style="padding-right:4px; padding-left:4px">
+<a href="https://nbisweden.github.io/workshop-RaukR-2206/"><img src="assets/icons8-globe-26.png" alt="website" border="0" style="height:15px"></a>
+</span>
+<span class="footericon" style="padding-right:4px; padding-left:4px">
+<a href="https://twitter.com/hashtag/RaukR?src=hash"><img src="assets/icons8-twitter-26.png" alt="twitter" border="0" style="height:15px"></a>
+</span>
+</span></p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
