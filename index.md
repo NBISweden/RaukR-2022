@@ -7,7 +7,7 @@ description: Advanced R for Bioinformatics
 
 # Course content
 
-## 13-Jun-2021 (Mon)
+## 13-Jun-2022 (Mon)
 
 - **Introduction to RaukR 2021** (Marcin Kierczak)
     - Presentation
@@ -24,7 +24,7 @@ description: Advanced R for Bioinformatics
     - Presentation
     - Lab
 
-## 14-Jun-2021 (Tue)
+## 14-Jun-2022 (Tue)
 
 - **Debugging, Profiling and Optimization** (Ashfaq Ali and Marcin Kierczak)
     - Presentation
@@ -34,7 +34,7 @@ description: Advanced R for Bioinformatics
     - Presentation
     - Lab
 
-## 15-Jun-2021 (Wed)
+## 15-Jun-2022 (Wed)
 
 - **Object-oriented programming** (Marcin Kierczak)
     - Presentation
@@ -52,7 +52,7 @@ description: Advanced R for Bioinformatics
     - Presentation
     - Lab
 
-## 16-Jun-2021 (Thu)
+## 16-Jun-2022 (Thu)
 
 - **Tidyverse** (Marcin Kierczak)
     - Presentation
@@ -65,7 +65,7 @@ description: Advanced R for Bioinformatics
 - **Efficient iteration** (Jenny Bryan, RStudio & UBC)
     - Presentation
 
-## 17-Jun-2021 (Fri)
+## 17-Jun-2022 (Fri)
 
 - **Introduction to shiny apps** (Roy Francis)
     - [Presentation](shiny/presentation/shiny_presentation.html)
