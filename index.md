@@ -12,15 +12,18 @@ description: Advanced R for Bioinformatics
 - **Introduction to RaukR 2022** (Marcin Kierczak)
     - Presentation
 
-- **Reproducible research** (Roy Francis and Mun-Gwan Hong)
+- **Reproducible research** (Mun-Gwan Hong & Roy Francis)
     - [Presentation](topic_repr_research_Mun-Gwan/presentation/rr_presentation.html)
     - [Lab](topic_repr_research_Mun-Gwan/lab/rr_lab.html)
 
-- **Best Coding Practises** (Marcin Kierczak)
+- **Best Coding Practises in R** (Marcin Kierczak)
     - [Presentation](topic_best_coding_practises_Marcin/presentation/pres_best_coding_practises.html)
     - [Lab](topic_best_coding_practises_Marcin/lab/BestCodingPractisesLab.html)
 
-- **Functions & Scripts** (Sebastian DiLorenzo)
+- **RMarkdown** (Chris Dervieux and Yihui Xie, RStudio)
+    - Presentation
+
+- **Functions & Scripts** (Sebastian DiLorenzo and Julie Laurent)
     - Presentation
     - Lab
 
@@ -30,57 +33,41 @@ description: Advanced R for Bioinformatics
     - Presentation
     - Lab
 
-- **R Packages** (Sebastian DiLorenzo)
+- **R Packages** (Sebastian DiLorenzo and Nima Rafati)
     - Presentation
     - Lab
+
+- **Guest Lecture** (Jenny Bryan, RStudio)
+    - Presentation
 
 ## 15-Jun-2022 (Wed)
 
-- **Object-oriented programming** (Marcin Kierczak)
+- **Object-oriented programming** (Marcin Kierczak and Ashfaq Ali)
     - Presentation
     - Lab
 
-- **Vectorization** (Marcin Kierczak)
+- **Vectorisation and Parallelisation** (Sebastian DiLorenzo and Marcin Kierczak)
     - Presentation
     - Lab
 
-- **Parallelisation** (Sebastian DiLorenzo)
-    - Presentation
-    - Lab
-
-- **reticulate: Combining R with Python** (Nina Norgren)
+- **reticulate: Combining R with Python** (Nina Norgren and Roy Francis and Marcin Kierczak)
     - Presentation
     - Lab
 
 ## 16-Jun-2022 (Thu)
 
-- **Tidyverse** (Marcin Kierczak)
+- **Tidyverse** (Marcin Kierczak, Roy Francis, Mun-Gwan Hong)
     - Presentation
     - Lab
 
-- **Working with ggplot2** (Roy Francis)
+- **Working with ggplot2** (Roy Francis and Julie Laurent)
     - [Presentation](ggplot/presentation/ggplot_presentation.html)
     - [Lab](ggplot/lab/ggplot_lab.html)
 
-- **Efficient iteration** (Jenny Bryan, RStudio & UBC)
-    - Presentation
-
 ## 17-Jun-2022 (Fri)
 
-- **Introduction to shiny apps** (Roy Francis)
+- **Introduction to shiny apps** (Roy Francis, Lokeshwaran Manoharan)
     - [Presentation](shiny/presentation/shiny_presentation.html)
     - [Lab](shiny/lab/shiny_lab.html)
-
-- **Tidymodels** (Max Kuhn, RStudio)
-    - Presentation
-
-- **RMarkdown** (Christoph Dervieux, Yihui Xie, RStudio)
-    - Presentation
-
-- **Stats and ML** (Nikolay Oskolkov)
-    - Presentation
-    - Lab
-
----
 
 **2022** • NBIS
