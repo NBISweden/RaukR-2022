@@ -17,8 +17,8 @@ description: Advanced R for Bioinformatics
     - [Lab](topic_repr_research_Mun-Gwan/lab/rr_lab.html)
 
 - **Best Coding Practises** (Marcin Kierczak)
-    - [Presentation](best_coding_practises_Marcin/presentation/pres_best_coding_practises.html)
-    - [Lab](best_coding_practises_Marcin/lab/BestCodingPractisesLab.html)
+    - [Presentation](topic_best_coding_practises_Marcin/presentation/pres_best_coding_practises.html)
+    - [Lab](topic_best_coding_practises_Marcin/lab/BestCodingPractisesLab.html)
 
 - **Functions & Scripts** (Sebastian DiLorenzo)
     - Presentation
