@@ -1,0 +1,6 @@
+memory profiling: GC profiling: line profiling: sample.interval=10000
+#File 1: <expr>
+:2959363:8768399:214296320:237:"findCenvVar" "getInlineInfo" "tryInline" "cmpCall" "cmp" "cmpSymbolAssign" "h" "tryInline" "cmpCall" "cmp" "h" "tryInline" "cmpCall" "cmp" "genCode" "cmpfun" "compiler:::tryCmpfun" 1#2 "rmarkdown::render" 
+:2988262:9325891:222288920:3825:"is.pairlist" "rmarkdown::render" 
+:3031268:10287114:233641296:6144:"eval" "eval" "fun_fill_loop2" 1#2 "rmarkdown::render" 
+:3069432:11140352:243716648:5452:"eval" "eval" "fun_fill_loop2" 1#2 "rmarkdown::render" 
