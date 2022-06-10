@@ -9,16 +9,16 @@ description: Advanced R for Bioinformatics
 
 ## 13-Jun-2022 (Mon)
 
-- **Introduction to RaukR 2021** (Marcin Kierczak)
+- **Introduction to RaukR 2022** (Marcin Kierczak)
     - Presentation
 
 - **Reproducible research** (Roy Francis and Mun-Gwan Hong)
-    - [Presentation](rr/presentation/rr_presentation.html)
-    - [Lab](rr/lab/rr_lab.html)
+    - [Presentation](topic_repr_research_Mun-Gwan/presentation/rr_presentation.html)
+    - [Lab](topic_repr_research_Mun-Gwan/lab/rr_lab.html)
 
 - **Best Coding Practises** (Marcin Kierczak)
-    - Presentation
-    - Lab
+    - [Presentation](best_coding_practises_Marcin/presentation/pres_best_coding_practises.html)
+    - [Lab](best_coding_practises_Marcin/lab/BestCodingPractisesLab.html)
 
 - **Functions & Scripts** (Sebastian DiLorenzo)
     - Presentation
