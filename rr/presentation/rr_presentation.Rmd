@@ -100,19 +100,19 @@ class: spaced
 
 1. Get data
 2. Clean, transform data in spreadsheet
-3. Copy-paste-adjust, copy-paste-adjust, ...
-4. Run analysis & export figures using A
-5. Write up report using B
-6. Import figures from A to B
-7. Realizes a sample was mis-labelled
-8. Go back to step 2, Repeat
-9. (after a couple of months) Need to fix the figures
-10. Back to step 2, but forgot what was the latest version?
-11. Realizes the number of samples didn't match
-12. Back to step 2, try to remember why some data was modified manually before
+3. Copy-paste, copy-paste, ...
+4. Run analysis & make figures
+5. Write up a report attaching the figures
+6. Need to modify the source data/analysis
+7. Go back to step 2, Repeat
+8. (after a couple of months) Need to fix the figures
+9. Ask to myself which data I'm supposed to use now? (`data-final3` or `data-refined2`)
+10. Realize the number of samples didn't match
+11. Back to step 2, try to remember why some data was modified manually before
 
 --
 
+* (a couple of years later) "I got these figures from you. Could you modify them?"
 .size-30[![](rr_presentation_assets/picard.jpg)]
 
 ???
@@ -151,13 +151,15 @@ class: spaced
 
 ![](rr_presentation_assets/rr-solutions.jpg)
 
-* Containerised computing environment. Eg: *Docker*
-* Workflow manager Eg: *Snakemake, Nextflow*
-* Package and environment manager. Eg: *renv, Conda*
-* Track edits and collaborate coding. Eg: *Git*
-* Share and track code. Eg: *GitHub*
-* Notebooks to document ongoing analyses. Eg: *Jupyter*
-* Analyze and generate reports. Eg: *R Markdown*
+* Containerised computing environment - *eg: Singularity, Docker*
+* Workflow manager - *eg: Snakemake, Nextflow*
+* Package and environment manager - *eg: renv, Conda*
+* Track edits and collaborate coding - *eg: Git*
+* Share and track code - *eg: GitHub, Bitbucket*
+* Notebooks to document ongoing analyses - *eg: Jupyter*
+* Analyze and generate reports - *eg: R Markdown*
+
+A NBIS course of [**Tools for reproducible research**](https://nbis-reproducible-research.readthedocs.io/en/latest/)
 
 ???
 
@@ -168,11 +170,11 @@ class: spaced
 
 ## Steps to reproducibility
 
-* Documents containing analysis, code and results
-* Note the environment
-* Self-contained portable project
 * Avoid manual steps
-* Results are directly linked to code used to generate them
+* Documents containing analysis, code and results
+* Note the software environment
+* Self-contained portable project
+* Results directly linked to code
 * Contextual narrative to why a certain step was performed
 * Version control of documents
 * Keep the original data intact (read-only) with descriptions incl. how the data was obtained
@@ -186,7 +188,7 @@ Reproducible programming is not an R specific issue. R offers a set of tools and
 ## Environment
 
 * Not about `environment()`
-* Environment around your code
+* Software environment around your code
 * Operating system (Windows, Mac, Linux, ...)
 * A particular version of R/Python
 * Loaded package versions
@@ -195,11 +197,11 @@ Reproducible programming is not an R specific issue. R offers a set of tools and
 
 ## Software for environment management
 
-* Operating system - *Docker*
-* R/Python - *Conda*
-* Loaded package versions - *`renv`* package
+* Operating system - *Singularity*, *Docker*
 
-A NBIS course of [**Tools for reproducible research**](https://nbis-reproducible-research.readthedocs.io/en/latest/)
+* R/Python - *Conda*
+
+* Loaded package versions - *`renv`* package
 
 ---
 
@@ -207,15 +209,15 @@ A NBIS course of [**Tools for reproducible research**](https://nbis-reproducible
 
 * **R env**ironment management package
 
-* It helps our individual projects **isolated** so **portable**, 
-and **reproducible**
+* It helps our individual projects **isolated** so **portable**, and **reproducible**
 
 * Local library of R packages
 
-* Install `renv` package from CRAN
+* Install `renv` package from CRAN or Conda
 
 ```
 install.packages("renv")
+conda install -c conda-forge r-renv 
 ```
 
 * Initialize local R environment using `renv`
