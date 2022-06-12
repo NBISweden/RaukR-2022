@@ -41,12 +41,26 @@ library(rmarkdown)
 ```
 
 <div class="spaced abstract">
-This is the R packages exercise from RaukR 2021. It will take you through creating an R package with code, data, documentation, creating or generating a correct DESCRIPTION and NAMESPACE, importing packages, checking your package for warnings and using C++ functions through `Rcpp`.
+This is the R packages exercise from RaukR. It will take you through creating an R package with code, data, documentation, creating or generating a correct DESCRIPTION and NAMESPACE, importing packages, checking your package for warnings. There are also some advanced excercises you can do if you have time.
+
+The exercise will show how do to things from R console, but many of the functionalities are so common they are built into Rstudio. Because of this I have included a cheatsheet which can be useful if you are developing packages in Rstudio in the future.
 
 It is fine if you do not have time for the whole thing, as all components may not be important to you. You can always come back later :).
 </div>
 
 ---
+
+# Cheatsheet
+
+```{r,echo=FALSE, results ='asis'}
+library(knitr)
+cheatsheet <- data.frame(command = c("usethis::create_package()","usethis::use_r()","devtools::load_all()","usethis::use_data()","devtools::document()","devtools::use_package()","devtools::check()"),
+                         description = c("Create a package backbone.","Create or open a file in R/ for editing.","Simulates building, installing and attaching a development package.","Creates a .rda file in data/ containing the object. The file has the same name as the object.","Create .Rd files from roxygen2 function comments. Generate NAMESPACE.","Add package to Imports field of DESCRIPTION.","Run R CMD check on your development package from within R. Also performs bundling and other checks."),
+                         Rstudio_windows = c("File > New Project > New Directory > R package","NA","CTRL+SHIFT+L ","NA","CTRL+SHIFT+D","NA","NA"),
+                         Rstudio_mac = c("File > New Project > New Directory > R package","NA","CMD+SHIFT+L","NA","CMD+SHIFT+D","NA","NA"))
+kable(cheatsheet, caption = "Cheatsheet. Note; not all commands are functionally equivalent to Rstudio commands.")
+```
+
 
 # Installing dependencies
 
@@ -64,19 +78,20 @@ First of all we will create the standard files that are required in an R package
 
 <!-- You can do this from within Rstudio **or** using `devtools`. 
 
-## Option 1: In Rstudio -->
+## Option 1: In Rstudio
 
 Select *File > New Project > New Directory > R package*, give your package a name and click *Create Project*. This should trigger your Rstudio to reload, showing your package name in the top right corner, your packages file structure in the file viewer and a standard **hello.R** R code file in the editor.
 
-<!--
-## Option 2: In R devtools suite
+
+## Option 2: In R devtools suite-->
 
 ```
 usethis::create_package("path/to/your/package/packagename")
 ```
 
-I recommend using the Rstudio interface when working on your R package. To open this package in Rstudio, double click the **.Rproj** file or select it from Rstudio.
--->
+If you execute this command from within Rstudio, it should open a new instance of Rstudio located within your newly created package. If you didn't and want to work on your package in Rstudio, double click the **.Rproj** file or select it from Rstudio.
+
+Take a look at the "Files" pane of Rstudio to see what `create_package()` actually created for you.
 
 # Insert wondrous things
 
@@ -84,7 +99,15 @@ Now that we have a R package backbone lets fill it with stuff!
 
 ## R code
 
-Start by editing your **hello.R** file, you can rename it if you wish. Feel free to rewrite the function to perform some simple task. From adding two numbers to creating a basic plot from some input. It's up to you!
+Let's create the first function of your package. We can use the handy helper-function `usethis::use_r()` to create or navigate between the r files in your **R/** folder. You can also just create a **.R** file there if you wish.
+
+```
+usethis::use_r("trianguletter")
+```
+
+This should create and open the file `R/trianguletter.R` for editing.
+
+Feel free to rewrite the function to perform some simple task. From adding two numbers to creating a basic plot from some input. It's up to you!
 
 Here is an example that I threw together:
 ```{r, echo=TRUE}
@@ -95,7 +118,7 @@ trianguletter <- function(x) {
 }
 ```
 
-When you are happy with your function, save it and load it using `devtools::load_all()` or the keyboard shortcut *Ctrl/Cmd + Shift + L*
+When you are happy with your function, save it. To access and test your newly created function we have to attach it to make it available. But rather than bundle, install and attach we can use the function `devtools::load_all()` while developing the package. `load_all()` simulates the behaviour of bundling, installing and attaching the package, without actually having to do it.
 
 Now test your function in the console!
 
@@ -107,7 +130,7 @@ trianguletter(12)
 
 ## Data
 
-Lets add some data to our package, create an R object with whatever information you want. A string, a vector or a data.frame, as long as you recognise it, it doesn't matter. First we will save it to our **data/** folder using `usethis::use_data()`.
+Lets add some data to our package, create an R object with whatever information you want. A string, a vector or a data.frame, as long as you recognize it, it doesn't matter. First we will save it to our **data/** folder using `usethis::use_data()`.
 
 ```{r,eval=F}
 # A random object
@@ -131,7 +154,7 @@ usethis::use_data(your_object)
 ```
 -->
 
-Now when our package is loaded, `your_object` will be made available to us. To test this, remove all objects from your working directory, and load all functions. Check that you can access the object, despite just removing it from your workspace.
+Now when our package is loaded, `your_object` will be made available to the user. To test this, remove all objects from your working directory, and load all functions. Check that you can access the object, despite just removing it from your workspace.
 
 ```{r,eval=F}
 # Clear workspace
@@ -145,7 +168,8 @@ your_object
 [1] "red"   "green" "blue"
 ```
 
-The data in **data/** folder is available to the user, needs to be documented, and is where you would store data if the purpose of your package is to distribute one or more datasets in an R friendly way. If there is some data that you don't want to make easily accessible to the users, AKA not document, but that your functions use, you can put it in **sysdata.rda**. Lets create a second object, like the last one it does not matter what it is. Use the same command as before to save the object, except this time specify that this data is intended for internal use.
+The data in **data/** folder is available to the user, needs to be documented, and is where you would store data if the purpose of your package is to distribute one or more datasets in an R friendly way. 
+If there is some data that you don't want to make easily accessible to the users, AKA not document, but that your functions use, you can put it in **sysdata.rda**. Lets create a second object. Like the last one it does not matter what it is. Use the same command as before to save the object, except this time specify that this data is intended for internal use.
 
 ```{r,eval=F}
 # Create a second object
@@ -207,7 +231,7 @@ As was discussed in the presentation, the `roxygen2` documentation for a functio
 
 Go ahead and create documentation for your function. Add at least a title, a description, multi-section details, the parameters, the expected return value or output, an example of how to use your function and the export tag.
 
-> Note: The @export tag should always be last in documentation and grants the user access to the function. It is very important!
+> Note: The @export tag should always be last in documentation and grants the user access to the function. It is very important, if you want the user to be able to call the function. For internal functions, this may not be the case.
 
 An example functional documentation:
 ```{r,echo=T,eval=F}
@@ -235,7 +259,7 @@ trianguletter <- function(x) {
 }
 ```
 
-When you are satisfied with your documentation, build it using `devtools::document()`, or *Ctrl/Cmd + Shift + D* in Rstudio. This creates the **.Rd** file in **man/** which is parsed by R when you request the functions documentation. Additionally, the first time you build documentation it will make some edits to your **DESCRIPTION** and check on your **NAMESPACE**.
+When you are satisfied with your documentation, build it using `devtools::document()`. This creates the **.Rd** file in **man/** which is parsed by R when you request the functions documentation. Additionally, the first time you build documentation it will make some edits to your **DESCRIPTION** and check on your **NAMESPACE**.
 
 > Note: You may have gotten a warning message that your NAMESPACE was not generated by roxygen2. This is good behaviour by roxygen2, it doesn't want to change something the user has created a certain way. In this case however, we want the NAMESPACE to be handled by roxygen2, so delete the NAMESPACE file and run `devtools::document()` again to have roxygen2 create it.
 
@@ -266,7 +290,7 @@ First of all, lets check what the output of requesting help for your dataset is 
 ```
 
 As expected, it is undocumented.
-Since we cannot add this information to the dataset file, .rda, lets create an R file in **R/** called **data.R** and add the documentation there. The name we document has to be the same name as the dataset object you created earlier. Go ahead and document your dataset now.
+Since we cannot add this information to the dataset file, **your_object.rda**, like we did with the functions documentation, lets create an R file in **R/** called **data.R** and add the documentation there. The name we document has to be the same name as the dataset object you created earlier. Go ahead and document your dataset now.
 
 ```{r,eval=F}
 #' A vector with three strings
@@ -294,18 +318,191 @@ Once you are happy with your documentation, save the file and run `devtools::doc
 
 Well done! You have successfully created documentation for a function and a dataset and shown that it can be queried within R.
 
-## Vignette
 
-While we are on the topic of documentation, lets check out how to get started writing your vignette. To initialise your vignette run `usethis::use_vignette("packagename_vignette")`.
+## DESCRIPTION
+
+Now lets take a look at our **DESCRIPTION** file, at this point it should look similar to this:
+
+```
+Package: newpkg
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: What the package does (one paragraph).
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.0
+Depends: 
+    R (>= 2.10)
+LazyData: true
+```
+
+> Note: The information can look slightly different depending on how the package was created.
+
+Looks pretty good but some information definitely needs to be updated if you are ever going to submit this to a repository.
+
+Update the *Title*, *Author* and *Description* fields.
+
+When it comes to the *License* field, Just in case you don't want to consider which license to give your package, why not choose one of the most common ones that were mentioned during the lecture?
+
+* MIT : Free, but your license must be included in any following work.
+* GPL-3 : Even more free. If someone uses your code, whatever they are doing must also be GPL compatible.
+* CC0 : Totally free.
+
+One good way of adding the license is not to just update the **DESCRIPTION**, but to use a function such as `use_mit_license()`. It not only updates your **DESCRIPTION**, but also adds the file **LICENSE** and **LICENSE.md** to your package, with relevant license information.
+
+A good place to look at the meaning of licenses is https://tldrlegal.com.
+
+Now that your **DESCRIPTION** is up to shape, we can move on to the **NAMESPACE**.
+
+## NAMESPACE
+
+Roxygen2 made our function available to the users in our **NAMESPACE** and made sure that our package works well with other packages. Basically, you should almost never be editing your **NAMESPACE** by hand.
+
+### Import
+
+First, lets import a function from a package and add its functionality to the function we created. This is very handy for using functions from other packages in your package and for making sure your package uses only that function when it is called, no matter the users environment.
+
+1. Create a new file called **R/utility.R**. We won't actually put any internal utility functions there, but this is a typical place where you would import functions from other packages.
+2. Next add code to import the `melt` function from `reshape2`. This is in the form `@importFrom pkg function`. Since this kind of documentation has to precede a function or object, we will give it the **NULL** object, by convention.
+
+```{r, eval=F}
+#' @importFrom reshape2 melt
+NULL
+```
+
+To update the **NAMESPACE** run `devtools::document()`.
+
+Now your **NAMESPACE** should look like this:
+```
+# Generated by roxygen2: do not edit by hand
+
+export(trianguletter)
+importFrom(reshape2,melt)
+```
+
+Great! If the `melt` command from `reshape2` is ever used in your package, it will know which one to use. But for our package to use `reshape2` we first have to import it in **DESCRIPTION**.
+
+To add the `Imports` field and the `reshape2` information to your **DESCRIPTION** you can use the `devtools::use_package` command.
+
+```{r,echo=T,eval=F}
+devtools::use_package("reshape2")
+```
+
+While `Imports` means that if someone installs your package it will automatically install `reshape2` as well, regrettably it does not mean that if `reshape2` is missing when we reinstall it locally it will be downloaded and installed. Luckily we installed it at the start of the exercise.
+
+### Testing the imported function
+
+Now that we have added `melt` from `reshape2` lets add it to our function. You can do this any way you like, or copy usage from the example function.
+
+In this example the `head` of `iris` dataset before and after `melt` is viewed, to see that it had an effect.
+```{r, eval=T}
+#' A right sided triangle of alphabetic letters
+#'
+#' A right sided triangle of alphabetic letters
+#'
+#' This function takes a number as input and outputs an increasing
+#'     number of alphabetic letters on top of eachother, resembling
+#'     a right sided triangle.
+#' @section Warning:
+#' Not tested for numbers over 26!
+#'
+#' @param x A number.
+#' @return Outputs to console. NULL object returned.
+#' @examples
+#' trianguletter(10)
+#' @export
+trianguletter <- function(x) {
+  for(i in 1:x){
+    cat(rep( letters[i], times = i),"\n")
+  }
+  # Check if second object can be called by our function
+  #cat(second_object)
+  #what iris dataset looks like
+  cat("before melt:\n")
+  print(head(iris))
+  #Use melt and see what it looks like
+  cat("after melt:\n")
+  print(head(melt(iris)))
+}
+```
+
+<!-- Does this part need devtools::build() or can one test melt() using for example load_all()? Otherwise explain what build() does. --> 
+Use `devtools::load_all()` to reload your package and it's imports. You can check that `reshape2` was also loaded with `sessionInfo()`.
+
+Test your function, does the output show that it can use `melt`?
+
+Now, lets check that the NAMESPACE is doing what we want it to do, making sure that the correct `melt` is being used by our package. Lets define a new function, also named `melt`, in our global environment. That is to say we just define it from the R console.
+
+```{r, eval=T}
+melt <- function(x) {
+   cat("abc",x)}
+```
+
+Now try your function again. Is it using the correct `melt`?
+
+It should be!
+
+Try using `melt(iris)` in your R console, as it is used in your packages function. It should not work. This is because it is using the `melt` function you just defined, and it is getting in the way of using the correct function!
+
+> Note: An alternative way of achieving the behaviour of a correct NAMESPACE is writing your code with strict package references. In our case `reshape2::melt()`. This way you can circumvent using `roxygen2` to add import tags to `NAMESPACE` if you want. I recommend doing both =).
+
+# Checking your package
+
+Now that we have a pretty complete package, lets run some checks on it. You can use the standard `R CMD check pkgname` from your terminal, or you can use `devtools::check()`, which we recommend, as it performs some additional operations such as updating the documentation and bundling the package before checking.
+
+```
+── R CMD check results ───────────────────────────────── newpkg 0.0.0.9000 ────
+Duration: 18.1s
+
+❯ checking R code for possible problems ... NOTE
+  trianguletter: no visible global function definition for ‘head’
+  trianguletter: no visible binding for global variable ‘iris’
+  Undefined global functions or variables:
+    head iris
+  Consider adding
+    importFrom("datasets", "iris")
+    importFrom("utils", "head")
+  to your NAMESPACE file.
+
+0 errors ✔ | 0 warnings ✔ | 1 note ✖
+```
+
+Did you get any **NOTE**s, **ERROR**s or **WARNING**s? I know I did! Among other things it didn't like my usage of the `iris` dataset without specifying it in the NAMESPACE. This one is a bit tricky, but you can try to solve it if you want.
+
+# Finish line
+
+```{r, out.width = "40%", echo=F,fig.align='center'}
+knitr::include_graphics("rpackages_lab_assets/small_package.jpg")
+```
+
+Well done! You have built a functional package. Maybe it is even time to update the version number in **DESCRIPTION** and take it out of development?
+
+If you want to know even more about this topic, I recommend Hadley Wickham and Jenny Bryans excellent online resource http://r-pkgs.had.co.nz/check.html
+
+The next sections are optional and cover vignettes, testing,  including C++ code in your package using `Rcpp` and pushing your R package to github and setting up github actions for it.
+
+# Vignette
+
+Vignettes are long-form documentation for your package. Like a manual detailing what the purpose of your package and its functions are.
+To initialise your vignette, you can use the command:
+
+```
+usethis::use_vignette("packagename_vignette")
+```
 
 What this does:
 
-1. Creates the **vignettes/** folder with **packagename_vignettes.Rmd** inside
+1. Creates the **vignettes/** folder with **packagename_vignette.Rmd** inside
 2. Edits your **DESCRIPTION**, adding `knitr` to `Suggests` and as a `VignetteBuilder`.
 
-Open the file **vignettes/packagename_vignette.Rmd**. Edit the header data, `Vignette Title` and `Vignett Author`, and create a minimal vignette for your function. Do run your function and show your dataset using `knitr` from the vignette. It can be as short as you want, however if you do this for a real package it should be a long form manual showing how your package can use its functions or data to perform the task it was designed for.
+Open the file **vignettes/packagename_vignette.Rmd**, unless it was already automatically opened when using the command. Edit the header data, change `title` and add an `author`, then create a minimal vignette for your function. Do run your function and show your dataset using `knitr` from the vignette. It can be as short as you want, however if you do this for a real package it should be a long form manual showing how your package can use its functions or data to perform the task it was designed for.
 
-> Note: To be able to use the functions of your package in the vignette you will need to install your package, the easiest way is to execute *Cmd/Ctrl + Shift + B*.
+> Note: To be able to use the functions of your package in the vignette you will need to install your package, the easiest way is to execute `devtools::install()`.
 
 To preview your vignette while working on it, press the *knit* button in Rstudio.
 
@@ -363,176 +560,9 @@ Example **vignette.Rmd**:
 And the beautiful rendered version:<br>
 <img src="rpackages_lab_assets/vignette.png">
 
-The preview you get when knitting the **vignette.Rmd** does not mean that the vignette has been created. When you are happy with the vignette, use `devtools::build_vignettes()`. To view the vignette as an external user would view it is for some reason a bit of a hassle for the package you are developing, perhaps because the output is pretty much the same as when you knit. If you want to do this you can build your package source *Build>Build source package*, and then install your package from that source. Then view the vignette with `browseVignettes("packagename")`.
+The preview you get when knitting the **vignette.Rmd** does not mean that the vignette has been created. When you are happy with the vignette, use `devtools::build_vignettes()`. To view the vignette as an external user would view it is for some reason a bit of a hassle for the package you are developing, perhaps because the output is pretty much the same as when you knit. If you want to do this you can build your package source with `devtools::build()`, which also builds the vignette, and then `devtools::load_all()`. Then view the vignette with `browseVignettes("packagename")`.
 
 Once again, good work! Now you have written a short guide to your package that will be included wherever it goes!
-
-## DESCRIPTION
-
-Now lets take a look at our **DESCRIPTION** file, at this point it should look similar to this:
-
-```
-Package: newpkg
-Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
-Encoding: UTF-8
-LazyData: true
-Depends: 
-    R (>= 2.10)
-RoxygenNote: 7.1.1
-Suggests: 
-    rmarkdown,
-    knitr
-VignetteBuilder: knitr
-```
-
-> Note: The information can look slightly different depending on how the package was created, but the information is equivalent. For example you might see `Authors@R` instead of `Author` and `Maintainer`.
-
-Looks pretty good but some information definitely needs to be updated if you are ever going to submit this to a repository.
-
-Update the *Title*, *Author*, *Maintainer*, *Description* and *License* fields.
-
-Just in case you don't want to consider which license to give your package, why not choose one of the most common ones that were mentioned during the lecture?
-
-* MIT : Free, but your license must be included in any following work.
-* GPL-3 : Even more free. If someone uses your code, whatever they are doing must also be GPL compatible.
-* CC0 : Totally free.
-
-A good place to look at the meaning of licenses is https://tldrlegal.com.
-
-Now that your **DESCRIPTION** is up to shape, we can move on to the **NAMESPACE**.
-
-## NAMESPACE
-
-In the **NAMESPACE** roxygen2 made our function available to the users and made sure that our package works well with other packages.
-
-### Import
-
-First, lets import a function from a package and add its functionality to the function we created.
-
-1. Create a new file called **R/utility.R**. We won't actually put any utility functions there but this is a good place for imports.
-2. Next add code to import the `melt` function from `reshape2`. This is in the form `@importFrom pkg function`.
-
-```{r, eval=F}
-#' @importFrom reshape2 melt
-NULL
-```
-
-To update the **NAMESPACE** run `devtools::document()`.
-
-Now your **NAMESPACE** should look like this:
-```
-# Generated by roxygen2: do not edit by hand
-
-export(trianguletter)
-importFrom(reshape2,melt)
-```
-
-Great! If the `melt` command from `reshape2` is ever used in your package, it will know which one to use. But for our package to use `reshape2` we first have to import it in **DESCRIPTION**.
-
-Add the `Imports` field somewhere in your **DESCRIPTION**.
-
-```
-Imports:
-    reshape2
-```
-
-While `Imports` means that if someone installs your package it will automatically install `reshape2` as well, regrettably it does not mean that if `reshape2` is missing when we reinstall it locally it will be downloaded and installed. Luckily we installed it at the start of the exercise.
-
-### Testing the imported function
-
-Now that we have added `melt` from `reshape2` lets add it to our function. You can do this any way you like, or copy usage from the example function.
-
-In this example the `head` of `iris` dataset before and after `melt` is viewed, to see that it had an effect.
-```{r, eval=T}
-#' A right sided triangle of alphabetic letters
-#'
-#' A right sided triangle of alphabetic letters
-#'
-#' This function takes a number as input and outputs an increasing
-#'     number of alphabetic letters on top of eachother, resembling
-#'     a right sided triangle.
-#' @section Warning:
-#' Not tested for numbers over 26!
-#'
-#' @param x A number.
-#' @return Outputs to console. NULL object returned.
-#' @examples
-#' trianguletter(10)
-#' @export
-trianguletter <- function(x) {
-  for(i in 1:x){
-    cat(rep( letters[i], times = i),"\n")
-  }
-  # Check if second object can be called by our function
-  #cat(second_object)
-  #what iris dataset looks like
-  cat("before melt:\n")
-  print(head(iris))
-  #Use melt and see what it looks like
-  cat("after melt:\n")
-  print(head(melt(iris)))
-}
-```
-
-Rebuild the package, *Ctrl/Cmd + Shift + B*. Since this loads the package you are working on, `reshape2` should also be loaded. You can check that this is true in `sessionInfo()`.
-
-Test your function, does the output show that it can use `melt`?
-
-Now, lets check that the NAMESPACE is doing what we want it to do, making sure that the correct `melt` is being used by our package. Lets define a new function, also named `melt`, which will be in our global environment.
-
-```{r, eval=T}
-melt <- function(x) {
-   cat("abc",x)}
-```
-
-Now try your function again. Is it using the correct `melt`?
-
-It should be!
-
-Try using `melt(iris)` in your R console, as it is used in your packages function. It should not work. This is because it is using the `melt` function you just defined, and it is getting in the way of using the correct function!
-
-> Note: An alternative way of doing this is using Imports in DESCRIPTION and writing your code with strict package references. In our case `reshape2::melt()`. This way you can circumvent using `roxygen2` to add import tags to `NAMESPACE` if you want.
-
-# Checking your package
-
-Now that we have a pretty complete package, lets run some checks on it. You can use the standard `R CMD check` *pkgname* from your terminal, or you can use `devtools::check()`, which we recommend, as it performs some additional operations such as updating the documentation and bundling the package before checking.
-
-```
-R CMD check results
-0 errors | 0 warnings | 1 note
-checking R code for possible problems ... NOTE
-trianguletter: no visible global function definition for ‘head’
-trianguletter: no visible binding for global variable ‘iris’
-Undefined global functions or variables:
-  head iris
-Consider adding
-  importFrom("datasets", "iris")
-  importFrom("utils", "head")
-to your NAMESPACE file.
-```
-
-Did you get any **NOTE**s, **ERROR**s or **WARNING**s? I know I did! Among other things it didn't like my usage of the `iris` dataset without specifying it in the NAMESPACE. Go ahead and try to fix whichever messages you received. Google if you need to.
-
-On the odd chance that you didn't get any check messages, try introducing an error, like creating an undocumented dataset or using a function that doesn't exist. It's easier to break things than to build them :).
-
-# Finish line
-
-```{r, out.width = "40%", echo=F,fig.align='center'}
-knitr::include_graphics("rpackages_lab_assets/small_package.jpg")
-```
-
-Well done! You have built a functional package. Maybe it is even time to update the version number in **DESCRIPTION** and take it out of development?
-
-If you want to know even more about this topic, I recommend Hadley Wickhams excellent online resource http://r-pkgs.had.co.nz/check.html
-
-The next two sections are optional and cover including C++ code in your package using `Rcpp` and pushing your R package to github and setting up github actions for it.
 
 # src/ and Rcpp
 
@@ -547,7 +577,7 @@ Similarly to how we created the package, the first thing we want to do is setup 
 3. Create and modify **.gitignore** to not include compiled files (useful if you connect your package to git)
 4. Let's you know two roxygen tags that need to be included, like our documentation, somewhere in package.
 
-> Note: I received some warnings using `usethis::use_rcpp()` but it didn't seem to break anything.
+> Note: Some users have reported receiving some warnings when executing `usethis::use_rcpp()` but it didn't seem to break anything.
 
 ```
 usethis::use_rcpp()
@@ -556,7 +586,7 @@ usethis::use_rcpp()
 Lets include the roxygen tags in our **utility.R** file.
 
 ```
-#' @useDynLib typicalr, .registration = TRUE
+#' @useDynLib newpkg, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 NULL
 ```
@@ -593,7 +623,7 @@ timesTwo(42)
 */
 ```
 
-You should not mess with the header, unless you know what you are doing. Here you can write any C++ function you want, either do this or leave it as it is and we will use the included example function, `timeTwo`. The function is exported to R using `// [[Rcpp::export]]`. Importantly, this does not add the function to your **NAMESPACE**. Add documentation to your function in the same way as we have done previously, but with the C++ commenting style of `//`.
+You should not mess with the header, unless you know what you are doing. Here you can write any C++ function you want, either do this or leave it as it is and we will use the included example function, `timesTwo`. The function is exported to R using `// [[Rcpp::export]]`. Importantly, this does not add the function to your **NAMESPACE**. Add documentation to your function in the same way as we have done previously, but with the C++ commenting style of `//'`.
 
 ```
 //' Multiply a number by two
@@ -606,7 +636,7 @@ NumericVector timesTwo(NumericVector x) {
 }
 ```
 
-Save the file to your src/ directory and call `pkgbuild::compile_dll()`, which re-compiles the package. This is necessary in this special case due to some recent changes to roxygen. Now run `devtools::document()` to update your **NAMESPACE**. Lets install and restart using *Cmd/Ctrl + Shift + B*. This will create the file **RcppExports.R** in **R/**, which is what R uses to call your C++ function.
+Save the file to your src/ directory and call `pkgbuild::compile_dll()`, which re-compiles the package, implementing our changes. Now run `devtools::document()` to update your **NAMESPACE**. Lets install and restart using *Cmd/Ctrl + Shift + B* in Rstudio. This will create the file **RcppExports.R** in **R/**, which is what R uses to call your C++ function.
 
 Test that your function works from console.
 
@@ -614,20 +644,30 @@ Your R package can now run C++ code, marvelous! Now you just need to learn C++ ;
 
 ## Check again!
 
-> Added a new component to the package have we?
+> Added new components to the package have we?
 > - Yoda
 
 Perform `devtools::check()` again and fix any new messages.
 
 # Github and Github actions
 
-This section does require some previous git knowledge, which is why it is optional.
+This section does require some previous git knowledge.
 
 ## Github
 
-Let's add our R package to github, so we can distribute it! To do this you will need a github account. Since git usage is a bit outside of the scope of this course, you can follow this guide to initiate git in your R package folder, set up a new repo on github and connect them: https://docs.github.com/en/github/importing-your-projects-to-github/importing-source-code-to-github/adding-an-existing-project-to-github-using-the-command-line
+Let's add our R package to github, so we can distribute it! To do this you will need a github account. Since git usage is covered later in the course, you can return to this. But if you want you are very welcome to follow this guide. It does require that you have git installed, accessible and configured on your local computer.
 
-Do this now.
+To initialize git for your R package, so it becomes a local repository, you first need to run the command:
+
+```
+usethis::use_git()
+```
+
+To initialize a new github repository with the same name as your R package and push your files there, you can use this command:
+
+```
+usethis::use_github()
+```
 
 At this point, you should have a new repository on your github that has your R package files inside it. This is fantastic! Not only does this mean you can now install your package from any other computer , but we can also setup github actions!
 
@@ -638,18 +678,20 @@ Check that you can install your package directly from the github repository usin
 > Note: Github actions are only free for public repositories. Do not create a private repository, for example under your organisation, for this exercise!
 
 Let's set up our R package so that it will test if it passes R CMD CHECK on three major operating systems. 
-The first thing you will need to do is make sure your github account can use actions/workflows. If you are using a personal access token go to *Settings>Developer settings>Personal access tokens* on your github account and make sure you have selected a *Scope* called *workflow*. 
+The first thing you will need to do is make sure your github account can use actions/workflows. If you are using a personal access token go to *(user, not repo) Settings>Developer settings>Personal access tokens* on your github account and make sure you have selected a *Scope* called *workflow*. 
 
 Now lets add an action to our R-package. It is possible to do this manually but luckily there are some example workflows you can use for the most common cases at https://github.com/r-lib/actions/tree/master/examples.
 To add the action, we will use the `usethis` package, similarly to how we used it to initiate vignettes earlier. Issue the command `usethis::use_github_action("check-standard")` in your R package R session, which will select the standard CI workflow from the link.
 
 What this actually did is create the folders and file `.github/workflows/check-standard.yaml` which github will know to look for in a repository for instructions to run actions.
 
-Now commit and push these newly added files to your git repository and hopefully the *Actions* tab on github will commence running an action, checking your R package for compatability with several operating systems!
+Now commit and push these newly added files to your git repository the *Actions* tab on github will commence running an action, checking your R package for compatibility with several operating systems, as shown below.
 
 ```{r, echo=F,fig.align='center'}
 knitr::include_graphics("rpackages_lab_assets/github_actions.png")
 ```
+
+That is it, now you know all the most important bits about creating an R package. Go make something useful!
 
 <!-- --------------------- Do not edit this and below ---------------------- -->
 
