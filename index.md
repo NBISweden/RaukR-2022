@@ -24,8 +24,8 @@ description: Advanced R for Bioinformatics
     - Presentation
 
 - **Functions & Scripts** (Sebastian DiLorenzo and Julie Laurent)
-    - Presentation
-    - Lab
+    - [Presentation](functions_and_scripts/presentation/functions_and_scripts_Sebastian.html)
+    - [Lab](functions_and_scripts/lab/functions_and_scripts_Sebastian.html)
 
 ## 14-Jun-2022 (Tue)
 
