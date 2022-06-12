@@ -123,7 +123,7 @@ Try creating your own function that uses ellipsis arguments.
 ---
 # R Scripts
 
-While many R users write and execute code interactively (in e.g. RStudio), you can run the content of a script by writing `source(myscriptfile.R)` in the R console. This is also a convenient way to load your custom functions (and this is actually what happens when you load an installed package with `library()`).
+While many R users write and execute code interactively (in e.g. RStudio), you can run the content of a script by writing `source("myscriptfile.R")` in the R console. This is also a convenient way to load your custom functions (and this is actually what happens when you load an installed package with `library()`).
 
 But once you have code that works you may want to run it routinely without an interactive R environment. R scripts can be executed directly from the command line by typing `Rscript myscriptfile.R`.
 
@@ -195,8 +195,8 @@ A convenient feature of command line scripts is the possibility to pipe data fro
 
 * Make your script parse the mean value from a text stream, and run it using the pipe e.g. `echo 100 | ./myscriptfile.R`.
 * Using the same script, supply the mean from a text file (containing only that) with `cat`.
-* Is it possible to read the input stream using `stdin()`?
 
+<details><summary>Example</summary>
 ```{r,echo=TRUE,eval=FALSE}
 #!/usr/bin/env Rscript
 input_con  <- file("stdin")
@@ -207,6 +207,7 @@ mean=as.numeric(oneline)
 mydata=rnorm(1000,mean = mean)
 print(summary(mydata))
 ```
+</details>
 
 You can pipe your output to another process (any script or tool that accepts a stream) by appending `| next_tool_or_script_call` to the call, or to a file by appending `> filename`.
 
@@ -215,13 +216,15 @@ You can pipe your output to another process (any script or tool that accepts a s
 
 You can use `write(x,file=stderr())` or `write(x,file=stdout())` to explicitly divert certain output.
 
-# Bonus challenges
+Well done, you should know know the basics of greating functions and some different kinds of R scripts.
+
+<!-- # Bonus challenges
 
 If you have time, practice by writing an R script that you need in your own work, or select either of the following:
 
 * Write a script that parses any text stream by line from either a file (when specified) or *stdin*, and writes to either another file (when specified) or *stdout*. Each line is written with a certain probability which is also provided as an argument (lines that start with **#** are always written). Report to *stderr* the number of lines read and written. Try your script on any *fastq*, *bam*/*sam*, or *vcf*-formatted data.
 
-* Write a script that summarizes the content of a table contained in a plain text file. The table is supplied either as a file (when specified) or as a stream. Make sure any lines starting with *#* are ignored. For speed, do not use more than a maximum of 1000 lines as default, or another number if supplied as an argument. Try your script on any tabular data you have available.
+* Write a script that summarizes the content of a table contained in a plain text file. The table is supplied either as a file (when specified) or as a stream. Make sure any lines starting with *#* are ignored. For speed, do not use more than a maximum of 1000 lines as default, or another number if supplied as an argument. Try your script on any tabular data you have available. -->
 
 <!-- --------------------- Do not edit this and below ---------------------- -->
 

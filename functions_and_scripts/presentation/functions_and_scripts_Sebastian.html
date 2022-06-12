@@ -178,7 +178,7 @@ And like the quote it should do **one** thing and do it well. Because of the **p
 
 ## Executing an R script
 
-* Interactively: `source myscript.R` in R console 
+* Interactively: `source("myscript.R")` in R console 
 
 ???
 One way to execute an Rscript is to use "source myscript.R" from an interactive session which **runs** whatever code is in the R script. So if it has **functions** or wether it **reads** a separate file and creates some new **object**, these will be in your **R environment** after sourcing the script.
@@ -212,7 +212,7 @@ If you want to run it without giving path, its folder must be in you $PATH varia
 * Passing arguments to the script allows for flexibility in settings and input data
 
 ???
-**Often** when we use an R script, like I mentioned in the **beginning**, we want to **pass multiple files/samples** through it for efficiency reasons. It **doesnt** just have to be **files**, like **functions** it can also be **settings.**
+**Often** when we use an R script, like I mentioned in the **beginning**, we want to **pass multiple files/samples** through it for efficiency reasons. It **doesnt** just have to be **files**, like **functions** it can also be **argument settings.**
 
 --
 
@@ -224,9 +224,6 @@ Here for example we are using the Rscript as an **executable** file, giving it a
 --
 
 * Packages are available that support long and short flags
-
---
-
   + `./myscript.R -i inputfile.vcf -o outputfile.vcf`
 
 ???
@@ -267,6 +264,10 @@ Use **commandArgs()** to capture whatever was **passed** into R as it was **exec
 
 Add `trailingOnly = TRUE` to suppress the first few items and get the arguments **you** passed to the script.
 
+
+???
+A **standard parameter**, but **not default**, that you can use when invoking commandArgs() is **trailingOnly = TRUE**, which basically tells it to start counting the input from **after** the **Rscript arguments**. As you can see here when we invoke it without this parameter it returns the script itself, in this case R studio. But with it the invocation is clear, there were no trailing command line arguments.
+
 --
 
 
@@ -290,10 +291,6 @@ commandArgs(trailingOnly = TRUE)
 ```
 ## character(0)
 ```
-
-
-???
-A **standard parameter**, but **not default**, that you can use when invoking commandArgs() is **trailingOnly = TRUE**, which basically tells it to start counting the input from **after** the **Rscript arguments**. As you can see here when we invoke it without this parameter it returns the script itself, in this case R studio. But with it the invocation is clear, there were no trailing command line arguments.
 
 ---
 
@@ -415,7 +412,12 @@ If you already have a tibble, you can stream it out of R using this command.
 
 ## Summary
 
-&lt;img src="http://www.azquotes.com/picture-quotes/quote-this-is-the-unix-philosophy-write-programs-that-do-one-thing-and-do-it-well-write-programs-douglas-mcilroy-81-95-07.jpg"&gt;
+&lt;!-- &lt;img src="http://www.azquotes.com/picture-quotes/quote-this-is-the-unix-philosophy-write-programs-that-do-one-thing-and-do-it-well-write-programs-douglas-mcilroy-81-95-07.jpg"&gt; --&gt;
+
+* Functions are great for organizing code and repeating tasks.
+* R scripts are great for performing tasks from commandline.
+* R scripts can be built in different ways to take arguments or text streams
+
 
 ???
 So to summarize, R scripts are powerful tools to solve a specific problem that you define, and often fit well together with other tools. And now you have learned to execute them in different ways, with inputs and outputs and with other programs. All that is left is to actually write the content.
@@ -432,7 +434,7 @@ count: false
 
 &lt;p&gt;R version 4.1.2 (2021-11-01)&lt;br&gt;&lt;p&gt;Platform: x86_64-apple-darwin17.0 (64-bit)&lt;/p&gt;&lt;p&gt;OS: macOS Big Sur 10.16&lt;/p&gt;&lt;br&gt;
 
-Built on : &lt;i class='fa fa-calendar' aria-hidden='true'&gt;&lt;/i&gt; 31-May-2022 at &lt;i class='fa fa-clock-o' aria-hidden='true'&gt;&lt;/i&gt; 20:28:08  
+Built on : &lt;i class='fa fa-calendar' aria-hidden='true'&gt;&lt;/i&gt; 12-Jun-2022 at &lt;i class='fa fa-clock-o' aria-hidden='true'&gt;&lt;/i&gt; 21:28:20  
 
 &lt;b&gt;2022&lt;/b&gt; • [SciLifeLab](https://www.scilifelab.se/) • [NBIS](https://nbis.se/) • [RaukR](https://nbisweden.github.io/workshop-RaukR-2206/)
 
