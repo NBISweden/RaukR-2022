@@ -20,7 +20,8 @@ description: Advanced R for Bioinformatics
     - [Lab](topic_best_coding_practises_Marcin/lab/BestCodingPractisesLab.html)
 
 - **RMarkdown** (Chris Dervieux and Yihui Xie, RStudio)
-    - Presentation
+    - [Presentation](https://raukr-2022-rmd-skills.netlify.app)
+    - [GitHub](https://github.com/cderv/raukr-2022-rmd-skills)
 
 - **Functions & Scripts** (Sebastian DiLorenzo and Julie Lorent)
     - [Presentation](functions_and_scripts/presentation/functions_and_scripts_Sebastian.html)
@@ -33,8 +34,8 @@ description: Advanced R for Bioinformatics
     - [Lab](debugging/lab/DebuggingProfilingOptimization.html)
 
 - **R Packages** (Sebastian DiLorenzo and Nima Rafati)
-    - Presentation
-    - Lab
+    - [Presentation](rpackages/presentation/rpackages_Sebastian.html)
+    - [Lab](rpackages/lab/rpackages_Sebastian.html)
 
 - **Guest Lecture** (Jenny Bryan, RStudio)
     - Presentation
