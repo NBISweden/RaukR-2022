@@ -663,7 +663,7 @@ name: facet-wrap
 ## Facets • `facet_wrap`
 
 * Split to subplots based on variable(s)
-* Facetting in one dimension
+* Faceting in one dimension
 
 --
 
@@ -698,7 +698,7 @@ name: facet-grid
 
 ## Facets • `facet_grid`
 
-* Facetting in two dimensions
+* Faceting in two dimensions
 
 .pull-left-50[
 ```{r,fig.height=3.8,fig.width=5}
@@ -1078,14 +1078,14 @@ class: spaced
 ## Extensions
 
 - [**patchwork**](https://patchwork.data-imaginist.com/): Combining plots
-- [**ggrepel**](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html): Advanced text labels including overlap control 
-- [**ggforce**](https://github.com/thomasp85/ggforce): Additional features
-- [**ggpmisc**](https://cran.rstudio.com/web/packages/ggpmisc/): Miscellaneaous features
-- [**ggthemes**](https://cran.r-project.org/web/packages/ggthemes/vignettes/ggthemes.html): Set of extra themes  
+- [**ggrepel**](https://ggrepel.slowkow.com/index.html): Text labels including overlap control 
+- [**ggforce**](https://ggforce.data-imaginist.com/): Additional features
+- [**ggpmisc**](https://github.com/aphalo/ggpmisc): Miscellaneaous features
+- [**ggthemes**](https://jrnold.github.io/ggthemes/): Set of extra themes  
 - [**ggthemr**](https://github.com/cttobin/ggthemr): More themes  
-- [**ggsci**](https://cran.r-project.org/web/packages/ggsci/vignettes/ggsci.html): Color palettes for scales  
+- [**ggsci**](https://nanx.me/ggsci/): Color palettes for scales  
 - [**ggmap**](https://github.com/dkahle/ggmap): Dedicated to mapping  
-- [**ggraph**](https://github.com/thomasp85/ggraph): Network graphs  
+- [**ggraph**](https://ggraph.data-imaginist.com/): Network graphs  
 - [**ggiraph**](http://davidgohel.github.io/ggiraph/): Converting ggplot2 to interactive graphics  
 
 A collection of ggplot extension packages: [https://exts.ggplot2.tidyverse.org/](https://exts.ggplot2.tidyverse.org/).
@@ -1096,13 +1096,13 @@ class: spaced
 
 ## Help
 
+- [**ggplot2 book**](https://ggplot2-book.org/introduction.html)  
 - [**ggplot2 official reference**](http://ggplot2.tidyverse.org/reference/)  
 - [**The R cookbook**](http://www.cookbook-r.com/Graphs/)  
 - [**RStudio Cheatsheet**](https://www.rstudio.com/resources/cheatsheets/)  
 - [**r-statistics Cheatsheet**](http://r-statistics.co/ggplot2-cheatsheet.html)  
 - [**StackOverflow**](https://stackoverflow.com/)  
-- [**ggplot2 GUI**](https://site.shinyserver.dck.gmw.rug.nl/ggplotgui/)  
-- Numerous personal blogs, r-bloggers.com etc.  
+- Blogs, for example; [R-Bloggers](https://www.r-bloggers.com/), [Cedric Scherer](https://www.cedricscherer.com/tags/ggplot2/) etc.  
 
 <!-- --------------------- Do not edit this and below --------------------- -->
 

@@ -1,6 +1,6 @@
 ---
 title: "Introduction to ggplot2"
-subtitle: "RaukR 2019 • Advanced R for Bioinformatics"
+subtitle: "RaukR 2022 • Advanced R for Bioinformatics"
 author: "Roy Francis"
 output:
   bookdown::html_document2:
@@ -23,29 +23,13 @@ output:
 
 <!-- ------------ Only edit title, subtitle & author above this ------------ -->
 
-```{r,echo=FALSE,results='hide'}
-## LIBRARIES AND VARIABLES
-# load the packages you need for this document
+<br>
 
-library(dplyr)
-library(tidyr)
-library(stringr)
-
-library(ggplot2)
-library(ggrepel)
-
-#library(gridExtra)
-#library(ggpubr)
-
-# variables needed in this document
-# raukr colors
-#rv_col_dark <- "#125687"
-#rv_col_light <- "#e7eef3"
-```
+<div class="spaced abstract">
+This is the hands-on material for **Introduction to `ggplot2`**. These are a series of excercises to help you get started and familiarise yourself with ggplot2 syntax, plot building logic and fine modification of plots. Practice using the *Basics* section and then move on to slightly more complex plots: a scatterplot and a heatmap.
+</div>
 
 <br>
-<div class="spaced abstract">
-This is the hands-on material for **Introduction to `ggplot2`**. These are series of excercises to help you get started and familiarise yourself with ggplot2 syntax, plot building logic and fine modification of plots. Practice using the Basics section. Then there are tutorials for two complex plots: a scatterplot and a heatmap.
 
 <div class="pull-left-50">
 <img src="ggplot_lab_assets/economist-scatterplot.png">
@@ -54,15 +38,21 @@ This is the hands-on material for **Introduction to `ggplot2`**. These are serie
 <div class="pull-right-50">
 <img src="ggplot_lab_assets/wsj-heatmap.png">
 </div>
-</div>
+
 <br>
 
 # Basics
 
-First step is to make sure that `ggplot2` is installed and the package is loaded.
+First step is to make sure that the necessary packages are installed and loaded.
 
 ```{r}
+library(dplyr)
+library(tidyr)
+library(stringr)
+
 library(ggplot2)
+library(ggrepel)
+library(patchwork)
 ```
 
 We use the `iris` data to get started. This dataset has four continuous variables and one categorical variable. It is important to remember about the data type when plotting graphs. 
@@ -80,7 +70,7 @@ ggplot2 plots are initialised by specifying the dataset. This can be saved to a 
 ggplot(data=iris)
 ```
 
-Now we can specify what we want on the x and y axes using aethetic mapping. And we specify the geometric using geoms. Note that the variable names do not have double quotes `""` like in base plots.
+Now we can specify what we want on the x and y axes using aesthetic mapping. And we specify the geometric using geoms. Note that the variable names do not have double quotes `""` like in base plots.
 
 ```{r,fig.height=4,fig.width=4}
 ggplot(data=iris)+
@@ -183,9 +173,9 @@ ggplot(data=iris,mapping=aes(x=Petal.Length,y=Petal.Width))+
        y="Petal Width", caption="This is a little caption.")
 ```
 
-## Facetting
+## Faceting
 
-We can create subplots using the facetting functionality. Let's create three subplots for the three levels of Species.
+We can create subplots using the faceting functionality. Let's create three subplots for the three levels of Species.
 
 ```{r,fig.height=4,fig.width=6}
 ggplot(data=iris,mapping=aes(x=Petal.Length,y=Petal.Width))+
@@ -214,7 +204,7 @@ ggplot(data=iris,mapping=aes(x=Petal.Length,y=Petal.Width))+
   theme_bw()
 ```
 
-All non-data related aspects of the plot can be modified through themes. Let's modify the colors of the title labels and turn off the gridlines. The various parameters for theme ca be found using `?theme`.
+All non-data related aspects of the plot can be modified through themes. Let's modify the colors of the title labels and turn off the gridlines. The various parameters for theme can be found using `?theme`.
 
 ```{r,fig.height=4,fig.width=6}
 ggplot(data=iris,mapping=aes(x=Petal.Length,y=Petal.Width))+
@@ -327,7 +317,7 @@ ggplot(data=iris,mapping=aes(x=Petal.Length,y=Petal.Width))+
 
 ## Annotations
 
-Custom annotations of any geom can be added arbitrarly anywhere on the plot.
+Custom annotations of any geom can be added arbitrarily anywhere on the plot.
 
 ```{r,fig.height=4,fig.width=6}
 ggplot(data=iris,mapping=aes(x=Petal.Length,y=Petal.Width))+
@@ -527,7 +517,7 @@ p
 
 ## Axes
 
-Next step is to adjust the axes breaks, axes labels, point colors and relabelling the trendline legend text. 
+Next step is to adjust the axes breaks, axes labels, point colors and relabeling the trendline legend text. 
 > Change axes labels to 'Corruption Perceptions Index, 2011 (10=least corrupt)' on the x-axis and 'Human Development Index, 2011 (1=best)' on the y-axis. Set breaks on the x-axis from 1 to 10 by 1 increment and y-axis from 0.2 to 1.0 by 0.1 increments.
 
 ```{r,fig.height=5,fig.width=7}
