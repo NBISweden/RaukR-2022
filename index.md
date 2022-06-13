@@ -49,8 +49,8 @@ description: Advanced R for Bioinformatics
     - Lab
 
 - **reticulate: Combining R with Python** (Nina Norgren)
-    - Presentation
-    - Lab
+    - [Presentation](reticulate/presentation/presentation_reticulate.html)
+    - [Lab](reticulate/lab/lab_reticulate.html)
 
 ## 16-Jun-2021 (Thu)
 
