@@ -9,8 +9,7 @@ description: Advanced R for Bioinformatics
 
 ## 13-Jun-2022 (Mon)
 
-- **Introduction to RaukR 2022** (Marcin Kierczak)
-    - Presentation
+- **Introduction to RaukR 2022** (Marcin Kierczak & Sebastian DiLorenzo)
 
 - **Reproducible research** (Mun-Gwan Hong & Roy Francis)
     - [Presentation](topic_repr_research_Mun-Gwan/presentation/rr_presentation.html)
