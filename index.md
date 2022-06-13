@@ -61,13 +61,13 @@ description: Advanced R for Bioinformatics
     - Lab
 
 - **Working with ggplot2** (Roy Francis and Julie Lorent)
-    - [Presentation](ggplot/presentation/ggplot_presentation.html)
-    - [Lab](ggplot/lab/ggplot_lab.html)
+    - Presentation
+    - Lab
 
 ## 17-Jun-2022 (Fri)
 
 - **Introduction to shiny apps** (Roy Francis, Lokeshwaran Manoharan)
-    - [Presentation](shiny/presentation/shiny_presentation.html)
-    - [Lab](shiny/lab/shiny_lab.html)
+    - Presentation
+    - Lab
 
 **2022** • NBIS
