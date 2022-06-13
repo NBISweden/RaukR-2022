@@ -431,7 +431,6 @@ trianguletter <- function(x) {
 }
 ```
 
-<!-- Does this part need devtools::build() or can one test melt() using for example load_all()? Otherwise explain what build() does. --> 
 Use `devtools::load_all()` to reload your package and it's imports. You can check that `reshape2` was also loaded with `sessionInfo()`.
 
 Test your function, does the output show that it can use `melt`?
@@ -518,8 +517,9 @@ Example **vignette.Rmd**:
           %\VignetteEngine{knitr::rmarkdown}
           %\VignetteEncoding{UTF-8}
         ---
-
-        \```{r setup, include = FALSE}
+        
+        
+        ```{r setup, include = FALSE}
         knitr::opts_chunk$set(
           collapse = TRUE,
           comment = "#>"
@@ -527,7 +527,8 @@ Example **vignette.Rmd**:
 
         # replace this with your package name
         library(newpkg)
-        \```
+        ```
+        
 
         # The greatest package for a very specific purpose
 
@@ -539,13 +540,13 @@ Example **vignette.Rmd**:
         This package and its sole function, trianguletter, solves just this problem!
 
         But you do not have to take my word for it, see for yourself:
-        \```{r,echo=T}
+        ```{r,echo=T}
         # With just a simple number we specify how long into the alphabet we go.
         trianguletter(10)
 
         # Also, this package has this random dataset:
         your_object
-        \```
+        ```
 
         # Future plans
 
@@ -555,7 +556,7 @@ Example **vignette.Rmd**:
 
 ```
 
-> Note: Because I am writing this in rmarkdown I added backslashes before the code or it would not render properly for this exercise instruction. In your rmarkdown there should **not** be backslashes before code chunks.  See the \\``` in the vignette code.
+<!-- > Note: Because I am writing this in rmarkdown I added backslashes before the code or it would not render properly for this exercise instruction. In your rmarkdown there should **not** be backslashes before code chunks.  See the \\``` in the vignette code. -->
 
 And the beautiful rendered version:<br>
 <img src="rpackages_lab_assets/vignette.png">
@@ -563,6 +564,55 @@ And the beautiful rendered version:<br>
 The preview you get when knitting the **vignette.Rmd** does not mean that the vignette has been created. When you are happy with the vignette, use `devtools::build_vignettes()`. To view the vignette as an external user would view it is for some reason a bit of a hassle for the package you are developing, perhaps because the output is pretty much the same as when you knit. If you want to do this you can build your package source with `devtools::build()`, which also builds the vignette, and then `devtools::load_all()`. Then view the vignette with `browseVignettes("packagename")`.
 
 Once again, good work! Now you have written a short guide to your package that will be included wherever it goes!
+
+# Testing
+
+Testing is a powerful way to add tests to your package. They can for example make sure that the output from your functions are as you expect them to be. This can be very good when you have many people working on a package, such as open source. It is not hard to imagine a situation where someone makes a change that has unforseen consequences and even if the function doesn't throw an error the output has changed leading to errors in the next function that are hard to track.
+
+To add tests to your package you can use
+
+```{r, eval=FALSE}
+usethis::use_testthat()
+```
+
+Be sure to check the output from the command as it describes what it does to your package very well. As it suggests we can now use `usethis::use_test()` to create a template test for a function.
+
+We will create a new function to test, since `trianguletter()` uses `cat()` which is standard output, it is advanced to run tests on it. As always you are free and encouraged to create your own function. The example is for inspiration.
+
+Create a new function in `R/divider.R`
+```{r, eval = FALSE}
+usethis::use_r("trivider")
+```
+
+And define the function.
+```
+trivider <- function(x){
+  x / 3
+}
+```
+
+Now lets create the test using:
+```
+usethis::use_test("trivider")
+```
+
+This creates the file **tests/testthat/test-trivider.R**, which is where we will write our tests for that function.
+Now we can for example write a test that makes sure the input *9* results in the output *3*.
+
+```
+test_that("given a 9 the output is 3", {
+  expect_equal(trivider(9), 3)
+})
+```
+
+You can run the test by using the command
+```
+devtools::test()
+```
+
+Try adding another test in **test-trivider.R**, or whichever function you are using. Use `expect_error()` this time. Can you get a PASS on both your tests?
+
+Importantly, your tests are performed when you run `devtools::check()`, which means that you have just extended its functionality to keep a closer eye on your packages expected behaviour.
 
 # src/ and Rcpp
 

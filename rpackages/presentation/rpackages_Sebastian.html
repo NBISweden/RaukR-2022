@@ -60,6 +60,7 @@ count: false
     + [Vignettes](#vig)
     + [Import &amp; Export | `NAMESPACE`](#namespace)
     + [Data | `data/`](#data)
+    + [Tests | `tests/`](#tests)
     + [Compiled code | `src/`](#src)
 &lt;!--    + [Installed files | `inst/`](#) Include? --&gt;     
 &lt;!-- * [Testing](#)  Include? --&gt;
@@ -586,7 +587,7 @@ usethis::use_vignette("typicalr-vignette")
   ---
   title: "Vignette Title"
   author: "Vignette Author"
-  date: "2022-05-31"
+  date: "2022-06-13"
   output: rmarkdown::html_vignette
   vignette: &gt;
     %\VignetteIndexEntry{Vignette Title}
@@ -618,7 +619,7 @@ usethis::use_vignette("typicalr-vignette")
   ---
   title: "typicalr"
   author: "Sebastian DiLorenzo"
-  date: "2022-05-31"
+  date: "2022-06-13"
   output: rmarkdown::html_vignette
   vignette: &gt;
     %\VignetteIndexEntry{typicalr}
@@ -775,6 +776,54 @@ system.file("extdata","filename.csv", package="packagename")
 
 ???
 Here we see some code where we use usethis to save a object directly to data/ directory with the correct name. This is the same thing basically as using the save command and pointing to the correct location, with correct filename. If you want to access data belongning to a package you can use the system.file command in R.
+
+---
+name: tests
+
+## tests/
+
+.pull-left-50[
+* What to test?
+ + That the return value is what is expected given a certain input
+ 
+* Why test?
+ + Improved development stability
+ + Working in group/open source
+ + Working on big package
+ 
+&lt;br&gt;
+&lt;img src="rpackages_presentation_assets/test.jpeg"&gt;
+]
+
+???
+Tests or unit tests formally checks that we get the correct result from a function given a specific input. This can be good when working on big and/or complex packages or together with other people as it directly tells you if a change has been made that has changed the expected behaviour of the package.
+
+--
+
+.pull-right-50.smallish[
+* How to test?
+ + Uses `testthat` package for testing and `usethis` package for setup &lt;br&gt;
+ + Initialize with `use_testthat()`
+ + Create test for a function with `use_test("call_me")`
+ + Testfile: `tests/testthat/test-call_me.R`
+ + Run test with `devtools::test()` or `check()`
+
+]
+
+--
+
+.pull-right-50[
+&lt;br&gt;&lt;br&gt;
+*tests/testthat/test-call_me.R:*
+```
+test_that("multiplication works", {
+  expect_equal(2 * 2, 4)
+})
+```
+]
+
+???
+This is the standard template created when use_test() is called.
 
 ---
 name: src
@@ -982,6 +1031,7 @@ class: spaced
     + [Vignettes](#vig)
     + [Import &amp; Export | `NAMESPACE`](#namespace)
     + [Data | `data/`](#data)
+    + [Tests | `tests/`](#tests)
     + [Compiled code | `src/`](#src)
 &lt;!--    + [Installed files | `inst/`](#) Include? --&gt;     
 &lt;!-- * [Testing](#)  Include? --&gt;
@@ -1007,7 +1057,7 @@ count: false
 
 &lt;p&gt;R version 4.1.2 (2021-11-01)&lt;br&gt;&lt;p&gt;Platform: x86_64-apple-darwin17.0 (64-bit)&lt;/p&gt;&lt;p&gt;OS: macOS Big Sur 10.16&lt;/p&gt;&lt;br&gt;
 
-Built on : &lt;i class='fa fa-calendar' aria-hidden='true'&gt;&lt;/i&gt; 31-May-2022 at &lt;i class='fa fa-clock-o' aria-hidden='true'&gt;&lt;/i&gt; 20:12:55  
+Built on : &lt;i class='fa fa-calendar' aria-hidden='true'&gt;&lt;/i&gt; 13-Jun-2022 at &lt;i class='fa fa-clock-o' aria-hidden='true'&gt;&lt;/i&gt; 22:10:57  
 
 &lt;b&gt;2022&lt;/b&gt; • [SciLifeLab](https://www.scilifelab.se/) • [NBIS](https://nbis.se/) • [RaukR](https://nbisweden.github.io/workshop-RaukR-2206/)
 
