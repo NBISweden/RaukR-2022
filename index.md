@@ -23,7 +23,7 @@ description: Advanced R for Bioinformatics
 - **RMarkdown** (Chris Dervieux and Yihui Xie, RStudio)
     - Presentation
 
-- **Functions & Scripts** (Sebastian DiLorenzo and Julie Laurent)
+- **Functions & Scripts** (Sebastian DiLorenzo and Julie Lorent)
     - Presentation
     - Lab
 
@@ -60,7 +60,7 @@ description: Advanced R for Bioinformatics
     - Presentation
     - Lab
 
-- **Working with ggplot2** (Roy Francis and Julie Laurent)
+- **Working with ggplot2** (Roy Francis and Julie Lorent)
     - [Presentation](ggplot/presentation/ggplot_presentation.html)
     - [Lab](ggplot/lab/ggplot_lab.html)
 
