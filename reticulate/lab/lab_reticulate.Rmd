@@ -85,7 +85,7 @@ In preparation for using the Python code in R, make sure that the following file
 
 1. `imdb.db` 
 2. `model.py`
-3. `imdb_functions.py` 
+3. `imdb_functions.py`
 
 <br>
 <i class="fas fa-clipboard-list"></i> Start by loading all the python functions into R

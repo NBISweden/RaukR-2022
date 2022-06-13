@@ -272,7 +272,8 @@ Install and load the <code>reticulate</code> package from CRAN, as well as the <
 <div class="block-title small">
 R
 </div>
-<pre class="r"><code>install.packages(&quot;reticulate&quot;)
+<pre class="r"><code>install.packages(&#39;Rcpp&#39;)
+install.packages(&quot;reticulate&quot;)
 install.packages(&quot;ggplot2&quot;)
 install.packages(&quot;tidyverse&quot;)</code></pre>
 </div>
@@ -319,10 +320,10 @@ R
 <p><br>
 <i class="fas fa-clipboard-list"></i> Start by loading all the python functions into R</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811506229" aria-expanded="false" aria-controls="acc2022060811506229">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321008205" aria-expanded="false" aria-controls="acc2022061321008205">
 </button>
 </p>
-<div id="acc2022060811506229" class="collapse">
+<div id="acc2022061321008205" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -340,10 +341,10 @@ R
 <h2><span class="header-section-number">2.2</span> Get to know the data</h2>
 <p><i class="fas fa-clipboard-list"></i> Let’s try out the <code>get_actors()</code> function. Get the principal actors for the movie <strong>Gattaca</strong>, and inspect the output type</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811528595" aria-expanded="false" aria-controls="acc2022060811528595">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321095694" aria-expanded="false" aria-controls="acc2022061321095694">
 </button>
 </p>
-<div id="acc2022060811528595" class="collapse">
+<div id="acc2022061321095694" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -359,10 +360,10 @@ str(actors)</code></pre>
 <p><br>
 <i class="fas fa-clipboard-list"></i> Next let’s do the same with the function <code>get_movies()</code>. List movies that <strong>Brent Spiner</strong> has been in</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811522036" aria-expanded="false" aria-controls="acc2022060811522036">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321105245" aria-expanded="false" aria-controls="acc2022061321105245">
 </button>
 </p>
-<div id="acc2022060811522036" class="collapse">
+<div id="acc2022061321105245" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -378,10 +379,10 @@ str(movies)</code></pre>
 <p><br>
 <i class="fas fa-clipboard-list"></i> For printing some basic information about a movie, without saving anything to an R object, use the <code>print_movie_info</code> function. Here, find out information about the <strong>Avengers</strong> movies</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811527798" aria-expanded="false" aria-controls="acc2022060811527798">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321103436" aria-expanded="false" aria-controls="acc2022061321103436">
 </button>
 </p>
-<div id="acc2022060811527798" class="collapse">
+<div id="acc2022061321103436" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -394,10 +395,10 @@ R
 <p><br>
 <i class="fas fa-clipboard-list"></i> Capture the output from the previous function and save it as a variable</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811526738" aria-expanded="false" aria-controls="acc2022060811526738">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321108465" aria-expanded="false" aria-controls="acc2022061321108465">
 </button>
 </p>
-<div id="acc2022060811526738" class="collapse">
+<div id="acc2022061321108465" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -445,10 +446,10 @@ cat(output)</code></pre>
 <p><br></p>
 <p><i class="fas fa-clipboard-list"></i> Inspect the types of the variables <code>actors</code> and <code>movies</code>. What type are they? What type where they converted from in Python?</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811520968" aria-expanded="false" aria-controls="acc2022060811520968">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321108057" aria-expanded="false" aria-controls="acc2022061321108057">
 </button>
 </p>
-<div id="acc2022060811520968" class="collapse">
+<div id="acc2022061321108057" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -467,10 +468,10 @@ str(movies)
 </div>
 <p><i class="fas fa-clipboard-list"></i> Source the python file again, but set <code>convert=FALSE</code>. What are the types now?</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811524649" aria-expanded="false" aria-controls="acc2022060811524649">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321105583" aria-expanded="false" aria-controls="acc2022061321105583">
 </button>
 </p>
-<div id="acc2022060811524649" class="collapse">
+<div id="acc2022061321105583" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -492,10 +493,10 @@ class(movies)
 </div>
 <p><i class="fas fa-clipboard-list"></i> Convert the types manually back to R types</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811538525" aria-expanded="false" aria-controls="acc2022060811538525">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321107038" aria-expanded="false" aria-controls="acc2022061321107038">
 </button>
 </p>
-<div id="acc2022060811538525" class="collapse">
+<div id="acc2022061321107038" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -530,10 +531,10 @@ R
 <p><br>
 <i class="fas fa-clipboard-list"></i> Start by importing all movies into a pandas dataframe, by sourcing the python functions into R. Do <em>not</em> convert the result into an R dataframe:</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811537830" aria-expanded="false" aria-controls="acc2022060811537830">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321109282" aria-expanded="false" aria-controls="acc2022061321109282">
 </button>
 </p>
-<div id="acc2022060811537830" class="collapse">
+<div id="acc2022061321109282" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -557,10 +558,10 @@ class(movies_py)</code></pre>
 <p>We will try to answer this with a pandas method <em>directly</em> in a Python chunk. To do this we first have to make our <code>movies_py</code> variable visible to Python. Even though it is a Python object, since it was created within a R code chunk, Python code chunks cannot directly access them. To make R variables accessible in Python code chunks we use the <code>r</code> object. Remember that to access a Python variable from R, we used <code>py$</code>, to do the opposite we use <code>r.</code>. The $ and the . denotes the different ways in which Python and R represents methods.</p>
 <p>Use the method <code>.max()</code> from the <code>pandas</code> module to find and filter out the top movie/movies</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811534865" aria-expanded="false" aria-controls="acc2022060811534865">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321100021" aria-expanded="false" aria-controls="acc2022061321100021">
 </button>
 </p>
-<div id="acc2022060811534865" class="collapse">
+<div id="acc2022061321100021" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -590,10 +591,10 @@ top_movies[&#39;primaryTitle&#39;]</code></pre>
 Above we are using pure pandas code directly in our RMarkdown document.</p>
 <p><i class="fas fa-clipboard-list"></i> Save <code>top_movies</code> as an R object, and find out from what years these movies are, and how many votes they got</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811544953" aria-expanded="false" aria-controls="acc2022060811544953">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321116290" aria-expanded="false" aria-controls="acc2022061321116290">
 </button>
 </p>
-<div id="acc2022060811544953" class="collapse">
+<div id="acc2022061321116290" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -619,10 +620,10 @@ So the answer to which are the highest ranked movies of all times is <strong>The
 <p>Next we want to explore how the average ratings for movies has changed over time. This one we will solve in normal R chunks, by importing the required python functions from the file <code>imdb_functions.py</code>, and also load <code>pandas</code> into R. As we will be using pandas in R, import the Python file without converting it</p>
 <p><i class="fas fa-clipboard-list"></i> Get all movies and save into a pandas dataframe</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811543856" aria-expanded="false" aria-controls="acc2022060811543856">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321112644" aria-expanded="false" aria-controls="acc2022061321112644">
 </button>
 </p>
-<div id="acc2022060811543856" class="collapse">
+<div id="acc2022061321112644" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -636,10 +637,10 @@ class(movies_py)</code></pre>
 </div>
 <p><i class="fas fa-clipboard-list"></i> Import pandas into R</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811549239" aria-expanded="false" aria-controls="acc2022060811549239">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321117910" aria-expanded="false" aria-controls="acc2022061321117910">
 </button>
 </p>
-<div id="acc2022060811549239" class="collapse">
+<div id="acc2022061321117910" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -651,10 +652,10 @@ R
 </div>
 <p><i class="fas fa-clipboard-list"></i> Use pandas to group the data by startYear, and calculate the average ratings. Next, convert the result back into an R dataframe</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811549804" aria-expanded="false" aria-controls="acc2022060811549804">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321115387" aria-expanded="false" aria-controls="acc2022061321115387">
 </button>
 </p>
-<div id="acc2022060811549804" class="collapse">
+<div id="acc2022061321115387" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -682,10 +683,10 @@ str(movies_grouped_r)</code></pre>
 </div>
 <p><i class="fas fa-clipboard-list"></i> In this case the conversion seems to have done something to our startYear column. To fix this, add startYear column back into the dataframe, using R</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811541900" aria-expanded="false" aria-controls="acc2022060811541900">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321111353" aria-expanded="false" aria-controls="acc2022061321111353">
 </button>
 </p>
-<div id="acc2022060811541900" class="collapse">
+<div id="acc2022061321111353" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -706,10 +707,10 @@ movies_grouped_r[1:5,1:4]</code></pre>
 <p>Make sure to inspect that the dataframe looks like it is supposed to, and that the values make sense. Once we are sure we have managed to transform the data, we can proceed.</p>
 <p><i class="fas fa-clipboard-list"></i> Plot the average ratings for each year</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811541784" aria-expanded="false" aria-controls="acc2022060811541784">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321114182" aria-expanded="false" aria-controls="acc2022061321114182">
 </button>
 </p>
-<div id="acc2022060811541784" class="collapse">
+<div id="acc2022061321114182" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -737,10 +738,10 @@ R
 <p>Scenario 1 would count, while scenario 2 would not, as IM and PS was in this movie both together.</p>
 <p>To solve this one you need to think in several steps. There are of course several solutions, and you are free to approach this exercise however you want. We will give you a suggestion to one approach that could be used below:</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811540138" aria-expanded="false" aria-controls="acc2022060811540138">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321122640" aria-expanded="false" aria-controls="acc2022061321122640">
 </button>
 </p>
-<div id="acc2022060811540138" class="collapse">
+<div id="acc2022061321122640" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>- Get a list of movies where Ian McKellen has played
 - Get a list of movies where Patrick Stewart has played
@@ -767,10 +768,10 @@ check_results(res_actor, &#39;Ian McKellen&#39;, &#39;Patrick Stewart&#39;)</cod
 <p><br>
 And if you want to see one suggested solution to this problem:</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022060811558126" aria-expanded="false" aria-controls="acc2022060811558126">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061321128523" aria-expanded="false" aria-controls="acc2022061321128523">
 </button>
 </p>
-<div id="acc2022060811558126" class="collapse">
+<div id="acc2022061321128523" class="collapse">
 <div class="card card-body">
 <div class="block-title-parent">
 <div class="block-title small">
@@ -861,13 +862,13 @@ intersect(actors_lst_uniq, actors_lst2_uniq)</code></pre>
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] reticulate_1.20   forcats_0.5.1     stringr_1.4.0     dplyr_1.0.6      
+##  [1] reticulate_1.25   forcats_0.5.1     stringr_1.4.0     dplyr_1.0.6      
 ##  [5] purrr_0.3.4       readr_1.4.0       tidyr_1.1.3       tibble_3.1.2     
-##  [9] ggplot2_3.3.3     tidyverse_1.3.1   fontawesome_0.2.1 captioner_2.2.3  
+##  [9] ggplot2_3.3.6     tidyverse_1.3.1   fontawesome_0.2.1 captioner_2.2.3  
 ## [13] bookdown_0.22     knitr_1.33       
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.6       lattice_0.20-44  lubridate_1.7.10 png_0.1-7       
+##  [1] Rcpp_1.0.8.3     lattice_0.20-44  lubridate_1.7.10 png_0.1-7       
 ##  [5] assertthat_0.2.1 digest_0.6.27    utf8_1.2.1       R6_2.5.0        
 ##  [9] cellranger_1.1.0 backports_1.2.1  reprex_2.0.0     evaluate_0.14   
 ## [13] highr_0.9        httr_1.4.2       pillar_1.6.1     rlang_0.4.11    
@@ -883,7 +884,7 @@ intersect(actors_lst_uniq, actors_lst2_uniq)</code></pre>
 ## [53] glue_1.4.2       hms_1.1.0        fastmap_1.1.0    yaml_2.2.1      
 ## [57] colorspace_2.0-1 rvest_1.0.0      haven_2.4.1      sass_0.4.1</code></pre>
 <p style="text-align: left; font-size: small;">
-Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 08-Jun-2022 at <i class="fa fa-clock-o" aria-hidden="true"></i> 11:10:59.
+Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 13-Jun-2022 at <i class="fa fa-clock-o" aria-hidden="true"></i> 21:11:16.
 </p>
 <hr/>
 <div style="padding-bottom: 1.5em">
