@@ -250,7 +250,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Introduction to ggplot2</h1>
-<h3 class="subtitle">RaukR 2019 • Advanced R for Bioinformatics</h3>
+<h3 class="subtitle">RaukR 2022 • Advanced R for Bioinformatics</h3>
 <h4 class="author">Roy Francis</h4>
 
 </div>
@@ -259,15 +259,16 @@ div.tocify {
 <!-- rmd lab header -->
 <p><img src="assets/logo.svg" alt="logo_raukr" class="trlogo"></p>
 <!-- ------------ Only edit title, subtitle & author above this ------------ -->
-<br>
+<p><br></p>
 <div class="spaced abstract">
-<p>This is the hands-on material for <strong>Introduction to <code>ggplot2</code></strong>. These are series of excercises to help you get started and familiarise yourself with ggplot2 syntax, plot building logic and fine modification of plots. Practice using the Basics section. Then there are tutorials for two complex plots: a scatterplot and a heatmap.</p>
+<p>This is the hands-on material for <strong>Introduction to <code>ggplot2</code></strong>. These are a series of excercises to help you get started and familiarise yourself with ggplot2 syntax, plot building logic and fine modification of plots. Practice using the <em>Basics</em> section and then move on to slightly more complex plots: a scatterplot and a heatmap.</p>
+</div>
+<p><br></p>
 <div class="pull-left-50">
 <p><img src="ggplot_lab_assets/economist-scatterplot.png"></p>
 </div>
 <div class="pull-right-50">
 <p><img src="ggplot_lab_assets/wsj-heatmap.png"></p>
-</div>
 </div>
 <p><br></p>
 <div id="basics" class="section level1" number="1">
@@ -287,7 +288,7 @@ head(iris)</code></pre>
 <p>ggplot2 plots are initialised by specifying the dataset. This can be saved to a variable or it draws a blank plot.</p>
 <pre class="r"><code>ggplot(data=iris)</code></pre>
 <p><img src="ggplot_lab_files/figure-html/unnamed-chunk-5-1.png" width="384" style="display: block; margin: auto auto auto 0;" /></p>
-<p>Now we can specify what we want on the x and y axes using aethetic mapping. And we specify the geometric using geoms. Note that the variable names do not have double quotes <code>""</code> like in base plots.</p>
+<p>Now we can specify what we want on the x and y axes using aesthetic mapping. And we specify the geometric using geoms. Note that the variable names do not have double quotes <code>""</code> like in base plots.</p>
 <pre class="r"><code>ggplot(data=iris)+
   geom_point(mapping=aes(x=Petal.Length,y=Petal.Width))</code></pre>
 <p><img src="ggplot_lab_files/figure-html/unnamed-chunk-6-1.png" width="384" style="display: block; margin: auto auto auto 0;" /></p>
@@ -369,9 +370,9 @@ head(iris)</code></pre>
        y=&quot;Petal Width&quot;, caption=&quot;This is a little caption.&quot;)</code></pre>
 <p><img src="ggplot_lab_files/figure-html/unnamed-chunk-15-1.png" width="480" style="display: block; margin: auto auto auto 0;" /></p>
 </div>
-<div id="facetting" class="section level2" number="1.10">
-<h2><span class="header-section-number">1.10</span> Facetting</h2>
-<p>We can create subplots using the facetting functionality. Let’s create three subplots for the three levels of Species.</p>
+<div id="faceting" class="section level2" number="1.10">
+<h2><span class="header-section-number">1.10</span> Faceting</h2>
+<p>We can create subplots using the faceting functionality. Let’s create three subplots for the three levels of Species.</p>
 <pre class="r"><code>ggplot(data=iris,mapping=aes(x=Petal.Length,y=Petal.Width))+
   geom_point(aes(color=Sepal.Width))+
   geom_smooth(method=&quot;lm&quot;)+
@@ -395,7 +396,7 @@ head(iris)</code></pre>
   facet_wrap(~Species)+
   theme_bw()</code></pre>
 <p><img src="ggplot_lab_files/figure-html/unnamed-chunk-17-1.png" width="576" style="display: block; margin: auto auto auto 0;" /></p>
-<p>All non-data related aspects of the plot can be modified through themes. Let’s modify the colors of the title labels and turn off the gridlines. The various parameters for theme ca be found using <code>?theme</code>.</p>
+<p>All non-data related aspects of the plot can be modified through themes. Let’s modify the colors of the title labels and turn off the gridlines. The various parameters for theme can be found using <code>?theme</code>.</p>
 <pre class="r"><code>ggplot(data=iris,mapping=aes(x=Petal.Length,y=Petal.Width))+
   geom_point(aes(color=Sepal.Width))+
   geom_smooth(method=&quot;lm&quot;)+
@@ -481,7 +482,7 @@ ggplot(data=iris,mapping=aes(x=Petal.Length,y=Petal.Width))+
 </div>
 <div id="annotations" class="section level2" number="1.14">
 <h2><span class="header-section-number">1.14</span> Annotations</h2>
-<p>Custom annotations of any geom can be added arbitrarly anywhere on the plot.</p>
+<p>Custom annotations of any geom can be added arbitrarily anywhere on the plot.</p>
 <pre class="r"><code>ggplot(data=iris,mapping=aes(x=Petal.Length,y=Petal.Width))+
   geom_point(aes(color=Species))+
   annotate(&quot;text&quot;,x=2.5,y=2.1,label=&quot;There is a random line here&quot;)+
@@ -573,9 +574,12 @@ SSA                   Sub-Saharan\nAfrica</code></pre>
                                 &quot;Sub-Saharan\nAfrica&quot;))</code></pre>
 <p>Our new Regions should look like:</p>
 <pre class="r"><code>levels(ec$Region)</code></pre>
-<pre><code>## [1] &quot;OECD&quot;                        &quot;Americas&quot;                   
-## [3] &quot;Asia &amp;\nOceania&quot;             &quot;Central &amp;\nEastern Europe&quot;  
-## [5] &quot;Middle East &amp;\nNorth Africa&quot; &quot;Sub-Saharan\nAfrica&quot;</code></pre>
+<pre><code>## [1] &quot;OECD&quot;                       
+## [2] &quot;Americas&quot;                   
+## [3] &quot;Asia &amp;\nOceania&quot;            
+## [4] &quot;Central &amp;\nEastern Europe&quot;  
+## [5] &quot;Middle East &amp;\nNorth Africa&quot;
+## [6] &quot;Sub-Saharan\nAfrica&quot;</code></pre>
 </div>
 <div id="points" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Points</h2>
@@ -640,7 +644,7 @@ p</code></pre>
 </div>
 <div id="axes" class="section level2" number="2.7">
 <h2><span class="header-section-number">2.7</span> Axes</h2>
-<p>Next step is to adjust the axes breaks, axes labels, point colors and relabelling the trendline legend text.
+<p>Next step is to adjust the axes breaks, axes labels, point colors and relabeling the trendline legend text.
 &gt; Change axes labels to ‘Corruption Perceptions Index, 2011 (10=least corrupt)’ on the x-axis and ‘Human Development Index, 2011 (1=best)’ on the y-axis. Set breaks on the x-axis from 1 to 10 by 1 increment and y-axis from 0.2 to 1.0 by 0.1 increments.</p>
 <pre class="r"><code>p &lt;- p+scale_x_continuous(name=&quot;Corruption Perceptions Index, 2011 (10=least corrupt)&quot;,
                           breaks=1:10,limits=c(1,10))+
@@ -1137,28 +1141,245 @@ p &lt;- ggplot(me3,aes(x=year,y=reorder(state,desc(state)),fill=total))+
 ## [11] LC_MEASUREMENT=en_GB.UTF-8 LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## [1] stats     graphics  grDevices utils     datasets 
+## [6] methods   base     
 ## 
 ## other attached packages:
-## [1] ggrepel_0.9.1     ggplot2_3.3.5     stringr_1.4.0     tidyr_1.2.0      
-## [5] dplyr_1.0.8       fontawesome_0.2.2 captioner_2.2.3   bookdown_0.25    
-## [9] knitr_1.38       
+##  [1] ggiraph_0.8.2     plotly_4.10.0     patchwork_1.1.1  
+##  [4] kableExtra_1.3.4  ggrepel_0.9.1     stringr_1.4.0    
+##  [7] fontawesome_0.2.2 captioner_2.2.3   bookdown_0.25    
+## [10] knitr_1.38        dplyr_1.0.8       highcharter_0.9.4
+## [13] readxl_1.4.0      ggplot2_3.3.5     tidyr_1.2.0      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.8.3     highr_0.9        pillar_1.7.0     bslib_0.3.1     
-##  [5] compiler_4.1.0   jquerylib_0.1.4  tools_4.1.0      digest_0.6.29   
-##  [9] lattice_0.20-45  nlme_3.1-157     gtable_0.3.0     jsonlite_1.8.0  
-## [13] evaluate_0.15    lifecycle_1.0.1  tibble_3.1.6     mgcv_1.8-40     
-## [17] pkgconfig_2.0.3  rlang_1.0.2      Matrix_1.4-1     cli_3.2.0       
-## [21] DBI_1.1.2        yaml_2.3.5       xfun_0.30        fastmap_1.1.0   
-## [25] withr_2.5.0      generics_0.1.2   vctrs_0.4.0      sass_0.4.1      
-## [29] grid_4.1.0       tidyselect_1.1.2 glue_1.6.2       R6_2.5.1        
-## [33] fansi_1.0.3      rmarkdown_2.13   farver_2.1.0     purrr_0.3.4     
-## [37] magrittr_2.0.3   splines_4.1.0    scales_1.1.1     htmltools_0.5.2 
-## [41] ellipsis_0.3.2   assertthat_0.2.1 colorspace_2.0-3 labeling_0.4.2  
-## [45] utf8_1.2.2       stringi_1.7.6    munsell_0.5.0    crayon_1.5.1</code></pre>
+##   [1] SparseM_1.81               
+##   [2] scattermore_0.8            
+##   [3] SpatialExperiment_1.2.1    
+##   [4] R.methodsS3_1.8.1          
+##   [5] SeuratObject_4.0.4         
+##   [6] ggpmisc_0.4.5              
+##   [7] bit64_4.0.5                
+##   [8] irlba_2.3.5                
+##   [9] DelayedArray_0.20.0        
+##  [10] R.utils_2.11.0             
+##  [11] data.table_1.14.2          
+##  [12] rpart_4.1.16               
+##  [13] KEGGREST_1.32.0            
+##  [14] RCurl_1.98-1.6             
+##  [15] generics_0.1.2             
+##  [16] BiocGenerics_0.40.0        
+##  [17] callr_3.7.0                
+##  [18] cowplot_1.1.1              
+##  [19] usethis_2.1.5              
+##  [20] RSQLite_2.2.12             
+##  [21] shadowtext_0.1.1           
+##  [22] RANN_2.6.1                 
+##  [23] commonmark_1.8.0           
+##  [24] future_1.24.0              
+##  [25] bit_4.0.4                  
+##  [26] rlist_0.4.6.2              
+##  [27] webshot_0.5.2              
+##  [28] spatstat.data_2.1-4        
+##  [29] xml2_1.3.3                 
+##  [30] lubridate_1.8.0            
+##  [31] httpuv_1.6.5               
+##  [32] ggpp_0.4.3                 
+##  [33] SummarizedExperiment_1.25.2
+##  [34] assertthat_0.2.1           
+##  [35] xfun_0.30                  
+##  [36] jquerylib_0.1.4            
+##  [37] evaluate_0.15              
+##  [38] promises_1.2.0.1           
+##  [39] fansi_1.0.3                
+##  [40] igraph_1.3.0               
+##  [41] DBI_1.1.2                  
+##  [42] geneplotter_1.70.0         
+##  [43] quantmod_0.4.18            
+##  [44] htmlwidgets_1.5.4          
+##  [45] spatstat.geom_2.4-0        
+##  [46] stats4_4.1.0               
+##  [47] purrr_0.3.4                
+##  [48] ellipsis_0.3.2             
+##  [49] crosstalk_1.2.0.9000       
+##  [50] ggpubr_0.4.0               
+##  [51] backports_1.4.1            
+##  [52] V8_4.1.0                   
+##  [53] annotate_1.70.0            
+##  [54] nuclon_0.0.1               
+##  [55] deldir_1.0-6               
+##  [56] sparseMatrixStats_1.4.2    
+##  [57] MatrixGenerics_1.6.0       
+##  [58] vctrs_0.4.0                
+##  [59] SingleCellExperiment_1.16.0
+##  [60] Biobase_2.54.0             
+##  [61] remotes_2.4.2              
+##  [62] quantreg_5.88              
+##  [63] TTR_0.24.3                 
+##  [64] ROCR_1.0-11                
+##  [65] abind_1.4-5                
+##  [66] withr_2.5.0                
+##  [67] cachem_1.0.6               
+##  [68] triebeard_0.3.0            
+##  [69] checkmate_2.0.0            
+##  [70] sctransform_0.3.3          
+##  [71] xts_0.12.1                 
+##  [72] prettyunits_1.1.1          
+##  [73] goftest_1.2-3              
+##  [74] svglite_2.1.0              
+##  [75] cluster_2.1.3              
+##  [76] dir.expiry_1.0.0           
+##  [77] lazyeval_0.2.2             
+##  [78] crayon_1.5.1               
+##  [79] basilisk.utils_1.4.0       
+##  [80] pixture_0.0.2.2000         
+##  [81] genefilter_1.74.1          
+##  [82] labeling_0.4.2             
+##  [83] edgeR_3.34.1               
+##  [84] pkgconfig_2.0.3            
+##  [85] GenomeInfoDb_1.30.1        
+##  [86] pkgload_1.2.4              
+##  [87] nlme_3.1-157               
+##  [88] devtools_2.4.3             
+##  [89] rlang_1.0.2                
+##  [90] globals_0.14.0             
+##  [91] lifecycle_1.0.1            
+##  [92] miniUI_0.1.1.1             
+##  [93] MatrixModels_0.5-0         
+##  [94] filelock_1.0.2             
+##  [95] dbscan_1.1-10              
+##  [96] rprojroot_2.0.3            
+##  [97] cellranger_1.1.0           
+##  [98] polyclip_1.10-0            
+##  [99] matrixStats_0.61.0         
+## [100] emayili_0.7.5              
+## [101] lmtest_0.9-40              
+## [102] Matrix_1.4-1               
+## [103] urltools_1.7.3             
+## [104] carData_3.0-5              
+## [105] Rhdf5lib_1.14.2            
+## [106] zoo_1.8-9                  
+## [107] base64enc_0.1-3            
+## [108] ggridges_0.5.3             
+## [109] processx_3.5.3             
+## [110] pheatmap_1.0.12            
+## [111] png_0.1-7                  
+## [112] viridisLite_0.4.0          
+## [113] rjson_0.2.21               
+## [114] gap.datasets_0.0.5         
+## [115] bitops_1.0-7               
+## [116] R.oo_1.24.0                
+## [117] KernSmooth_2.23-20         
+## [118] rhdf5filters_1.4.0         
+## [119] Biostrings_2.60.2          
+## [120] blob_1.2.2                 
+## [121] DelayedMatrixStats_1.14.3  
+## [122] parallelly_1.30.0          
+## [123] spatstat.random_2.2-0      
+## [124] rstatix_0.7.0              
+## [125] jpeg_0.1-9                 
+## [126] ggsignif_0.6.3             
+## [127] S4Vectors_0.32.3           
+## [128] beachmat_2.8.1             
+## [129] scales_1.1.1               
+## [130] memoise_2.0.1              
+## [131] magrittr_2.0.3             
+## [132] plyr_1.8.7                 
+## [133] ica_1.0-2                  
+## [134] zlibbioc_1.40.0            
+## [135] compiler_4.1.0             
+## [136] dqrng_0.3.0                
+## [137] RColorBrewer_1.1-3         
+## [138] DESeq2_1.32.0              
+## [139] fitdistrplus_1.1-8         
+## [140] cli_3.2.0                  
+## [141] XVector_0.34.0             
+## [142] listenv_0.8.0              
+## [143] pbapply_1.5-0              
+## [144] ps_1.6.0                   
+## [145] MASS_7.3-56                
+## [146] mgcv_1.8-40                
+## [147] tidyselect_1.1.2           
+## [148] stringi_1.7.6              
+## [149] highr_0.9                  
+## [150] yaml_2.3.5                 
+## [151] locfit_1.5-9.5             
+## [152] grid_4.1.0                 
+## [153] sass_0.4.1                 
+## [154] randomcoloR_1.1.0.1        
+## [155] tools_4.1.0                
+## [156] future.apply_1.8.1         
+## [157] parallel_4.1.0             
+## [158] uuid_1.0-4                 
+## [159] rstudioapi_0.13            
+## [160] gridExtra_2.3              
+## [161] farver_2.1.0               
+## [162] Rtsne_0.15                 
+## [163] DropletUtils_1.12.3        
+## [164] spatialDE_1.0.0            
+## [165] digest_0.6.29              
+## [166] shiny_1.7.1                
+## [167] Rcpp_1.0.8.3               
+## [168] car_3.0-12                 
+## [169] GenomicRanges_1.46.1       
+## [170] broom_0.7.12               
+## [171] scuttle_1.2.1              
+## [172] later_1.3.0                
+## [173] writexl_1.4.0              
+## [174] RcppAnnoy_0.0.19           
+## [175] httr_1.4.2                 
+## [176] AnnotationDbi_1.54.1       
+## [177] colorspace_2.0-3           
+## [178] brio_1.1.3                 
+## [179] rvest_1.0.2                
+## [180] XML_3.99-0.9               
+## [181] fs_1.5.2                   
+## [182] tensor_1.5                 
+## [183] reticulate_1.24            
+## [184] IRanges_2.28.0             
+## [185] splines_4.1.0              
+## [186] uwot_0.1.11                
+## [187] spatstat.utils_2.3-0       
+## [188] basilisk_1.4.0             
+## [189] systemfonts_1.0.4          
+## [190] sessioninfo_1.2.2          
+## [191] xtable_1.8-4               
+## [192] jsonlite_1.8.0             
+## [193] quarto_1.1                 
+## [194] testthat_3.1.3             
+## [195] gap_1.2.3-6                
+## [196] R6_2.5.1                   
+## [197] pillar_1.7.0               
+## [198] htmltools_0.5.2            
+## [199] mime_0.12                  
+## [200] glue_1.6.2                 
+## [201] fastmap_1.1.0              
+## [202] BiocParallel_1.26.2        
+## [203] codetools_0.2-18           
+## [204] pkgbuild_1.3.1             
+## [205] utf8_1.2.2                 
+## [206] bslib_0.3.1                
+## [207] lattice_0.20-45            
+## [208] spatstat.sparse_2.1-0      
+## [209] tibble_3.1.6               
+## [210] logger_0.2.2               
+## [211] curl_4.3.2                 
+## [212] leiden_0.3.9               
+## [213] magick_2.7.3               
+## [214] survival_3.3-1             
+## [215] limma_3.50.1               
+## [216] rmarkdown_2.13             
+## [217] desc_1.4.1                 
+## [218] munsell_0.5.0              
+## [219] xaringan_0.23              
+## [220] rhdf5_2.36.0               
+## [221] GenomeInfoDbData_1.2.7     
+## [222] HDF5Array_1.20.0           
+## [223] reshape2_1.4.4             
+## [224] gtable_0.3.0               
+## [225] spatstat.core_2.4-2        
+## [226] Seurat_4.1.0</code></pre>
 <p style="text-align: left; font-size: small;">
-Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 15-Apr-2022 at <i class="fa fa-clock-o" aria-hidden="true"></i> 10:55:39.
+Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 10-Jun-2022 at <i class="fa fa-clock-o" aria-hidden="true"></i> 16:48:12.
 </p>
 <hr/>
 <div style="padding-bottom: 1.5em">

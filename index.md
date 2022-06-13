@@ -23,7 +23,7 @@ description: Advanced R for Bioinformatics
 - **RMarkdown** (Chris Dervieux and Yihui Xie, RStudio)
     - Presentation
 
-- **Functions & Scripts** (Sebastian DiLorenzo and Julie Laurent)
+- **Functions & Scripts** (Sebastian DiLorenzo and Julie Lorent)
     - [Presentation](functions_and_scripts/presentation/functions_and_scripts_Sebastian.html)
     - [Lab](functions_and_scripts/lab/functions_and_scripts_Sebastian.html)
 
@@ -60,14 +60,14 @@ description: Advanced R for Bioinformatics
     - Presentation
     - Lab
 
-- **Working with ggplot2** (Roy Francis and Julie Laurent)
-    - [Presentation](ggplot/presentation/ggplot_presentation.html)
-    - [Lab](ggplot/lab/ggplot_lab.html)
+- **Working with ggplot2** (Roy Francis and Julie Lorent)
+    - Presentation
+    - Lab
 
 ## 17-Jun-2022 (Fri)
 
 - **Introduction to shiny apps** (Roy Francis, Lokeshwaran Manoharan)
-    - [Presentation](shiny/presentation/shiny_presentation.html)
-    - [Lab](shiny/lab/shiny_lab.html)
+    - Presentation
+    - Lab
 
 **2022** • NBIS
