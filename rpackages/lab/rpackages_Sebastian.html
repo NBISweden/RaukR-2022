@@ -621,7 +621,6 @@ trianguletter &lt;- function(x) {
   cat(&quot;after melt:\n&quot;)
   print(head(melt(iris)))
 }</code></pre>
-<!-- Does this part need devtools::build() or can one test melt() using for example load_all()? Otherwise explain what build() does. -->
 <p>Use <code>devtools::load_all()</code> to reload your package and it’s imports. You can check that <code>reshape2</code> was also loaded with <code>sessionInfo()</code>.</p>
 <p>Test your function, does the output show that it can use <code>melt</code>?</p>
 <p>Now, lets check that the NAMESPACE is doing what we want it to do, making sure that the correct <code>melt</code> is being used by our package. Lets define a new function, also named <code>melt</code>, in our global environment. That is to say we just define it from the R console.</p>
@@ -688,8 +687,9 @@ To initialise your vignette, you can use the command:</p>
           %\VignetteEngine{knitr::rmarkdown}
           %\VignetteEncoding{UTF-8}
         ---
-
-        \```{r setup, include = FALSE}
+        
+        
+        ```{r setup, include = FALSE}
         knitr::opts_chunk$set(
           collapse = TRUE,
           comment = &quot;#&gt;&quot;
@@ -697,7 +697,8 @@ To initialise your vignette, you can use the command:</p>
 
         # replace this with your package name
         library(newpkg)
-        \```
+        ```
+        
 
         # The greatest package for a very specific purpose
 
@@ -709,29 +710,52 @@ To initialise your vignette, you can use the command:</p>
         This package and its sole function, trianguletter, solves just this problem!
 
         But you do not have to take my word for it, see for yourself:
-        \```{r,echo=T}
+        ```{r,echo=T}
         # With just a simple number we specify how long into the alphabet we go.
         trianguletter(10)
 
         # Also, this package has this random dataset:
         your_object
-        \```
+        ```
 
         # Future plans
 
         We plan do add features so that you can give it
         a letter, rather than a number, and output a
         bunch of numbers instead!</code></pre>
-<blockquote>
-<p>Note: Because I am writing this in rmarkdown I added backslashes before the code or it would not render properly for this exercise instruction. In your rmarkdown there should <strong>not</strong> be backslashes before code chunks. See the \``` in the vignette code.</p>
-</blockquote>
+<!-- > Note: Because I am writing this in rmarkdown I added backslashes before the code or it would not render properly for this exercise instruction. In your rmarkdown there should **not** be backslashes before code chunks.  See the \\``` in the vignette code. -->
 <p>And the beautiful rendered version:<br>
 <img src="rpackages_lab_assets/vignette.png"></p>
 <p>The preview you get when knitting the <strong>vignette.Rmd</strong> does not mean that the vignette has been created. When you are happy with the vignette, use <code>devtools::build_vignettes()</code>. To view the vignette as an external user would view it is for some reason a bit of a hassle for the package you are developing, perhaps because the output is pretty much the same as when you knit. If you want to do this you can build your package source with <code>devtools::build()</code>, which also builds the vignette, and then <code>devtools::load_all()</code>. Then view the vignette with <code>browseVignettes("packagename")</code>.</p>
 <p>Once again, good work! Now you have written a short guide to your package that will be included wherever it goes!</p>
 </div>
-<div id="src-and-rcpp" class="section level1" number="8">
-<h1><span class="header-section-number">8</span> src/ and Rcpp</h1>
+<div id="testing" class="section level1" number="8">
+<h1><span class="header-section-number">8</span> Testing</h1>
+<p>Testing is a powerful way to add tests to your package. They can for example make sure that the output from your functions are as you expect them to be. This can be very good when you have many people working on a package, such as open source. It is not hard to imagine a situation where someone makes a change that has unforseen consequences and even if the function doesn’t throw an error the output has changed leading to errors in the next function that are hard to track.</p>
+<p>To add tests to your package you can use</p>
+<pre class="r"><code>usethis::use_testthat()</code></pre>
+<p>Be sure to check the output from the command as it describes what it does to your package very well. As it suggests we can now use <code>usethis::use_test()</code> to create a template test for a function.</p>
+<p>We will create a new function to test, since <code>trianguletter()</code> uses <code>cat()</code> which is standard output, it is advanced to run tests on it. As always you are free and encouraged to create your own function. The example is for inspiration.</p>
+<p>Create a new function in <code>R/divider.R</code></p>
+<pre class="r"><code>usethis::use_r(&quot;trivider&quot;)</code></pre>
+<p>And define the function.</p>
+<pre><code>trivider &lt;- function(x){
+  x / 3
+}</code></pre>
+<p>Now lets create the test using:</p>
+<pre><code>usethis::use_test(&quot;trivider&quot;)</code></pre>
+<p>This creates the file <strong>tests/testthat/test-trivider.R</strong>, which is where we will write our tests for that function.
+Now we can for example write a test that makes sure the input <em>9</em> results in the output <em>3</em>.</p>
+<pre><code>test_that(&quot;given a 9 the output is 3&quot;, {
+  expect_equal(trivider(9), 3)
+})</code></pre>
+<p>You can run the test by using the command</p>
+<pre><code>devtools::test()</code></pre>
+<p>Try adding another test in <strong>test-trivider.R</strong>, or whichever function you are using. Use <code>expect_error()</code> this time. Can you get a PASS on both your tests?</p>
+<p>Importantly, your tests are performed when you run <code>devtools::check()</code>, which means that you have just extended its functionality to keep a closer eye on your packages expected behaviour.</p>
+</div>
+<div id="src-and-rcpp" class="section level1" number="9">
+<h1><span class="header-section-number">9</span> src/ and Rcpp</h1>
 <p>R is not always the most efficient language, which is why it is great that we can integrate other code with our package. Either using ready made solutions, or by including a script file of another language in the package.</p>
 <p>Here we will integrate the well developed <code>Rcpp</code> package to be able to use C++ code in our package.</p>
 <p>Similarly to how we created the package, the first thing we want to do is setup our package to accept <code>Rcpp</code>. We can do this with <code>usethis::use_rcpp()</code> which does four things:</p>
@@ -789,8 +813,8 @@ NumericVector timesTwo(NumericVector x) {
 <p>Save the file to your src/ directory and call <code>pkgbuild::compile_dll()</code>, which re-compiles the package, implementing our changes. Now run <code>devtools::document()</code> to update your <strong>NAMESPACE</strong>. Lets install and restart using <em>Cmd/Ctrl + Shift + B</em> in Rstudio. This will create the file <strong>RcppExports.R</strong> in <strong>R/</strong>, which is what R uses to call your C++ function.</p>
 <p>Test that your function works from console.</p>
 <p>Your R package can now run C++ code, marvelous! Now you just need to learn C++ ;).</p>
-<div id="check-again" class="section level2" number="8.1">
-<h2><span class="header-section-number">8.1</span> Check again!</h2>
+<div id="check-again" class="section level2" number="9.1">
+<h2><span class="header-section-number">9.1</span> Check again!</h2>
 <blockquote>
 <p>Added new components to the package have we?
 - Yoda</p>
@@ -798,11 +822,11 @@ NumericVector timesTwo(NumericVector x) {
 <p>Perform <code>devtools::check()</code> again and fix any new messages.</p>
 </div>
 </div>
-<div id="github-and-github-actions" class="section level1" number="9">
-<h1><span class="header-section-number">9</span> Github and Github actions</h1>
+<div id="github-and-github-actions" class="section level1" number="10">
+<h1><span class="header-section-number">10</span> Github and Github actions</h1>
 <p>This section does require some previous git knowledge.</p>
-<div id="github" class="section level2" number="9.1">
-<h2><span class="header-section-number">9.1</span> Github</h2>
+<div id="github" class="section level2" number="10.1">
+<h2><span class="header-section-number">10.1</span> Github</h2>
 <p>Let’s add our R package to github, so we can distribute it! To do this you will need a github account. Since git usage is covered later in the course, you can return to this. But if you want you are very welcome to follow this guide. It does require that you have git installed, accessible and configured on your local computer.</p>
 <p>To initialize git for your R package, so it becomes a local repository, you first need to run the command:</p>
 <pre><code>usethis::use_git()</code></pre>
@@ -811,8 +835,8 @@ NumericVector timesTwo(NumericVector x) {
 <p>At this point, you should have a new repository on your github that has your R package files inside it. This is fantastic! Not only does this mean you can now install your package from any other computer , but we can also setup github actions!</p>
 <p>Check that you can install your package directly from the github repository using a command of the form <code>devtools::install_github("Username/repository_name")</code>.</p>
 </div>
-<div id="github-actions" class="section level2" number="9.2">
-<h2><span class="header-section-number">9.2</span> Github actions</h2>
+<div id="github-actions" class="section level2" number="10.2">
+<h2><span class="header-section-number">10.2</span> Github actions</h2>
 <blockquote>
 <p>Note: Github actions are only free for public repositories. Do not create a private repository, for example under your organisation, for this exercise!</p>
 </blockquote>
@@ -827,8 +851,8 @@ To add the action, we will use the <code>usethis</code> package, similarly to ho
 <!-- --------------------- Do not edit this and below ---------------------- -->
 </div>
 </div>
-<div id="session-info" class="section level1" number="10">
-<h1><span class="header-section-number">10</span> Session info</h1>
+<div id="session-info" class="section level1" number="11">
+<h1><span class="header-section-number">11</span> Session info</h1>
 <pre><code>## R version 4.1.2 (2021-11-01)
 ## Platform: x86_64-apple-darwin17.0 (64-bit)
 ## Running under: macOS Big Sur 10.16
@@ -860,7 +884,7 @@ To add the action, we will use the <code>usethis</code> package, similarly to ho
 ## [37] htmltools_0.5.2   ellipsis_0.3.2    stringi_1.7.6     cachem_1.0.6     
 ## [41] crayon_1.5.1      brio_1.1.3</code></pre>
 <p style="text-align: left; font-size: small;">
-Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 12-Jun-2022 at <i class="fa fa-clock-o" aria-hidden="true"></i> 20:16:52.
+Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 13-Jun-2022 at <i class="fa fa-clock-o" aria-hidden="true"></i> 21:22:55.
 </p>
 <hr/>
 <div style="padding-bottom: 1.5em">
