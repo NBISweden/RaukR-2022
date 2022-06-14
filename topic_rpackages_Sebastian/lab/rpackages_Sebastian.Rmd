@@ -43,7 +43,7 @@ library(rmarkdown)
 <div class="spaced abstract">
 This is the R packages exercise from RaukR. It will take you through creating an R package with code, data, documentation, creating or generating a correct DESCRIPTION and NAMESPACE, importing packages, checking your package for warnings. There are also some advanced excercises you can do if you have time.
 
-The exercise will show how do to things from R console, but many of the functionalities are so common they are built into Rstudio. Because of this I have included a cheatsheet which can be useful if you are developing packages in Rstudio in the future.
+The exercise will show how to do things from R console, but many of the functionalities are so common they are built into Rstudio. Because of this I have included a cheatsheet which can be useful if you are developing packages in Rstudio in the future.
 
 It is fine if you do not have time for the whole thing, as all components may not be important to you. You can always come back later :).
 </div>
@@ -99,7 +99,7 @@ Now that we have a R package backbone lets fill it with stuff!
 
 ## R code
 
-Let's create the first function of your package. We can use the handy helper-function `usethis::use_r()` to create or navigate between the r files in your **R/** folder. You can also just create a **.R** file there if you wish.
+Let's create the first function of your package. We can use the handy helper-function `usethis::use_r()` to create or navigate between the R files in your **R/** folder. You can also just create a **.R** file there if you wish.
 
 ```
 usethis::use_r("trianguletter")
