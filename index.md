@@ -46,13 +46,9 @@ description: Advanced R for Bioinformatics
     - [Presentation](topic_oop_Marcin/presentation/oop_presentation.html)
     - [Lab](topic_oop_Marcin/lab/oop_lab.html)
 
-- **Vectorisation and Parallelisation** (Sebastian DiLorenzo and Marcin Kierczak)
-    - Presentation
-    - Lab
-
-- **reticulate: Combining R with Python** (Nina Norgren and Roy Francis and Marcin Kierczak)
-    - Presentation
-    - Lab
+- **reticulate: Combining R with Python** (Nina Norgren)
+    - [Presentation](reticulate/presentation/presentation_reticulate.html)
+    - [Lab](reticulate/lab/lab_reticulate.html)
 
 ## 16-Jun-2022 (Thu)
 
