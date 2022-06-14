@@ -387,10 +387,10 @@ importFrom(reshape2,melt)
 
 Great! If the `melt` command from `reshape2` is ever used in your package, it will know which one to use. But for our package to use `reshape2` we first have to import it in **DESCRIPTION**.
 
-To add the `Imports` field and the `reshape2` information to your **DESCRIPTION** you can use the `devtools::use_package` command.
+To add the `Imports` field and the `reshape2` information to your **DESCRIPTION** you can use the `usethis::use_package` command.
 
 ```{r,echo=T,eval=F}
-devtools::use_package("reshape2")
+usethis::use_package("reshape2")
 ```
 
 While `Imports` means that if someone installs your package it will automatically install `reshape2` as well, regrettably it does not mean that if `reshape2` is missing when we reinstall it locally it will be downloaded and installed. Luckily we installed it at the start of the exercise.
