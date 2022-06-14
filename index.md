@@ -30,12 +30,12 @@ description: Advanced R for Bioinformatics
 ## 14-Jun-2022 (Tue)
 
 - **Debugging, Profiling and Optimization** (Ashfaq Ali and Marcin Kierczak)
-    - [Presentation](debugging/presentation/debugging_profiling_optimization.html)
-    - [Lab](debugging/lab/DebuggingProfilingOptimization.html)
+    - [Presentation](topic_debugging_Ash/presentation/debugging_profiling_optimization.html)
+    - [Lab](topic_debugging_Ash/lab/DebuggingProfilingOptimization.html)
 
 - **R Packages** (Sebastian DiLorenzo and Nima Rafati)
-    - [Presentation](rpackages/presentation/rpackages_Sebastian.html)
-    - [Lab](rpackages/lab/rpackages_Sebastian.html)
+    - [Presentation](topic_rpackages_Sebastian/presentation/rpackages_Sebastian.html)
+    - [Lab](topic_rpackages_Sebastian/lab/rpackages_Sebastian.html)
 
 - **Guest Lecture** (Jenny Bryan, RStudio)
     - Presentation
@@ -43,8 +43,8 @@ description: Advanced R for Bioinformatics
 ## 15-Jun-2022 (Wed)
 
 - **Object-oriented programming** (Marcin Kierczak and Ashfaq Ali)
-    - Presentation
-    - Lab
+    - [Presentation](topic_oop_Marcin/presentation/oop_presentation.html)
+    - [Lab](topic_oop_Marcin/lab/oop_lab.html)
 
 - **Vectorisation and Parallelisation** (Sebastian DiLorenzo and Marcin Kierczak)
     - Presentation
