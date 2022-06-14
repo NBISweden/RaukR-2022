@@ -57,8 +57,8 @@ description: Advanced R for Bioinformatics
 ## 16-Jun-2022 (Thu)
 
 - **Tidyverse** (Marcin Kierczak, Roy Francis, Mun-Gwan Hong)
-    - Presentation
-    - Lab
+    - [Presentation](topic_tidyverse_Marcin/presentation/tidyverse_presentation.html)
+    - [Lab](topic_tidyverse_Marcin/lab.lab.html)
 
 - **Working with ggplot2** (Roy Francis and Julie Lorent)
     - Presentation
