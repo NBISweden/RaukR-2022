@@ -1,6 +1,6 @@
 ## NAMETAGGER
 ## R shinyapp to generate nametags
-## 2019 Roy Mathew Francis
+## 2022 Roy Mathew Francis
 
 library(shiny)
 library(shinyAce)
@@ -110,7 +110,7 @@ nametag_plot_page <- function(dfr,logo_right=NULL,logo_right_scale,logo_right_of
     # add right logo to plot
     p <- p + annotation_raster(logo_right,xmin=logo_right_x1,xmax=logo_right_x2,ymin=logo_right_y1,ymax=logo_right_y2)
   }
-  
+
   p <- p+
     facet_grid(row~col)+
     theme(axis.text=element_blank(),
@@ -243,7 +243,7 @@ ui <- fluidPage(
       downloadButton("btn_download","Download"),
       checkboxInput("in_settings","Settings",value=FALSE),
       tags$hr(),
-      helpText("2019 | NBIS")
+      helpText("2022 | NBIS")
     ),
     column(6,style="max-width:450px;min-width:400px;padding-top:15px;padding-bottom:15px;border-radius:4px;",
       textOutput("out_pagecount"),
