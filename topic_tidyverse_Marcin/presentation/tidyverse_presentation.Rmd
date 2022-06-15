@@ -57,7 +57,7 @@ When this module is complete, you will:
 * know whether the data you work with are tidy
 * will be able to load, debug and tidy your data
 * understand how to combine datasets using `join_*` 
-* be aware of useful packages within tidyverse
+* be aware of useful packages within `tidyverse`
 
 ---
 name: tidyverse
@@ -65,7 +65,8 @@ name: tidyverse
 
 * [tidyverse](http://www.tidyverse.org) is a collection of packages `r emo::ji('package'); emo::ji('package')` 
 * created by [Hadley Wickham](http://hadley.nz)
-* gains popularity `r emo::ji('chart_increasing')`, on the way to become a *de facto* standard in data analyses
+* constantly gains popularity `r emo::ji('chart_increasing')`, 
+* has became a *de facto* standard in data analyses,
 * knowing how to use it can increase your salary `r emo::ji('money_bag')` 
 * a philosophy of programming or a programming paradigm
 * everything is about `r emo::ji('water_wave')` the flow of `r emo::ji('broom')` *tidy data*
@@ -143,7 +144,7 @@ name: other_pipes_T
 
 * provided by `magritter`, not in `tidyverse`
 
-* when you call a function for its side effects
+* when you call a function for its *side effects*
 
 ```{r magrittr2a, fig.height=4, fig.width=4, error=TRUE, tidy=FALSE} 
 rnorm(50) %>% 
@@ -183,7 +184,7 @@ iris %$% cor(Sepal.Length, Sepal.Width)
 
 --
 
-This is because the `cor` function does not have the `data` argument (which also should be the first argument of a pipe-friendly function).
+This is because `cor` function does not have the `x` (data) argument &ndash; the very first argument of a pipe-friendly function.
 
 ---
 name: pipes_two_way 
@@ -197,6 +198,7 @@ M <- matrix(rnorm(16), nrow=4)
 M %<>% colSums()
 M
 ```
+
 ---
 name: magrittr_placeholder
 
@@ -205,15 +207,20 @@ Sometimes we want to pass the resulting data to *other than the first* argument 
 * `x %>% f(y, .)` $\equiv$ `f(y, x)`,
 * `x %>% f(y, z = .)` $\equiv$ `f(y, z = x)`.
 
+-- 
+
+```{r magrittr_placeholder_example1}
+M <- rnorm(4) %>% matrix(nrow = 2)
+M %>% `%*%`(., .)
+``` 
+
+--
+
 But for nested expressions:
 * `x %>% f(a = p(.), b = q(.))` $\equiv$ `f(x, a = p(x), b = q(x))`,
 * `x %>% {f(a = p(.), b = q(.))}` $\equiv$ `f(a = p(x), b = q(x))`.  
 
-Examples:
-```{r magrittr_placeholder_example1}
-M <- rnorm(4) %>% matrix(nrow = 2)
-M %>% `%*%`(., .)
-```
+--
 
 ```{r magrittr_placeholder_example2}
 print_M_summ <- function(nrow, ncol) {
@@ -228,7 +235,7 @@ name: tibble_intro
 ## Tibbles
 .pull-left-50[
   ```{r, fig.align='center', echo=FALSE}
-  knitr::include_graphics("assets_tidyverse/hex-tibble.png")
+  knitr::include_graphics("assets_tidyverse/hex-tidyverse.png")
   ```
   ```{r}
   as_tibble(iris)
@@ -257,7 +264,7 @@ name: tibble2
 
 * When you print a `tibble`:
   + all columns that fit the screen are shown,
-  + first 10 rows are shown,
+  + only the first 10 rows are shown,
   + data type for each column is shown.
 
 ```{r tibble_printing} 
@@ -274,20 +281,32 @@ name: tibble2
 
 ## Subsetting Tibbles
 
-```{r tibble_subs}
-vehicles <- as_tibble(cars[1:5,])
+** vehicles ** will be our `tibble` version of `cars`
 
+```{r tibble_vehicles}
+vehicles <- as_tibble(cars[1:5,])
+```
+
+--
+
+We can access data like this:
+```{r tibble_subs}
 vehicles[['speed']]
 vehicles[[1]]
 vehicles$speed
+```
 
-# Using placeholders
+--
 
+Or, alternatively, using placeholders:
+```{r tibble_subs2}
 vehicles %>% .$dist
 vehicles %>% .[['dist']]
 vehicles %>% .[[2]]
 ```
+
 --
+
 **Note!** Not all old R functions work with tibbles, than you have to use `as.data.frame(my_tibble)`.
 
 ---
@@ -296,20 +315,42 @@ name: tibbles_partial_matching
 ## Tibbles are Stricter than `data.frames`
 ```{r tibble_strict, warning=T, echo=F}
 cars <- cars[1:5,]
+colnames(vehicles)
 ```
+
+--
+
 ```{r tibble_strict1, warning=T}
 cars$spe      # partial matching
 ```
+
+--
+
 ```{r tibble_strict2, warning=T}
 vehicles$spe  # no partial matching
 ```
+
+--
+
 ```{r tibble_strict3, warning=T}
 cars$gear
 ```
+
+--
+
 ```{r tibble_strict4, warning=T}
 vehicles$gear
 ```
 
+---
+name: tibble_tweet
+
+## Use tibbles &nbsp; they are real!
+
+```{r, fig.align='center', echo=FALSE}
+knitr::include_graphics("assets_tidyverse/tibble_tweet.png")
+```
+  
 ---
 name: loading_data
 
@@ -368,7 +409,7 @@ text1
 charToRaw(text2)
 parse_character(text1, locale = locale(encoding = 'UTF-8'))
 guess_encoding(charToRaw("Test"))
-guess_encoding(charToRaw(text1))
+guess_encoding(charToRaw(text2))
 ``` 
 
 ---
@@ -376,7 +417,7 @@ name: parsing_factors
 
 ## Parsing Factors
 
-* R is using factors to represent cathegorical variables. 
+* R is using factors to represent categorical variables. 
 * Supply known levels to `parse_factor` so that it warns you when an unknown level is present in the data:
 ```{r, error=T, warning=T}
 landscapes <- c('mountains', 'swamps', 'seaside')
