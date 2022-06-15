@@ -736,8 +736,6 @@ cat(paste0("```{r}\n","shinyApp(\n","  ui=fluidPage(),\n","  server=function(inp
 <iframe src="https://user.shinyapps.io/app"></iframe>
 ```
 
-.small[_Demo: shiny-rmarkdown.R_]
-
 ---
 name: extensions
 
@@ -757,6 +755,7 @@ class: spaced
 
 ## Help
 
+* [Mastering Shiny Book](https://mastering-shiny.org/index.html)
 * [**RStudio Shiny home**](https://shiny.rstudio.com/) 
 * [**RStudio Shiny tutorial**](http://shiny.rstudio.com/tutorial/)
 * [**RStudio Shiny articles**](https://shiny.rstudio.com/articles/)
