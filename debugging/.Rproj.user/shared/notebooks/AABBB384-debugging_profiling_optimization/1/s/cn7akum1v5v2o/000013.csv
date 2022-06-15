@@ -1,7 +1,0 @@
-"0","  times = 10L) 
-"
-"2","Warning in microbenchmark(cpuC = A %*% B, gpuC = gpuA %*% gpuB, vclC = vclA %*%  :"
-"2","
- "
-"2"," less accurate nanosecond times to avoid potential integer overflows
-"
