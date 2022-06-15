@@ -66,29 +66,63 @@ rv_col_light <- "#e7eef3"
 * [Interactive Plots](#interactive)
 * [Extensions](#extension)
 
+
 ---
-name: intro
-class: spaced
 
-## Why `ggplot2`?
+# Graphs
 
-* Consistent code
-* Flexible
-* Automatic legends, colors etc
-* Save plot objects
-* Themes for reusing styles
-* Numerous add-ons/extensions
-* Nearly complete graphing solution
+Graphing is an essential part of data analyses. Data with same summary statistics can look very different when plotted out.
 
 --
 
-Not suitable for:
+.pull-left-40[
+![](ggplot_presentation_assets/anscombe.jpg)
+]
 
-* 3D graphics
+--
 
-???
+.pull-right-60[
+![](ggplot_presentation_assets/datasaurus.jpg)
+]
 
-Why can't we just do everything is base plot? Of course, we could, but it's easier, consistent and more structured using `ggplot2`. There is bit of a learning curve, but once the code syntax and graphic building logic is clear, it becomes easy to plot a large variety of graphs.
+.small[
+[Anscombe's quartet](https://en.wikipedia.org/wiki/Anscombe%27s_quartet)  
+[Datasaurus](https://www.autodesk.com/research/publications/same-stats-different-graphs)  
+]
+
+---
+
+# Graph quality
+
+<img src="ggplot_presentation_assets/scientific_paper_graph_quality.jpg" width="500px">
+--
+<img src="ggplot_presentation_assets/excel.png" width="300px">
+
+.small[[xkcd](https://xkcd.com/1945/)]
+
+---
+
+# R graphics
+
+.pull-left-50[
+
+![](ggplot_presentation_assets/base.png)
+]
+
+--
+
+.pull-left-50[
+
+![](ggplot_presentation_assets/ggplot-example.png)
+]
+
+---
+
+# R graphics
+
+![](ggplot_presentation_assets/bbc.png)
+
+.small[[How BBC works with R graphics](https://medium.com/bbc-visual-and-data-journalism/how-the-bbc-visual-and-data-journalism-team-works-with-graphics-in-r-ed0b35693535)]
 
 ---
 name: gvb1
@@ -107,11 +141,16 @@ library(ggplot2)
 ggplot(iris,aes(x=Sepal.Length))+
   geom_histogram(bins=8)
 ```
+
 ]
 
 ???
 
 For simple graphs, the base plot seem to take minimal coding effort compared to a ggplot graph.
+
+---
+
+![](ggplot_presentation_assets/meme-confused.jpg)
 
 ---
 name: gvb2
@@ -141,6 +180,30 @@ ggplot(iris,aes(Petal.Length,Sepal.Length,color=Species))+
 For anything beyond extremely basic plots, base plotting quickly become complex. More importantly, base plots do not have consistency in it's functions or plotting strategy.
 
 ---
+name: intro
+class: spaced
+
+## Why `ggplot2`?
+
+- Consistent code for any type of plot (almost!)
+- Flexible and modular (Add/remove components)
+- Automatic legends, colors etc
+- Save plot objects
+- Themes for reusing styles
+- Numerous add-ons/extensions
+- Nearly complete structured graphing solution
+- Adapted to other programming languages
+  - [Gadfly](http://gadflyjl.org/stable/) in Julia  
+  - [gramm](https://se.mathworks.com/matlabcentral/fileexchange/54465-gramm-complete-data-visualization-toolbox-ggplot2-r-like) in MatLab  
+  - [GGPlot](https://metacpan.org/pod/Chart::GGPlot) in Perl  
+  - [Vega](https://vega.github.io/vega/) in Javascript  
+  - [PlotNine](https://plotnine.readthedocs.io/en/stable/) , [ggpy](https://github.com/yhat/ggpy), [lets-plot](https://lets-plot.org/) in Python  
+
+???
+
+Why can't we just do everything is base plot? Of course, we could, but it's easier, consistent and more structured using `ggplot2`. There is bit of a learning curve, but once the code syntax and graphic building logic is clear, it becomes easy to plot a large variety of graphs.
+
+---
 name: gog
 class: spaced
 
@@ -154,6 +217,7 @@ class: spaced
 --
 
 .pull-right-70[
+- Created by Hadley Wickham in 2005
 - **Data**: Input data
 - **Geom**: A geometry representing data. Points, Lines etc
 - **Aesthetic**: Visual characteristics of the geometry. Size, Color, Shape etc
@@ -184,15 +248,14 @@ name: build-1
 ## Building A Graph
 
 .pull-left-40[
-```{r,fig.height=5,fig.width=5,eval=FALSE}
+```{r,bag-1,fig.height=5,fig.width=5,eval=FALSE}
+data(iris)
 ggplot(iris)
 ```
 ]
 
 .pull-right-50[
-```{r,fig.height=5,fig.width=5,echo=FALSE}
-data(iris)
-ggplot(iris)
+```{r,bag-1,fig.height=5,fig.width=5,echo=FALSE}
 ```
 ]
 
@@ -202,16 +265,14 @@ name: build-2
 ## Building A Graph
 
 .pull-left-40[
-```{r,fig.height=5,fig.width=5,eval=FALSE}
+```{r,bag-2,fig.height=5,fig.width=5,eval=FALSE}
 ggplot(iris,aes(x=Sepal.Length,
                 y=Sepal.Width))
 ```
 ]
 
 .pull-right-50[
-```{r,fig.height=5,fig.width=5,echo=FALSE}
-ggplot(iris,aes(x=Sepal.Length,
-                y=Sepal.Width))
+```{r,bag-2,fig.height=5,fig.width=5,echo=FALSE}
 ```
 ]
 
@@ -229,10 +290,7 @@ ggplot(iris,aes(x=Sepal.Length,
 ]
 
 .pull-right-50[
-```{r,fig.height=5,fig.width=5,echo=FALSE}
-ggplot(iris,aes(x=Sepal.Length,
-                y=Sepal.Width))+
-  geom_point()
+```{r,bag-3,fig.height=5,fig.width=5,echo=FALSE}
 ```
 ]
 
@@ -248,14 +306,12 @@ ggplot(iris,aes(x=Sepal.Length,
                 colour=Species))+
   geom_point()
 ```
+
+![](ggplot_presentation_assets/syntax.png)
 ]
 
 .pull-right-50[
-```{r,fig.height=5,fig.width=5,echo=FALSE}
-ggplot(iris,aes(x=Sepal.Length,
-                y=Sepal.Width,
-                colour=Species))+
-  geom_point()
+```{r,bag-4,fig.height=5,fig.width=5,echo=FALSE}
 ```
 ]
 
@@ -441,7 +497,7 @@ ggplot(iris)+
 ```{r,fig.height=4,fig.width=5}
 ggplot(iris)+
   geom_point(aes(x=Sepal.Length,
-                 y=Sepal.Width),
+                 y=Sepal.Width), #<<
                  size=2,
                  alpha=0.8,
                  shape=15,
@@ -518,6 +574,19 @@ ggplot(iris,aes(x=Sepal.Length,y=Sepal.Width))+
 Each geom takes input from `ggplot()` inputs. If extra input is required to a geom, it can be specified additionally inside `aes()`.
 
 `data` can be changed if needed for specific geoms.
+
+---
+
+![](ggplot_presentation_assets/complicated-graphs.jpg)
+
+Just because you can doesn't mean you should.
+
+---
+name: scales-intro
+
+# Scales
+
+![](ggplot_presentation_assets/meme-scales.jpg)
 
 ---
 name: scales-discrete-color
@@ -633,9 +702,8 @@ name: scales-axis
 
 .pull-left-50[
 ```{r,fig.height=5,fig.width=5}
-p <- ggplot(iris)+
-      geom_point(aes(x=Sepal.Length,
-                     y=Sepal.Width))
+p <- ggplot(iris)+geom_point(
+  aes(x=Sepal.Length,y=Sepal.Width))
 p
 ```
 ]
@@ -644,9 +712,7 @@ p
 
 .pull-right-50[
 ```{r,fig.height=5,fig.width=5}
-p + scale_color_manual(name="New",
-   values=c("blue","green","red"))+
-scale_x_continuous(name="Sepal Length",
+p + scale_x_continuous(name="Sepal Length",
         breaks=seq(1,8),limits=c(3,5))
 ```
 ]
@@ -656,6 +722,13 @@ scale_x_continuous(name="Sepal Length",
 The x and y axes are also controlled by scales. The axis break points, the break point text and limits are controlled through scales.
 
 When setting limits using `scale_`, the data outside the limits are dropped. Limits can also be set using `lims(x=c(3,5))` or `xlim(c(3,5))`. When mapping, `coord_map()` or `coord_cartesian()` is recommended for setting limits.
+
+---
+name: facet-intro
+
+# Facets
+
+![](ggplot_presentation_assets/meme-facets.jpg)
 
 ---
 name: facet-wrap
@@ -722,6 +795,13 @@ p + facet_grid(cut~clarity)
 `facet_grid` is also used to split a plot into subplots based on the categories in one or more variables. `facet_grid` can be used to create a matrix-like grid of two variables.
 
 ---
+name: coordinates-intro
+
+# Coordinates
+
+![](ggplot_presentation_assets/meme-coordinates.jpg)
+
+---
 name: coordinate
 
 ## Coordinate Systems
@@ -751,6 +831,13 @@ The coordinate system defines the surface used to represent numbers. Most plots 
 p+coord_polar("y",start=0)
 ```
 ]
+
+---
+name: theme-intro
+
+# Theme
+
+![](ggplot_presentation_assets/meme-theme.jpg)
 
 ---
 name: theme
@@ -1061,8 +1148,8 @@ plotly::ggplotly(p1,width=400,height=300)
 .pull-right-50[
 ```{r,fig.height=4.5,fig.width=4.5}
 p2 <- p+ggiraph::geom_point_interactive(
-  aes(tooltip=paste0("<b>Species: </b>",Species)),
-  size=2)+theme_bw(base_size=12)
+  aes(tooltip=paste0("<b>Species: </b>",Species)))+
+  theme_bw(base_size=12)
 ggiraph::ggiraph(code=print(p2))
 ```
 ]
@@ -1105,6 +1192,10 @@ class: spaced
 - Blogs, for example; [R-Bloggers](https://www.r-bloggers.com/), [Cedric Scherer](https://www.cedricscherer.com/tags/ggplot2/) etc.  
 
 <!-- --------------------- Do not edit this and below --------------------- -->
+
+---
+
+![](ggplot_presentation_assets/meme-end-of-pres.jpg)
 
 ---
 name: end-slide
