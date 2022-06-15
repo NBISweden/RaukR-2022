@@ -24,8 +24,8 @@ description: Advanced R for Bioinformatics
     - [GitHub](https://github.com/cderv/raukr-2022-rmd-skills)
 
 - **Functions & Scripts** (Sebastian DiLorenzo and Julie Lorent)
-    - [Presentation](topic_functions_and_scripts/presentation/functions_and_scripts_Sebastian.html)
-    - [Lab](topic_functions_and_scripts/lab/functions_and_scripts_Sebastian.html)
+    - [Presentation](topic_functions_and_scripts_Sebastian/presentation/functions_and_scripts_Sebastian.html)
+    - [Lab](topic_functions_and_scripts_Sebastian/lab/functions_and_scripts_Sebastian.html)
 
 ## 14-Jun-2022 (Tue)
 
