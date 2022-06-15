@@ -64,8 +64,8 @@ description: Advanced R for Bioinformatics
     - [Lab](topic_tidyverse_Marcin/lab.lab.html)
 
 - **Working with ggplot2** (Roy Francis and Julie Lorent)
-    - Presentation
-    - Lab
+    - [Presentation](topic_ggplot_Roy/presentation/ggplot_presentation.html)
+    - [Lab](topic_ggplot_Roy/presentation/ggplot_lab.html)
 
 ## 17-Jun-2022 (Fri)
 
