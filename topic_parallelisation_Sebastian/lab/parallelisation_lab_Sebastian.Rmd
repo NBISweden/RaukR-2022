@@ -79,7 +79,9 @@ system.time({sample(100,200000000,replace=T)})
 
 ## Sequential and Multi-
 
-* Use the future package with `plan(sequential)`,which is the default, and run the supplied `sample()` inside a future. 
+* Use the future package with `plan(sequential)`,which is the default, and run the supplied `sample()` inside a future.
+
+* Due to a recent change in future, there is a warning message when generating random numbers without seed. We can ignore this by changing our options: `options(future.rng.onMisuse="ignore")`.
 
 * Add an approach from yesterdays lecture on benchmarking or some other way that you are comfortable with to calculate the time it takes to complete the operation of simply assigning the future. Do not evaluate the future yet by asking for the outcome value.
 
@@ -112,7 +114,7 @@ timer(
 
 * Introduce an error in one of your future expressions. 
 
-*Question 5:* Does the error output immediately?
+*Question 5:* Does the error output when the future is defined and unresolved, or when it is resolved?
 
 *Question 6:* What happens when you try to use that future later in your code?
 
@@ -137,6 +139,9 @@ for (name in c("a", "b", "c")) {
 }
 #Turn the environment back into a list
 v <- as.list(v)
+
+#To turn the list of vectors into the same format, one long vector, that we had above when running "a + b + c"
+vec <- Reduce(c,v)
 ```
 
 * Use this to divide the `sample()` operation into however many smaller pieces you want. Do remember to transform your output back into the object we started with before parallelising the execution.

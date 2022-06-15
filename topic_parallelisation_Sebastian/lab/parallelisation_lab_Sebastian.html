@@ -285,6 +285,7 @@ div.tocify {
 <h2><span class="header-section-number">2.1</span> Sequential and Multi-</h2>
 <ul>
 <li><p>Use the future package with <code>plan(sequential)</code>,which is the default, and run the supplied <code>sample()</code> inside a future.</p></li>
+<li><p>Due to a recent change in future, there is a warning message when generating random numbers without seed. We can ignore this by changing our options: <code>options(future.rng.onMisuse="ignore")</code>.</p></li>
 <li><p>Add an approach from yesterdays lecture on benchmarking or some other way that you are comfortable with to calculate the time it takes to complete the operation of simply assigning the future. Do not evaluate the future yet by asking for the outcome value.</p></li>
 </ul>
 <blockquote>
@@ -312,7 +313,7 @@ timer(
 <ul>
 <li>Introduce an error in one of your future expressions.</li>
 </ul>
-<p><em>Question 5:</em> Does the error output immediately?</p>
+<p><em>Question 5:</em> Does the error output when the future is defined and unresolved, or when it is resolved?</p>
 <p><em>Question 6:</em> What happens when you try to use that future later in your code?</p>
 <p><em>Question 7:</em> Can you perform other operations between defining your future and evaluating your future?</p>
 <p><a href="https://github.com/HenrikBengtsson/future#failed-futures">Further reading about errors and debugging for futures.</a></p>
@@ -331,7 +332,10 @@ for (name in c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)) {
      }
 }
 #Turn the environment back into a list
-v &lt;- as.list(v)</code></pre>
+v &lt;- as.list(v)
+
+#To turn the list of vectors into the same format, one long vector, that we had above when running &quot;a + b + c&quot;
+vec &lt;- Reduce(c,v)</code></pre>
 <ul>
 <li>Use this to divide the <code>sample()</code> operation into however many smaller pieces you want. Do remember to transform your output back into the object we started with before parallelising the execution.</li>
 </ul>
@@ -367,11 +371,11 @@ v &lt;- as.list(v)</code></pre>
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] future_1.26.1     fontawesome_0.2.2 captioner_2.2.3   bookdown_0.26    
+## [1] future_1.26.1     fontawesome_0.2.2 captioner_2.2.3   bookdown_0.27    
 ## [5] knitr_1.39       
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] parallelly_1.31.1 rstudioapi_0.13   magrittr_2.0.3    R6_2.5.1         
+##  [1] parallelly_1.32.0 rstudioapi_0.13   magrittr_2.0.3    R6_2.5.1         
 ##  [5] rlang_1.0.2       fastmap_1.1.0     stringr_1.4.0     globals_0.15.0   
 ##  [9] tools_4.1.2       parallel_4.1.2    xfun_0.31         cli_3.3.0        
 ## [13] jquerylib_0.1.4   htmltools_0.5.2   yaml_2.3.5        digest_0.6.29    
@@ -379,7 +383,7 @@ v &lt;- as.list(v)</code></pre>
 ## [21] stringi_1.7.6     compiler_4.1.2    bslib_0.3.1       jsonlite_1.8.0   
 ## [25] listenv_0.8.0</code></pre>
 <p style="text-align: left; font-size: small;">
-Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 31-May-2022 at <i class="fa fa-clock-o" aria-hidden="true"></i> 20:34:55.
+Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 15-Jun-2022 at <i class="fa fa-clock-o" aria-hidden="true"></i> 11:11:24.
 </p>
 <hr/>
 <div style="padding-bottom: 1.5em">

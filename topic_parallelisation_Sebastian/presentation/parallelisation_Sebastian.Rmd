@@ -56,8 +56,9 @@ name: overview
 ???
 Future package has backup packages, for example future.batchtools which provides access to cluster functions, like slurm, torque, SGE and LSF.
 Futures are evaluated in a local environment, meaning that you cant change variables in there. Like in functions.
-Finish with info that he has described this in detail for those that want to know more. Just published article.
-The big thing about futures is that it seems to support most infrastructures and it is written in a way where you are not deciding which infrastructure the user has, which parallel and foreach did.
+
+Recently published article.
+The big thing about futures is that it seems to support most infrastructures and it is written in a way where you are not deciding which infrastructure the user has, which parallel and foreach did. Finish with info that he has described this in detail for those that want to know more. 
 
 ---
 name: par
@@ -99,6 +100,10 @@ Published 2021-06-08 in "The R Journal":
 [A Unifying Framework for Parallel and Distributed Processing in R using Futures](https://journal.r-project.org/archive/2021/RJ-2021-048/RJ-2021-048.pdf)
 
 ???
+R package developers rarely know who the end-users are and what compute resources they have. With future, instead of programming for one architecture, the code should work on most architectures. We will get back to the Unblocked R process during resolving but basically what it means is that even if multiple things are being computed in parallel the R code can continue unblocked until the resolved values are needed.
+
+
+Text from article:
 The state of a future can either be unresolved or resolved. As soon as it is resolved, the value is available instantaneously. If the value is queried while the future is still unresolved, the current process is blocked until the future is resolved.
 
 R package developers rarely know who the end-users are and what compute resources they have. Regardless, developers who wish to support parallel processing still face the problem of deciding which parallel framework to target, a decision which often has to be done early in the development cycle. This means deciding on what type of parallelism to support,
@@ -110,12 +115,6 @@ This decision is critical because it limits the end-user’s options and any cha
 Building block:
 `variable %<-% {expression(s)}`
 
-???
-The state of a future can either be unresolved or resolved. As soon as it is resolved, the value is available instantaneously. If the value is queried while the future is still unresolved, the current process is blocked until the future is resolved.
-
-R package developers rarely know who the end-users are and what compute resources they have. Regardless, developers who wish to support parallel processing still face the problem of deciding which parallel framework to target, a decision which often has to be done early in the development cycle. This means deciding on what type of parallelism to support,
-This decision is critical because it limits the end-user’s options and any change, later on, might be expensive because of, for instance, having to rewrite and retest part of the codebase. A developer who wishes to support multiple parallel backends has to implement support for each of them individually and provide the end-user with a mechanism to choose between them.
-
 ---
 name: pla
 
@@ -126,26 +125,18 @@ name: pla
 ???
 Synchronus:
 existing or occurring at the same time.
-"glaciations were approximately synchronous in both hemispheres"
 
 Asynchronus:
-occurring at the same time
+Not occurring or existing at the same time
 
-or
-
-controlling the timing of operations by the use of pulses sent when the previous operation is completed rather than at regular intervals.
 
 Sequential: One after another. Default. Very useful when developing the code the first time.
-
-Transparent: troubleshooting. Not covered.
 
 multisession: All operating systems. Evaluated in background R sessions. Number of sessions decided by availableCores().
 
 multicore: operating systems supporting forking of processes, all except windows. Forks existing R process rather than creating new sessions. Max forks decided by availableCores().
 
-Cluster: Cluster environtment, such as HPC. Uses package parallel
-
-remote: connection to a separate r session on separate machine, typically on different network.
+Cluster: Cluster environment, such as HPC. Uses package parallel
 
 ---
 name: seq
@@ -171,6 +162,9 @@ b %<-% {
 
 a + b
 ```
+
+???
+In programming, a future is an abstraction for a value that may be available at some point in the future. The state of a future can either be unresolved or resolved. As soon as it is resolved, the value is available instantaneously. If the value is queried while the future is still unresolved, the current process is blocked until the future is resolved. It is possible to check whether a future is resolved or not without blocking. 
 
 --
 
@@ -237,7 +231,7 @@ print(proc.time() - p1)
 ```
 
 ???
-Note: To compute plan(multicore) the rmarkdown must be rendered from terminal r console, as rstudio does not support multicore.
+Note: To compute plan(multicore) the rmarkdown must be rendered from terminal r console, as rstudio does not support multicore. rmarkdown::render("parallelisation_Sebastian.Rmd")
 
 --
 
@@ -265,16 +259,16 @@ c %<-% {
   Sys.sleep(3)
   c <- 3
 }
-d %<-% {
-  Sys.sleep(3)
-  d <- 4
+
+...
+
 }
-e %<-% {
+k %<-% {
   Sys.sleep(3)
   e <- 5
 }
 
-a + b + c + d + e
+a + b + c + d + e + f + g + h + j + k
 ```
 
 --
@@ -303,8 +297,32 @@ e %<-% {
   Sys.sleep(3)
   e <- 5
 }
+f %<-% {
+  Sys.sleep(3)
+  f <- 6
+}
+g %<-% {
+  Sys.sleep(3)
+  g <- 7
+}
+h %<-% {
+  Sys.sleep(3)
+  h <- 8
+}
+i %<-% {
+  Sys.sleep(3)
+  i <- 9
+}
+j %<-% {
+  Sys.sleep(3)
+  j <- 10
+}
+k %<-% {
+  Sys.sleep(3)
+  k <- 5
+}
 
-a + b + c + d + e
+a + b + c + d + e + f + g + h + i + j + k
 print(proc.time() - p1)
 ```
 
