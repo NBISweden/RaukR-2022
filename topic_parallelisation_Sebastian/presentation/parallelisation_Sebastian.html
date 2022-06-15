@@ -66,8 +66,9 @@ name: overview
 ???
 Future package has backup packages, for example future.batchtools which provides access to cluster functions, like slurm, torque, SGE and LSF.
 Futures are evaluated in a local environment, meaning that you cant change variables in there. Like in functions.
-Finish with info that he has described this in detail for those that want to know more. Just published article.
-The big thing about futures is that it seems to support most infrastructures and it is written in a way where you are not deciding which infrastructure the user has, which parallel and foreach did.
+
+Recently published article.
+The big thing about futures is that it seems to support most infrastructures and it is written in a way where you are not deciding which infrastructure the user has, which parallel and foreach did. Finish with info that he has described this in detail for those that want to know more. 
 
 ---
 name: par
@@ -109,6 +110,10 @@ Published 2021-06-08 in "The R Journal":
 [A Unifying Framework for Parallel and Distributed Processing in R using Futures](https://journal.r-project.org/archive/2021/RJ-2021-048/RJ-2021-048.pdf)
 
 ???
+R package developers rarely know who the end-users are and what compute resources they have. With future, instead of programming for one architecture, the code should work on most architectures. We will get back to the Unblocked R process during resolving but basically what it means is that even if multiple things are being computed in parallel the R code can continue unblocked until the resolved values are needed.
+
+
+Text from article:
 The state of a future can either be unresolved or resolved. As soon as it is resolved, the value is available instantaneously. If the value is queried while the future is still unresolved, the current process is blocked until the future is resolved.
 
 R package developers rarely know who the end-users are and what compute resources they have. Regardless, developers who wish to support parallel processing still face the problem of deciding which parallel framework to target, a decision which often has to be done early in the development cycle. This means deciding on what type of parallelism to support,
@@ -120,12 +125,6 @@ This decision is critical because it limits the end-user’s options and any cha
 Building block:
 `variable %&lt;-% {expression(s)}`
 
-???
-The state of a future can either be unresolved or resolved. As soon as it is resolved, the value is available instantaneously. If the value is queried while the future is still unresolved, the current process is blocked until the future is resolved.
-
-R package developers rarely know who the end-users are and what compute resources they have. Regardless, developers who wish to support parallel processing still face the problem of deciding which parallel framework to target, a decision which often has to be done early in the development cycle. This means deciding on what type of parallelism to support,
-This decision is critical because it limits the end-user’s options and any change, later on, might be expensive because of, for instance, having to rewrite and retest part of the codebase. A developer who wishes to support multiple parallel backends has to implement support for each of them individually and provide the end-user with a mechanism to choose between them.
-
 ---
 name: pla
 
@@ -136,26 +135,18 @@ name: pla
 ???
 Synchronus:
 existing or occurring at the same time.
-"glaciations were approximately synchronous in both hemispheres"
 
 Asynchronus:
-occurring at the same time
+Not occurring or existing at the same time
 
-or
-
-controlling the timing of operations by the use of pulses sent when the previous operation is completed rather than at regular intervals.
 
 Sequential: One after another. Default. Very useful when developing the code the first time.
-
-Transparent: troubleshooting. Not covered.
 
 multisession: All operating systems. Evaluated in background R sessions. Number of sessions decided by availableCores().
 
 multicore: operating systems supporting forking of processes, all except windows. Forks existing R process rather than creating new sessions. Max forks decided by availableCores().
 
-Cluster: Cluster environtment, such as HPC. Uses package parallel
-
-remote: connection to a separate r session on separate machine, typically on different network.
+Cluster: Cluster environment, such as HPC. Uses package parallel
 
 ---
 name: seq
@@ -183,13 +174,16 @@ b %&lt;-% {
 a + b
 ```
 
+???
+In programming, a future is an abstraction for a value that may be available at some point in the future. The state of a future can either be unresolved or resolved. As soon as it is resolved, the value is available instantaneously. If the value is queried while the future is still unresolved, the current process is blocked until the future is resolved. It is possible to check whether a future is resolved or not without blocking. 
+
 --
 
 
 ```
 ## [1] 3
 ##    user  system elapsed 
-##   0.043   0.006   6.066
+##   0.027   0.008   6.044
 ```
 
 ---
@@ -220,13 +214,13 @@ a + b
 ```
 ## [1] 3
 ##    user  system elapsed 
-##   0.033   0.003   6.055
+##   0.043   0.057   3.062
 ```
 
 
 
 ???
-Note: To compute plan(multicore) the rmarkdown must be rendered from terminal r console, as rstudio does not support multicore.
+Note: To compute plan(multicore) the rmarkdown must be rendered from terminal r console, as rstudio does not support multicore. rmarkdown::render("parallelisation_Sebastian.Rmd")
 
 --
 
@@ -261,25 +255,25 @@ c %&lt;-% {
   Sys.sleep(3)
   c &lt;- 3
 }
-d %&lt;-% {
-  Sys.sleep(3)
-  d &lt;- 4
+
+...
+
 }
-e %&lt;-% {
+k %&lt;-% {
   Sys.sleep(3)
   e &lt;- 5
 }
 
-a + b + c + d + e
+a + b + c + d + e + f + g + h + j + k
 ```
 
 --
 
 
 ```
-## [1] 15
+## [1] 60
 ##    user  system elapsed 
-##   0.103   0.007  15.158
+##   0.298   0.365   6.208
 ```
 
 
@@ -321,7 +315,7 @@ count: false
 
 &lt;p&gt;R version 4.1.2 (2021-11-01)&lt;br&gt;&lt;p&gt;Platform: x86_64-apple-darwin17.0 (64-bit)&lt;/p&gt;&lt;p&gt;OS: macOS Big Sur 10.16&lt;/p&gt;&lt;br&gt;
 
-Built on : &lt;i class='fa fa-calendar' aria-hidden='true'&gt;&lt;/i&gt; 31-May-2022 at &lt;i class='fa fa-clock-o' aria-hidden='true'&gt;&lt;/i&gt; 20:35:35  
+Built on : &lt;i class='fa fa-calendar' aria-hidden='true'&gt;&lt;/i&gt; 15-Jun-2022 at &lt;i class='fa fa-clock-o' aria-hidden='true'&gt;&lt;/i&gt; 10:14:15  
 
 &lt;b&gt;2022&lt;/b&gt; • [SciLifeLab](https://www.scilifelab.se/) • [NBIS](https://nbis.se/) • [RaukR](https://nbisweden.github.io/workshop-RaukR-2206/)
 
