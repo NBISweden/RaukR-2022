@@ -60,7 +60,7 @@ When this module is complete, you will:
 * know whether the data you work with are tidy
 * will be able to load, debug and tidy your data
 * understand how to combine datasets using `join_*` 
-* be aware of useful packages within tidyverse
+* be aware of useful packages within `tidyverse`
 
 ---
 name: tidyverse
@@ -68,7 +68,8 @@ name: tidyverse
 
 * [tidyverse](http://www.tidyverse.org) is a collection of packages 📦 
 * created by [Hadley Wickham](http://hadley.nz)
-* gains popularity 📈, on the way to become a *de facto* standard in data analyses
+* constantly gains popularity 📈, 
+* has became a *de facto* standard in data analyses,
 * knowing how to use it can increase your salary 💰 
 * a philosophy of programming or a programming paradigm
 * everything is about 🌊 the flow of 🧹 *tidy data*
@@ -151,7 +152,7 @@ name: other_pipes_T
 
 * provided by `magritter`, not in `tidyverse`
 
-* when you call a function for its side effects
+* when you call a function for its *side effects*
 
 
 ```r
@@ -178,12 +179,12 @@ name: other_pipes_T_2
 
 ```
 ##        V1                V2         
-##  Min.   :-2.9266   Min.   :-1.9495  
-##  1st Qu.:-1.0700   1st Qu.:-0.7377  
-##  Median :-0.3719   Median :-0.2888  
-##  Mean   :-0.4088   Mean   : 0.0413  
-##  3rd Qu.:-0.0317   3rd Qu.: 0.8664  
-##  Max.   : 2.3698   Max.   : 2.1985
+##  Min.   :-1.3694   Min.   :-2.3596  
+##  1st Qu.:-0.5946   1st Qu.:-0.4597  
+##  Median :-0.3640   Median : 0.2489  
+##  Mean   :-0.1433   Mean   : 0.1509  
+##  3rd Qu.: 0.3201   3rd Qu.: 1.1660  
+##  Max.   : 3.3805   Max.   : 1.9563
 ```
 
 &lt;img src="tidyverse_presentation_files/figure-html/magrittr2b-1.png" width="288" style="display: block; margin: auto auto auto 0;" /&gt;
@@ -215,13 +216,13 @@ iris %$% cor(Sepal.Length, Sepal.Width)
 
 --
 
-This is because the `cor` function does not have the `data` argument (which also should be the first argument of a pipe-friendly function).
+This is because `cor` function does not have the `x` (data) argument &amp;ndash; the very first argument of a pipe-friendly function.
 
 ---
 name: pipes_two_way 
 ## Other Types of `magrittr` Pipes &amp;mdash; %&lt;&gt;%
 
-&gt; It exists but can lead to somewhat confusing code! ⚡
+&gt; It exists but can lead to somewhat confusing code! 💀
 
 `x %&lt;&gt;% f` `\(\equiv\)` `x &lt;- f(x)`
 
@@ -232,8 +233,9 @@ M
 ```
 
 ```
-## [1]  3.6444522  5.4804620 -0.1370658  1.6793794
+## [1] -0.6652377  0.1936827 -0.3921656  0.6551597
 ```
+
 ---
 name: magrittr_placeholder
 
@@ -242,11 +244,8 @@ Sometimes we want to pass the resulting data to *other than the first* argument 
 * `x %&gt;% f(y, .)` `\(\equiv\)` `f(y, x)`,
 * `x %&gt;% f(y, z = .)` `\(\equiv\)` `f(y, z = x)`.
 
-But for nested expressions:
-* `x %&gt;% f(a = p(.), b = q(.))` `\(\equiv\)` `f(x, a = p(x), b = q(x))`,
-* `x %&gt;% {f(a = p(.), b = q(.))}` `\(\equiv\)` `f(a = p(x), b = q(x))`.  
+-- 
 
-Examples:
 
 ```r
 M &lt;- rnorm(4) %&gt;% matrix(nrow = 2)
@@ -254,10 +253,18 @@ M %&gt;% `%*%`(., .)
 ```
 
 ```
-##            [,1]      [,2]
-## [1,]  4.3315745 -1.077136
-## [2,] -0.3380043  1.911765
+##             [,1]        [,2]
+## [1,] -0.34612797 -0.06976299
+## [2,]  0.01774236 -0.33185377
 ```
+
+--
+
+But for nested expressions:
+* `x %&gt;% f(a = p(.), b = q(.))` `\(\equiv\)` `f(x, a = p(x), b = q(x))`,
+* `x %&gt;% {f(a = p(.), b = q(.))}` `\(\equiv\)` `f(a = p(x), b = q(x))`.  
+
+--
 
 
 ```r
@@ -276,7 +283,7 @@ name: tibble_intro
 
 ## Tibbles
 .pull-left-50[
-  &lt;img src="assets_tidyverse/hex-tibble.png" width="80" style="display: block; margin: auto;" /&gt;
+  &lt;img src="assets_tidyverse/hex-tidyverse.png" width="133" style="display: block; margin: auto;" /&gt;
   
   ```r
   as_tibble(iris)
@@ -317,18 +324,18 @@ name: tibble_intro
 
 ```
 ## # A tibble: 50 x 4
-##        x      y     z  outcome
-##    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
-##  1     1 0.360   1.13  1.69   
-##  2     1 0.775   1.60 -0.446  
-##  3     1 0.675   1.46 -0.763  
-##  4     1 0.896   1.80 -0.00308
-##  5     1 0.0119  1.00 -0.0821 
-##  6     1 0.709   1.50  0.00195
-##  7     1 0.379   1.14  0.839  
-##  8     1 0.842   1.71  0.886  
-##  9     1 0.0487  1.00 -0.129  
-## 10     1 0.895   1.80 -1.92   
+##        x      y     z outcome
+##    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+##  1     1 0.598   1.36  -2.27 
+##  2     1 0.699   1.49   1.16 
+##  3     1 0.859   1.74   0.538
+##  4     1 0.357   1.13   0.719
+##  5     1 0.934   1.87  -0.939
+##  6     1 0.441   1.19  -1.09 
+##  7     1 0.0845  1.01  -0.907
+##  8     1 0.377   1.14  -0.409
+##  9     1 0.851   1.72   1.03 
+## 10     1 0.251   1.06  -0.230
 ## # … with 40 more rows
 ```
 ]
@@ -340,7 +347,7 @@ name: tibble2
 
 * When you print a `tibble`:
   + all columns that fit the screen are shown,
-  + first 10 rows are shown,
+  + only the first 10 rows are shown,
   + data type for each column is shown.
 
 
@@ -375,36 +382,59 @@ name: tibble2
 
 ## Subsetting Tibbles
 
+** vehicles ** will be our `tibble` version of `cars`
+
 
 ```r
 vehicles &lt;- as_tibble(cars[1:5,])
+```
 
+--
+
+We can access data like this:
+
+```r
 vehicles[['speed']]
 vehicles[[1]]
 vehicles$speed
+```
 
-# Using placeholders
+```
+## [1] 4 4 7 7 8
+## [1] 4 4 7 7 8
+## [1] 4 4 7 7 8
+```
 
+--
+
+Or, alternatively, using placeholders:
+
+```r
 vehicles %&gt;% .$dist
 vehicles %&gt;% .[['dist']]
 vehicles %&gt;% .[[2]]
 ```
 
 ```
-## [1] 4 4 7 7 8
-## [1] 4 4 7 7 8
-## [1] 4 4 7 7 8
 ## [1]  2 10  4 22 16
 ## [1]  2 10  4 22 16
 ## [1]  2 10  4 22 16
 ```
+
 --
+
 **Note!** Not all old R functions work with tibbles, than you have to use `as.data.frame(my_tibble)`.
 
 ---
 name: tibbles_partial_matching
 
 ## Tibbles are Stricter than `data.frames`
+
+```
+## [1] "speed" "dist"
+```
+
+--
 
 
 ```r
@@ -414,6 +444,9 @@ cars$spe      # partial matching
 ```
 ## [1] 4 4 7 7 8
 ```
+
+--
+
 
 ```r
 vehicles$spe  # no partial matching
@@ -427,6 +460,9 @@ vehicles$spe  # no partial matching
 ## NULL
 ```
 
+--
+
+
 ```r
 cars$gear
 ```
@@ -434,6 +470,9 @@ cars$gear
 ```
 ## NULL
 ```
+
+--
+
 
 ```r
 vehicles$gear
@@ -447,6 +486,13 @@ vehicles$gear
 ## NULL
 ```
 
+---
+name: tibble_tweet
+
+## Use tibbles &amp;nbsp; they are real!
+
+&lt;img src="assets_tidyverse/tibble_tweet.png" width="811" style="display: block; margin: auto;" /&gt;
+  
 ---
 name: loading_data
 
@@ -522,7 +568,7 @@ text1
 charToRaw(text2)
 parse_character(text1, locale = locale(encoding = 'UTF-8'))
 guess_encoding(charToRaw("Test"))
-guess_encoding(charToRaw(text1))
+guess_encoding(charToRaw(text2))
 ```
 
 ```
@@ -534,13 +580,11 @@ guess_encoding(charToRaw(text1))
 ##   encoding confidence
 ##   &lt;chr&gt;         &lt;dbl&gt;
 ## 1 ASCII             1
-## # A tibble: 4 x 2
-##   encoding   confidence
-##   &lt;chr&gt;           &lt;dbl&gt;
-## 1 UTF-8            1   
-## 2 ISO-8859-1       0.83
-## 3 ISO-8859-9       0.33
-## 4 ISO-8859-2       0.3
+## # A tibble: 2 x 2
+##   encoding     confidence
+##   &lt;chr&gt;             &lt;dbl&gt;
+## 1 UTF-8              1   
+## 2 windows-1252       0.24
 ```
 
 ---
@@ -548,7 +592,7 @@ name: parsing_factors
 
 ## Parsing Factors
 
-* R is using factors to represent cathegorical variables. 
+* R is using factors to represent categorical variables. 
 * Supply known levels to `parse_factor` so that it warns you when an unknown level is present in the data:
 
 ```r
@@ -1352,21 +1396,22 @@ missing_stones %&gt;% complete(cut, continent)
 ```
 
 ```
-## # A tibble: 12 x 4
+## # A tibble: 13 x 4
 ##    cut       continent clarity price
 ##    &lt;ord&gt;     &lt;chr&gt;     &lt;ord&gt;   &lt;int&gt;
-##  1 Fair      AusOce    VS2       337
-##  2 Fair      Eur       &lt;NA&gt;       NA
-##  3 Good      AusOce    SI2       335
+##  1 Fair      AusOce    &lt;NA&gt;       NA
+##  2 Fair      Eur       VS2       337
+##  3 Good      AusOce    &lt;NA&gt;       NA
 ##  4 Good      Eur       VS1       327
-##  5 Very Good AusOce    VVS2      336
-##  6 Very Good AusOce    VVS1      336
-##  7 Very Good AusOce    VS1       338
-##  8 Very Good Eur       SI1       337
-##  9 Premium   AusOce    SI1       326
-## 10 Premium   Eur       VS2       334
-## 11 Ideal     AusOce    &lt;NA&gt;       NA
-## 12 Ideal     Eur       SI2       326
+##  5 Good      Eur       SI2       335
+##  6 Very Good AusOce    VVS2      336
+##  7 Very Good AusOce    SI1       337
+##  8 Very Good Eur       VVS1      336
+##  9 Very Good Eur       VS1       338
+## 10 Premium   AusOce    SI1       326
+## 11 Premium   Eur       VS2       334
+## 12 Ideal     AusOce    SI2       326
+## 13 Ideal     Eur       &lt;NA&gt;       NA
 ```
 
 ---
