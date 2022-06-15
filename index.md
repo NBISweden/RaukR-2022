@@ -48,8 +48,8 @@ description: Advanced R for Bioinformatics
     - [Lab](topic_oop_Marcin/lab/oop_lab.html)
 
 - **Vectorization and Parallelisation** (Sebastian DiLorenzo and Marcin Kierczak)
-    - Presentation Vectorization
-    - Lab Vectorization
+    - [Presentation](topic_vectorization/presentation/vectorization.html)
+    - [Lab](topic_vectorization/lab/vectorization_lab.html)
     - [Presentation Parallelisation](topic_parallelisation_Sebastian/presentation/parallelisation_Sebastian.html)
     - [Lab Parallelisation](topic_parallelisation_Sebastian/lab/parallelisation_lab_Sebastian.html)
 
