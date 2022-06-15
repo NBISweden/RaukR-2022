@@ -24,8 +24,8 @@ description: Advanced R for Bioinformatics
     - [GitHub](https://github.com/cderv/raukr-2022-rmd-skills)
 
 - **Functions & Scripts** (Sebastian DiLorenzo and Julie Lorent)
-    - [Presentation](functions_and_scripts/presentation/functions_and_scripts_Sebastian.html)
-    - [Lab](functions_and_scripts/lab/functions_and_scripts_Sebastian.html)
+    - [Presentation](topic_functions_and_scripts/presentation/functions_and_scripts_Sebastian.html)
+    - [Lab](topic_functions_and_scripts/lab/functions_and_scripts_Sebastian.html)
 
 ## 14-Jun-2022 (Tue)
 
@@ -38,13 +38,20 @@ description: Advanced R for Bioinformatics
     - [Lab](topic_rpackages_Sebastian/lab/rpackages_Sebastian.html)
 
 - **Guest Lecture** (Jenny Bryan, RStudio)
-    - Presentation
+    - [Presentation](https://rstats-wtf.github.io/wtf-2022-rsc/day1_4)
+    - [happygitwithr.com](https://happygitwithr.com/)
 
 ## 15-Jun-2022 (Wed)
 
 - **Object-oriented programming** (Marcin Kierczak and Ashfaq Ali)
     - [Presentation](topic_oop_Marcin/presentation/oop_presentation.html)
     - [Lab](topic_oop_Marcin/lab/oop_lab.html)
+
+- **Vectorization and Parallelisation** (Sebastian DiLorenzo and Marcin Kierczak)
+    - Presentation Vectorization
+    - Lab Vectorization
+    - [Presentation Parallelisation](topic_parallelisation_Sebastian/presentation/parallelisation_Sebastian.html)
+    - [Lab Parallelisation](topic_parallelisation_Sebastian/lab/parallelisation_lab_Sebastian.html)
 
 - **reticulate: Combining R with Python** (Nina Norgren)
     - [Presentation](reticulate/presentation/presentation_reticulate.html)
