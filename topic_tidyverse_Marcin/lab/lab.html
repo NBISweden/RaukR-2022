@@ -278,10 +278,10 @@ div.tocify {
 my_cars &lt;- my_cars[my_cars$disp &gt; mean(my_cars$disp), ]
 my_cars &lt;- colMeans(my_cars)</code></pre>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611336438" aria-expanded="false" aria-controls="acc2022061611336438">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612589505" aria-expanded="false" aria-controls="acc2022061612589505">
 </button>
 </p>
-<div id="acc2022061611336438" class="collapse">
+<div id="acc2022061612589505" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>mtcars %&gt;%
   select(c(1:4, 10)) %&gt;%
@@ -299,10 +299,10 @@ my_cars &lt;- colMeans(my_cars)</code></pre>
 <pre><code>summary(cars)
 colSums(cars)</code></pre>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611330039" aria-expanded="false" aria-controls="acc2022061611330039">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612586858" aria-expanded="false" aria-controls="acc2022061612586858">
 </button>
 </p>
-<div id="acc2022061611330039" class="collapse">
+<div id="acc2022061612586858" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>cars %T&gt;% {print(summary(.))} %&gt;% colSums()</code></pre>
 </div>
@@ -313,20 +313,20 @@ colSums(cars)</code></pre>
 <p>Rewrite correlations to pipes.</p>
 <pre><code>cor(mtcars$gear, mtcars$mpg)</code></pre>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611331300" aria-expanded="false" aria-controls="acc2022061611331300">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612587682" aria-expanded="false" aria-controls="acc2022061612587682">
 </button>
 </p>
-<div id="acc2022061611331300" class="collapse">
+<div id="acc2022061612587682" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>mtcars %$% cor(gear, mpg)</code></pre>
 </div>
 </div>
 <pre><code>cor(mtcars)</code></pre>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611333927" aria-expanded="false" aria-controls="acc2022061611333927">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612581096" aria-expanded="false" aria-controls="acc2022061612581096">
 </button>
 </p>
-<div id="acc2022061611333927" class="collapse">
+<div id="acc2022061612581096" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>mtcars %&gt;% cor()</code></pre>
 </div>
@@ -357,10 +357,10 @@ cor(P[ ,&#39;a&#39;], P[ ,&#39;i&#39;])</code></pre>
 <p>A class of functions, called the <em>replacement functions</em> are of the form <code>function(arguments)&lt;-value</code> and <code>rownames(x) &lt;- c('a', 'b', 'c')</code> is a good example of a replacement function. When writing pipes, we have bear in mind that whole <code>function&lt;-</code> is the name of the replacement function and thus we have to use it as such in the pipe.</p>
 <p><i class='fa fa-lightbulb'></i> Sometimes, it may not be possible to put everything into one single pipe, the results of running two or more pipes have to be used in the final pipe.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611337628" aria-expanded="false" aria-controls="acc2022061611337628">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612581341" aria-expanded="false" aria-controls="acc2022061612581341">
 </button>
 </p>
-<div id="acc2022061611337628" class="collapse">
+<div id="acc2022061612581341" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>dim_summary &lt;- function(nrows, ncols) {
   print(paste0(&#39;Matrix M has: &#39;, nrows, &#39; rows and &#39;, ncols, &#39; columns.&#39;))
@@ -374,11 +374,11 @@ M &lt;- rnorm(16) %&gt;%
 
 N &lt;- rnorm(16) %&gt;%
   matrix(ncol = 4) %&gt;%
-  `colnames&lt;-`(letters[1:4]) %&gt;%
-  summary()
+  `colnames&lt;-`(letters[1:4]) %T&gt;%
+  summary() %&gt;% `+`(., 0)
 
 P &lt;- M %&gt;%
-  `%x%`(., .) %T&gt;%
+  `%x%`(., t(N)) %T&gt;%
   heatmap() %&gt;%
   `colnames&lt;-`(letters[1:dim(.)[2]]) %&gt;%
   as_data_frame() %$%
@@ -407,10 +407,10 @@ P &lt;- M %&gt;%
 <li>Convert <code>vehicles</code> back to a <code>data.frame</code> called <code>automobiles</code>.</li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611333804" aria-expanded="false" aria-controls="acc2022061611333804">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612580530" aria-expanded="false" aria-controls="acc2022061612580530">
 </button>
 </p>
-<div id="acc2022061611333804" class="collapse">
+<div id="acc2022061612580530" class="collapse">
 <div class="card card-body">
 <pre class="r"><code># 1
 vehicles &lt;- mtcars %&gt;% as_tibble()
@@ -454,10 +454,10 @@ automobiles &lt;- as.data.frame(vehicles)</code></pre>
   </script>
 </div>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611335771" aria-expanded="false" aria-controls="acc2022061611335771">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612584211" aria-expanded="false" aria-controls="acc2022061612584211">
 </button>
 </p>
-<div id="acc2022061611335771" class="collapse">
+<div id="acc2022061612584211" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>tab &lt;- tribble(
   ~id, ~event, ~date,
@@ -474,10 +474,10 @@ automobiles &lt;- as.data.frame(vehicles)</code></pre>
 <p>Compare the performance of <code>as.data.frame()</code>, <code>as_data_frame()</code> and <code>as_tibble()</code> on a
 100 x 30 matrix filled with random integers. Use package <code>microbenchmark</code>. Fill in your result <a href="https://docs.google.com/spreadsheets/d/1_2tDeEkDVS06RkB437yBI1XEB5SUebtHWyxAf_aRJu4/edit#gid=99106509">here</a> in the Tidyverse Lab sheet, Tibbles – performance.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611333858" aria-expanded="false" aria-controls="acc2022061611333858">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612581152" aria-expanded="false" aria-controls="acc2022061612581152">
 </button>
 </p>
-<div id="acc2022061611333858" class="collapse">
+<div id="acc2022061612581152" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>tst &lt;- replicate(30, sample(100), simplify = TRUE)
 colnames(tst) = paste0(rep(&#39;col&#39;, times = dim(tst)[2]), 1:dim(tst)[2])
@@ -493,10 +493,10 @@ microbenchmark::microbenchmark(
 <h3><span class="header-section-number">2.2.4</span> Task 4</h3>
 <p>Do you think tibbles are lazy? Try to create a tibble that tests whether <em>lazy evaluation</em> applies to tibbles too.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611338385" aria-expanded="false" aria-controls="acc2022061611338385">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612585139" aria-expanded="false" aria-controls="acc2022061612585139">
 </button>
 </p>
-<div id="acc2022061611338385" class="collapse">
+<div id="acc2022061612585139" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>tibble(x = sample(1:10, size = 10, replace = T), y = log10(x))</code></pre>
 </div>
@@ -518,10 +518,10 @@ microbenchmark::microbenchmark(
 <li>Parse <code>10_Jul_1410</code> as date.</li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611337001" aria-expanded="false" aria-controls="acc2022061611337001">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612586057" aria-expanded="false" aria-controls="acc2022061612586057">
 </button>
 </p>
-<div id="acc2022061611337001" class="collapse">
+<div id="acc2022061612586057" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>vec1 &lt;- c(1, 7.2, 3.84, -5.23)
 vec2 &lt;- c(&#39;2&#39;, &#39;3,45&#39;, &#39;?&#39;, &#39;-7,28&#39;)
@@ -565,10 +565,10 @@ parse_date(&quot;10_Jul_1410&quot;, format=&quot;%d%.%b%.%Y&quot;)</code></pre>
 </ul>
 <p>What is the difference between the two approaches?</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611338928" aria-expanded="false" aria-controls="acc2022061611338928">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612588239" aria-expanded="false" aria-controls="acc2022061612588239">
 </button>
 </p>
-<div id="acc2022061611338928" class="collapse">
+<div id="acc2022061612588239" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>install.packages(&#39;nycflights13&#39;)
 
@@ -611,10 +611,10 @@ flights %&gt;% rename(destination = dest)
 <li>is <code>unique()</code> more efficient than <code>distinct()</code>?</li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611338720" aria-expanded="false" aria-controls="acc2022061611338720">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612581784" aria-expanded="false" aria-controls="acc2022061612581784">
 </button>
 </p>
-<div id="acc2022061611338720" class="collapse">
+<div id="acc2022061612581784" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>flights %&gt;% filter(arr_delay &lt; 0)
 
@@ -676,10 +676,10 @@ Distinct is faster.</code></pre>
 <li><p>use <code>rownames_to_column()</code> on <code>mtcars</code> to add car model as an extra column,</p></li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611334488" aria-expanded="false" aria-controls="acc2022061611334488">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612585496" aria-expanded="false" aria-controls="acc2022061612585496">
 </button>
 </p>
-<div id="acc2022061611334488" class="collapse">
+<div id="acc2022061612585496" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>flights %&gt;% mutate(air_spd = distance/(air_time / 60))
 
@@ -695,10 +695,10 @@ mtcars %&gt;% rownames_to_column(&#39;model&#39;)</code></pre>
 <li>use <code>group_by()</code>, <code>summarise()</code> and <code>n()</code> to see how many planes were delayed (departure) every month,</li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611331304" aria-expanded="false" aria-controls="acc2022061611331304">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612582544" aria-expanded="false" aria-controls="acc2022061612582544">
 </button>
 </p>
-<div id="acc2022061611331304" class="collapse">
+<div id="acc2022061612582544" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>flights %&gt;%
   filter(dep_delay &gt; 0) %&gt;%
@@ -710,10 +710,10 @@ mtcars %&gt;% rownames_to_column(&#39;model&#39;)</code></pre>
 <li>do the same but using <code>tally()</code> and <code>count()</code>,</li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611333562" aria-expanded="false" aria-controls="acc2022061611333562">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612580437" aria-expanded="false" aria-controls="acc2022061612580437">
 </button>
 </p>
-<div id="acc2022061611333562" class="collapse">
+<div id="acc2022061612580437" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>flights %&gt;%
   filter(dep_delay &gt; 0) %&gt;%
@@ -729,10 +729,10 @@ flights %&gt;%
 <li>what was the mean <code>dep_delay</code> per month?</li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611339798" aria-expanded="false" aria-controls="acc2022061611339798">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612588594" aria-expanded="false" aria-controls="acc2022061612588594">
 </button>
 </p>
-<div id="acc2022061611339798" class="collapse">
+<div id="acc2022061612588594" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>flights %&gt;%
   group_by(month) %&gt;%
@@ -743,10 +743,10 @@ flights %&gt;%
 <li>count the number of incoming delayed flights from each unique origin and sort origins by this count (descending),</li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611331872" aria-expanded="false" aria-controls="acc2022061611331872">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612589929" aria-expanded="false" aria-controls="acc2022061612589929">
 </button>
 </p>
-<div id="acc2022061611331872" class="collapse">
+<div id="acc2022061612589929" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>flights %&gt;%
   filter(arr_delay &gt; 0) %&gt;%
@@ -759,10 +759,10 @@ flights %&gt;%
 <li>do the same using <code>tally()</code></li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611336823" aria-expanded="false" aria-controls="acc2022061611336823">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612584504" aria-expanded="false" aria-controls="acc2022061612584504">
 </button>
 </p>
-<div id="acc2022061611336823" class="collapse">
+<div id="acc2022061612584504" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>flights %&gt;%
   filter(arr_delay &gt; 0) %&gt;%
@@ -774,10 +774,10 @@ flights %&gt;%
 <li>use <code>summarise()</code> to sum total <code>dep_delay</code> per month in hours,</li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611338253" aria-expanded="false" aria-controls="acc2022061611338253">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612583786" aria-expanded="false" aria-controls="acc2022061612583786">
 </button>
 </p>
-<div id="acc2022061611338253" class="collapse">
+<div id="acc2022061612583786" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>flights %&gt;%
  group_by(month) %&gt;%
@@ -788,10 +788,10 @@ flights %&gt;%
 <li>use the <code>wt</code> parameter of <code>count()</code> (works with <code>tally()</code> too) to achieve the same,</li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611336429" aria-expanded="false" aria-controls="acc2022061611336429">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612581988" aria-expanded="false" aria-controls="acc2022061612581988">
 </button>
 </p>
-<div id="acc2022061611336429" class="collapse">
+<div id="acc2022061612581988" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>flights %&gt;%
  group_by(month) %&gt;%
@@ -802,10 +802,10 @@ flights %&gt;%
 <li>run <code>group_size()</code> on <code>carrier</code> what does it return?</li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611338568" aria-expanded="false" aria-controls="acc2022061611338568">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612583956" aria-expanded="false" aria-controls="acc2022061612583956">
 </button>
 </p>
-<div id="acc2022061611338568" class="collapse">
+<div id="acc2022061612583956" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>flights %&gt;%
     group_by(carrier) %&gt;%
@@ -816,10 +816,10 @@ flights %&gt;%
 <li>use <code>n_groups()</code> to check the number of unique origin-carrier pairs,</li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611331999" aria-expanded="false" aria-controls="acc2022061611331999">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612588188" aria-expanded="false" aria-controls="acc2022061612588188">
 </button>
 </p>
-<div id="acc2022061611331999" class="collapse">
+<div id="acc2022061612588188" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>flights %&gt;%
     group_by(carrier) %&gt;%
@@ -869,30 +869,30 @@ set2</code></pre>
 <p>Perform joins on <code>id</code> that result in the grey area from the Venn diagrams below. We have not talked about all possible joins, so read the docs if you do not know which join to use.</p>
 <p><img src="lab_files/figure-html/unnamed-chunk-28-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611330761" aria-expanded="false" aria-controls="acc2022061611330761">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612596386" aria-expanded="false" aria-controls="acc2022061612596386">
 </button>
 </p>
-<div id="acc2022061611330761" class="collapse">
+<div id="acc2022061612596386" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>left_join(set1, set2, by = &#39;id&#39;)</code></pre>
 </div>
 </div>
 <p><img src="lab_files/figure-html/unnamed-chunk-30-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611333555" aria-expanded="false" aria-controls="acc2022061611333555">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612594997" aria-expanded="false" aria-controls="acc2022061612594997">
 </button>
 </p>
-<div id="acc2022061611333555" class="collapse">
+<div id="acc2022061612594997" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>right_join(set1, set2, by = &#39;id&#39;)</code></pre>
 </div>
 </div>
 <p><img src="lab_files/figure-html/unnamed-chunk-32-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611339361" aria-expanded="false" aria-controls="acc2022061611339361">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612597644" aria-expanded="false" aria-controls="acc2022061612597644">
 </button>
 </p>
-<div id="acc2022061611339361" class="collapse">
+<div id="acc2022061612597644" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>inner_join(set1, set2, by = &#39;id&#39;) # or
 semi_join(set1, set2, by = &#39;id&#39;) # semi_join removes duplicates in x
@@ -901,20 +901,20 @@ semi_join(set1, set2, by = &#39;id&#39;) # semi_join removes duplicates in x
 </div>
 <p><img src="lab_files/figure-html/unnamed-chunk-34-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611338319" aria-expanded="false" aria-controls="acc2022061611338319">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612599495" aria-expanded="false" aria-controls="acc2022061612599495">
 </button>
 </p>
-<div id="acc2022061611338319" class="collapse">
+<div id="acc2022061612599495" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>full_join(set1, set2, by = &#39;id&#39;) # or</code></pre>
 </div>
 </div>
 <p><img src="lab_files/figure-html/unnamed-chunk-36-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611330472" aria-expanded="false" aria-controls="acc2022061611330472">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612592678" aria-expanded="false" aria-controls="acc2022061612592678">
 </button>
 </p>
-<div id="acc2022061611330472" class="collapse">
+<div id="acc2022061612592678" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>anti_join(set1, set2, by = &#39;id&#39;) # or</code></pre>
 </div>
@@ -930,10 +930,10 @@ library(EDAWR)</code></pre>
 <li>tidy <code>cases</code> so that years are not in separate columns, but in the column called <code>year</code> containing a value per each year.</li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611338436" aria-expanded="false" aria-controls="acc2022061611338436">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612594627" aria-expanded="false" aria-controls="acc2022061612594627">
 </button>
 </p>
-<div id="acc2022061611338436" class="collapse">
+<div id="acc2022061612594627" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>tidy_cases &lt;- cases %&gt;%
   pivot_longer(-country, names_to = &quot;year&quot;, values_to = &quot;count&quot;)</code></pre>
@@ -943,10 +943,10 @@ library(EDAWR)</code></pre>
 <li>now time for the <code>pollution</code> dataset. Tidy it so that there separate columns for <code>large</code> and <code>small</code> pollution values.</li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611336035" aria-expanded="false" aria-controls="acc2022061611336035">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612592480" aria-expanded="false" aria-controls="acc2022061612592480">
 </button>
 </p>
-<div id="acc2022061611336035" class="collapse">
+<div id="acc2022061612592480" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>tidy_pollution &lt;- pollution %&gt;%
   pivot_wider(city, names_from = size, values_from = amount)</code></pre>
@@ -956,10 +956,10 @@ library(EDAWR)</code></pre>
 <li>the <code>storms</code> dataset contains the <code>date</code> column. Make it into 3 columns: <code>year</code>, <code>month</code> and <code>day</code>. Store the result as <code>tidy_storms</code></li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611337618" aria-expanded="false" aria-controls="acc2022061611337618">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612596260" aria-expanded="false" aria-controls="acc2022061612596260">
 </button>
 </p>
-<div id="acc2022061611337618" class="collapse">
+<div id="acc2022061612596260" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>tidy_storms &lt;- storms %&gt;%
   separate(col = date,
@@ -971,10 +971,10 @@ library(EDAWR)</code></pre>
 <li>now, merge <code>year</code>, <code>month</code> and <code>day</code> in <code>tidy_storms</code> into a <code>date</code> column again but in the “DD/MM/YYYY” format.</li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611335662" aria-expanded="false" aria-controls="acc2022061611335662">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612595513" aria-expanded="false" aria-controls="acc2022061612595513">
 </button>
 </p>
-<div id="acc2022061611335662" class="collapse">
+<div id="acc2022061612595513" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>tidy_storms %&gt;% unite(col = &quot;date&quot;, 4:6, sep = &quot;/&quot;)</code></pre>
 <div data-pagedtable="false">
@@ -1031,10 +1031,10 @@ strsplit(text, &#39;,&#39;)</code></pre>
 </ul>
 <pre><code>str_remove_all(text, &quot;,.*&quot;)</code></pre>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611422142" aria-expanded="false" aria-controls="acc2022061611422142">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612079897" aria-expanded="false" aria-controls="acc2022061612079897">
 </button>
 </p>
-<div id="acc2022061611422142" class="collapse">
+<div id="acc2022061612079897" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>data &lt;- dplyr::as_tibble(matrix(NA_character_, ncol = 6, nrow = length(headers)), .name_repair = &#39;minimal&#39;)
 colnames(data) &lt;- c(&#39;id&#39;, &#39;run_id&#39;, &#39;sample_id&#39;, &#39;read&#39;, &#39;channel&#39;, &#39;start_time&#39;)
@@ -1060,10 +1060,10 @@ for (i in 1:length(headers)) {
 </ul>
 <p><i class='fa fa-lightbulb'></i> Read about <code>lead()</code></p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611488768" aria-expanded="false" aria-controls="acc2022061611488768">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612132606" aria-expanded="false" aria-controls="acc2022061612132606">
 </button>
 </p>
-<div id="acc2022061611488768" class="collapse">
+<div id="acc2022061612132606" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>data2 &lt;- data %&gt;%
   mutate(start_dttm = as_datetime(start_time)) %&gt;%
@@ -1084,10 +1084,10 @@ for (i in 1:length(headers)) {
 </ul>
 <p>Can you visualise this in a better way? Different geometry?</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611484442" aria-expanded="false" aria-controls="acc2022061611484442">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612136351" aria-expanded="false" aria-controls="acc2022061612136351">
 </button>
 </p>
-<div id="acc2022061611484442" class="collapse">
+<div id="acc2022061612136351" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>ggplot(data2, mapping = aes(x = start_dttm,
                             y = as.factor(chan),
@@ -1108,10 +1108,10 @@ for (i in 1:length(headers)) {
 <li>can you find a better cutoff value?</li>
 </ul>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611509883" aria-expanded="false" aria-controls="acc2022061611509883">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612146940" aria-expanded="false" aria-controls="acc2022061612146940">
 </button>
 </p>
-<div id="acc2022061611509883" class="collapse">
+<div id="acc2022061612146940" class="collapse">
 <div class="card card-body">
 <pre class="r"><code># Show time-to-next read distribution
 # thr &lt;- mean(data2$time_diff, na.rm = T) + 3 * sd(data2$time_diff, na.rm = T)
@@ -1156,10 +1156,10 @@ strict &lt;- F</code></pre>
 <h2><span class="header-section-number">6.3</span> Reading the data</h2>
 <p>Now, you should read the data:</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611502444" aria-expanded="false" aria-controls="acc2022061611502444">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612159649" aria-expanded="false" aria-controls="acc2022061612159649">
 </button>
 </p>
-<div id="acc2022061611502444" class="collapse">
+<div id="acc2022061612159649" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>species_orig &lt;- read_csv(file, col_names = c(&quot;sample&quot;,&quot;its&quot;,&quot;replicate&quot;,&quot;OTU&quot;,&quot;size&quot;,&quot;hit&quot;,&quot;perc_ident&quot;,&quot;score&quot;,&quot;family&quot;,&quot;species&quot;)) %&gt;%
   select(-score)
@@ -1189,10 +1189,10 @@ head(species_orig,n = 10)</code></pre>
 <h2><span class="header-section-number">6.4</span> Number of replicates per species</h2>
 <p>Create a new dataset <code>species</code> that contains an extra column <code>n_replicates</code>. The column contains number of replicates this particular species is present in. Do it per sample and its.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611506150" aria-expanded="false" aria-controls="acc2022061611506150">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612150609" aria-expanded="false" aria-controls="acc2022061612150609">
 </button>
 </p>
-<div id="acc2022061611506150" class="collapse">
+<div id="acc2022061612150609" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>species &lt;- species_orig %&gt;%
   group_by(sample, its, species) %&gt;%
@@ -1213,10 +1213,10 @@ head(species,n = 10)</code></pre>
 <p>Now, your task is to filter out all but your <code>sample_name</code> samples from the dataset.
 Call the resulting dataset <code>my_sample</code>.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611507120" aria-expanded="false" aria-controls="acc2022061611507120">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612152252" aria-expanded="false" aria-controls="acc2022061612152252">
 </button>
 </p>
-<div id="acc2022061611507120" class="collapse">
+<div id="acc2022061612152252" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>my_sample &lt;- species %&gt;%
   filter(sample == sample_name)</code></pre>
@@ -1228,10 +1228,10 @@ Call the resulting dataset <code>my_sample</code>.</p>
 <p>What happens if a set of primers failed to amplify or if one replicate was lost?
 Use <code>complete()</code> to make sure you have <code>NA</code> values in such cases.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611507348" aria-expanded="false" aria-controls="acc2022061611507348">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612153588" aria-expanded="false" aria-controls="acc2022061612153588">
 </button>
 </p>
-<div id="acc2022061611507348" class="collapse">
+<div id="acc2022061612153588" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>my_sample &lt;- my_sample %&gt;%
   complete(its = c(&quot;ITS1&quot;, &quot;ITS2&quot;),
@@ -1260,10 +1260,10 @@ head(my_sample,n = 10)</code></pre>
 <h2><span class="header-section-number">6.8</span> Supporting reads</h2>
 <p>Sometimes, an OTU generates two or more top BLAST hits that come from the same species. We have decided to sum reads in such cases. Do it!</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611505580" aria-expanded="false" aria-controls="acc2022061611505580">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612152835" aria-expanded="false" aria-controls="acc2022061612152835">
 </button>
 </p>
-<div id="acc2022061611505580" class="collapse">
+<div id="acc2022061612152835" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>my_sample &lt;- my_sample %&gt;%
   ungroup() %&gt;%
@@ -1285,10 +1285,10 @@ head(my_sample,n=10)</code></pre>
 <h2><span class="header-section-number">6.9</span> Within-OTU species diversity</h2>
 <p>Now, we want to see how many identifications an OTU got. Implement this. Store the result in a new tibble <code>diversity</code>.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611508952" aria-expanded="false" aria-controls="acc2022061611508952">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612152664" aria-expanded="false" aria-controls="acc2022061612152664">
 </button>
 </p>
-<div id="acc2022061611508952" class="collapse">
+<div id="acc2022061612152664" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>diversity &lt;- my_sample %&gt;%
   ungroup() %&gt;%
@@ -1308,10 +1308,10 @@ head(diversity,n=10)</code></pre>
 <h2><span class="header-section-number">6.10</span> Adding diversity data</h2>
 <p>Add the <code>diversity</code> data to <code>my_sample</code> using appropriate <code>join</code> function. Also, remove the column with sample names since we are dealing with only one sample.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611508908" aria-expanded="false" aria-controls="acc2022061611508908">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612151895" aria-expanded="false" aria-controls="acc2022061612151895">
 </button>
 </p>
-<div id="acc2022061611508908" class="collapse">
+<div id="acc2022061612151895" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>my_sample &lt;- my_sample %&gt;%
   left_join(diversity) %&gt;%
@@ -1340,10 +1340,10 @@ head(my_sample,n=10)</code></pre>
 </ul>
 <p>Our example solution involves some <code>ggplot2</code> magics. But would base-R be good enough for this type of plot?</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061611507621" aria-expanded="false" aria-controls="acc2022061611507621">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061612159760" aria-expanded="false" aria-controls="acc2022061612159760">
 </button>
 </p>
-<div id="acc2022061611507621" class="collapse">
+<div id="acc2022061612159760" class="collapse">
 <div class="card card-body">
 <div class="figure" style="text-align: left"><span id="fig:unnamed-chunk-52"></span>
 <img src="lab_files/figure-html/unnamed-chunk-52-1.png" alt="Red -- only one species in the current OTU, blue -- identification above the threshold, grey -- identification below the threshold" width="864" />
@@ -1421,7 +1421,7 @@ Figure 6.1: Red – only one species in the current OTU, blue – identification
 ## [67] polyclip_1.10-0        assertthat_0.2.1       xfun_0.30             
 ## [70] broom_0.7.8            ellipsis_0.3.2</code></pre>
 <p style="text-align: left; font-size: small;">
-Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 16-Jun-2022 at <i class="fa fa-clock-o" aria-hidden="true"></i> 11:58:52.
+Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 16-Jun-2022 at <i class="fa fa-clock-o" aria-hidden="true"></i> 12:03:17.
 </p>
 <hr/>
 <div style="padding-bottom: 1.5em">

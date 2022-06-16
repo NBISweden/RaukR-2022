@@ -160,11 +160,11 @@ M <- rnorm(16) %>%
 
 N <- rnorm(16) %>%
   matrix(ncol = 4) %>%
-  `colnames<-`(letters[1:4]) %>%
-  summary()
+  `colnames<-`(letters[1:4]) %T>%
+  summary() %>% `+`(., 0)
 
 P <- M %>%
-  `%x%`(., .) %T>%
+  `%x%`(., t(N)) %T>%
   heatmap() %>%
   `colnames<-`(letters[1:dim(.)[2]]) %>%
   as_data_frame() %$%
