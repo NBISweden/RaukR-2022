@@ -199,6 +199,18 @@ M %<>% colSums()
 M
 ```
 
+> From R >= 4.1.0 we have a native `|>` pipe that is a bit faster than `%>%` but currently has no placeholders mechanism. 
+
+```{r native_pipe}
+c(1,2,3,4,5) |> mean()
+```
+
+but 
+
+```{r native_pipe2}
+mtcars |> (\(x) lm(mpg ~ disp, data = x))()
+```
+
 ---
 name: magrittr_placeholder
 
