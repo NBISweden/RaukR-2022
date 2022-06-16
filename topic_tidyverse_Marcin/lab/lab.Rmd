@@ -164,7 +164,7 @@ N <- rnorm(16) %>%
   summary()
 
 P <- M %>%
-  `%x%`(., N) %T>%
+  `%x%`(., .) %T>%
   heatmap() %>%
   `colnames<-`(letters[1:dim(.)[2]]) %>%
   as_data_frame() %$%
