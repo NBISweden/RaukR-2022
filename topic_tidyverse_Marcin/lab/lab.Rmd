@@ -134,6 +134,7 @@ distr2 <- rnorm(16)
 N <- matrix(distr2, ncol = 4)
 colnames(N) <- (letters[1:4])
 summary(N)
+N <- N + 0
 ```
 
 ```
