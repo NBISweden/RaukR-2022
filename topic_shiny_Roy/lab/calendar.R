@@ -121,7 +121,7 @@ ui <- fluidPage(
       ),
       downloadButton("btn_downloadplot","Download Plot"),
       tags$hr(),
-      helpText("2019 | RaukR")
+      helpText("2022 | RaukR")
     ),
     mainPanel(
       sliderInput("in_scale","Image preview scale",min=0.1,max=3,step=0.10,value=1),

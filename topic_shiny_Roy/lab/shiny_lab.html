@@ -257,7 +257,7 @@ div.tocify {
 <!-- rmd lab header -->
 <p><img src="assets/logo.svg" alt="logo_raukr" class="trlogo"></p>
 <!-- ------------ Only edit title, subtitle & author above this ------------ -->
-<br>
+<p><br></p>
 <div class="abstract spaced">
 <p>This is an introduction to shiny web applications with R. Please follow the exercise to familiarise yourself with the fundamentals. And then you can follow instructions to build one of the two complete apps. Code chunks starting with <code>shinyApp()</code> can be simply copy-pasted to the RStudio console and run. Generally, complete shiny code is saved as a text file, named for example, as <strong>app.R</strong> and then clicking <strong>Run app</strong> launches the app.</p>
 </div>
@@ -648,8 +648,109 @@ hist(iris$Sepal.Length,breaks=input$in_breaks)
 ```</code></pre>
 <p>This code can be copied to a new file in RStudio and saved as, for example, <strong>shiny.Rmd</strong>. Then click ‘Knit’. Alternatively, you can run <code>rmarkdown::run("shiny.Rmd")</code>.</p>
 </div>
-<div id="rna-seq-power" class="section level1" number="11">
-<h1><span class="header-section-number">11</span> RNA-Seq power</h1>
+<div id="data-explorer" class="section level1" number="11">
+<h1><span class="header-section-number">11</span> Data explorer</h1>
+<p>A common use case of shiny apps is to explore a dataset interactively. So we will build a simple app that can create a scatterplot from a dataframe which a user can modify interactively. We will use the built-in <code>iris</code> dataset and the user should be able to select x and y axes variables as well the variable mapped to the colour of the points.</p>
+<p><strong>Topics covered</strong></p>
+<ul>
+<li>UI sidebar layout</li>
+<li>Input and output widgets</li>
+<li>Creating plots in a shiny app</li>
+<li>Passing variables into ggplot through non standard evaluation</li>
+</ul>
+<p>Below is a preview of the complete app.</p>
+<p><img src="shiny_lab_assets/data-explorer.png" /></p>
+<div id="ui" class="section level2" number="11.1">
+<h2><span class="header-section-number">11.1</span> UI</h2>
+<p>We start with the standard shiny app template.</p>
+<pre class="r"><code>library(shiny)
+
+shinyApp(
+  ui=fluidPage(),
+  server=function(input,output){}
+)</code></pre>
+<p>And then we start building the UI. We will add a title panel and a sidebar layout with a sidebar and a main panel.</p>
+<pre class="r"><code>library(shiny)
+
+shinyApp(
+  ui=fluidPage(
+    titlePanel(&quot;Data explorer&quot;),
+    sidebarLayout(
+      sidebarPanel(),
+      mainPanel()
+    )
+  ),
+  server=function(input,output){}
+)</code></pre>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-19-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
+<p>And to the sidebar, we will add 3 input widgets corresponding to x axis variable, y axis variable and colour variable. These will be dropdown type (<code>selectInput()</code>) and choices will be column names of the iris dataframe. And we add the output widget (<code>plotOutput()</code>) in the main panel.</p>
+<pre class="r"><code>library(shiny)
+
+shinyApp(
+  ui=fluidPage(
+    titlePanel(&quot;Data explorer&quot;),
+    sidebarLayout(
+      sidebarPanel(
+          selectInput(&quot;in_x&quot;,&quot;X axis variable&quot;, choices=colnames(iris), selected=colnames(iris)[1], multiple=FALSE),
+          selectInput(&quot;in_y&quot;,&quot;Y axis variable&quot;, choices=colnames(iris), selected=colnames(iris)[2], multiple=FALSE),
+          selectInput(&quot;in_col&quot;,&quot;Colour variable&quot;, choices=colnames(iris), selected=colnames(iris)[3], multiple=FALSE)
+      ),
+      mainPanel(
+        plotOutput(&quot;out_plot&quot;)
+      )
+    )
+  ),
+  server=function(input,output){}
+)</code></pre>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-20-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
+</div>
+<div id="server" class="section level2" number="11.2">
+<h2><span class="header-section-number">11.2</span> Server</h2>
+<p>Now, we need to add the server part. First, we write the ggplot code to create a plot.</p>
+<pre class="r"><code>ggplot(iris,aes(x,y,col))+
+      geom_point()</code></pre>
+<p>This is added inside the output render function <code>renderPlot()</code>.</p>
+<pre class="r"><code>output$out_plot &lt;- renderPlot({
+    ggplot(iris,aes(x,y,col))+
+      geom_point()
+  })</code></pre>
+<p>We need to wire the input variable into the ggplot inputs x, y and col. This is achieved through <code>input$</code> and the variables are wrapped inside <code>!!sym()</code> to convert quoted text to unquoted variable.</p>
+<pre class="r"><code>output$out_plot &lt;- renderPlot({
+  ggplot(iris,aes(!!sym(input$in_x),y=!!sym(input$in_y),col=!!sym(input$in_col)))+
+    geom_point()
+})</code></pre>
+<p>This is finally added to the server function.</p>
+<pre class="r"><code>library(shiny)
+
+shinyApp(
+  ui=fluidPage(
+    titlePanel(&quot;Data explorer&quot;),
+    sidebarLayout(
+      sidebarPanel(
+          selectInput(&quot;in_x&quot;,&quot;X axis variable&quot;, choices=colnames(iris), selected=colnames(iris)[1], multiple=FALSE),
+          selectInput(&quot;in_y&quot;,&quot;Y axis variable&quot;, choices=colnames(iris), selected=colnames(iris)[2], multiple=FALSE),
+          selectInput(&quot;in_col&quot;,&quot;Colour variable&quot;, choices=colnames(iris), selected=colnames(iris)[3], multiple=FALSE),
+      ),
+      mainPanel(
+        plotOutput(&quot;out_plot&quot;)
+      )
+    )
+  ),
+  server=function(input,output){
+    
+  output$out_plot &lt;- renderPlot({
+    ggplot(iris,aes(!!sym(input$in_x),y=!!sym(input$in_y),col=!!sym(input$in_col)))+
+      geom_point()
+  })
+      
+  }
+)</code></pre>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-24-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
+<p>This was a quick and easy start to shiny apps. You can expand this app to other datasets and map more variables to ggplot etc. Can you add the functionality to <a href="https://shiny.rstudio.com/gallery/file-download.html">download the plots</a>? Or perhaps to <a href="https://shiny.rstudio.com/articles/upload.html">upload a csv file</a> and plot from that file?</p>
+</div>
+</div>
+<div id="rna-seq-power" class="section level1" number="12">
+<h1><span class="header-section-number">12</span> RNA-Seq power</h1>
 <p>Run power analysis for an RNA-Seq experiment.</p>
 <p><strong>Topics covered</strong></p>
 <ul>
@@ -662,23 +763,23 @@ hist(iris$Sepal.Length,breaks=input$in_breaks)
 <p>The following R packages are required for this app: <code>c(shiny, shinythemes)</code>. In addition, install <strong>RNASeqPower</strong> from Bioconductor. <code>BiocManager::install('RNASeqPower')</code>.</p>
 <p>Below is a preview of the complete app.</p>
 <p><img src="shiny_lab_assets/rnaseq-power-preview.png" /></p>
-<div id="rnaseqpower" class="section level2" number="11.1">
-<h2><span class="header-section-number">11.1</span> RNASeqPower</h2>
-<p>The R package <strong>RNASeqPower</strong> helps users to perform a power analysis before running an RNA-Seq experiment. It helps you to estimate, for example, the number of samples required to detect a certain level of significance. The idea of this shiny app is to create a GUI for the RNASeqPower app.</p>
-<p>So we first need to understand how RNASeqPower works. For a complete understanding, check out <a href=""></a>. For our purpose, we will take a brief look at how it works. We only need to use one function <code>rnapower()</code>. Check out <code>?RNASeqPower::rnapower</code>.</p>
+<div id="rnaseqpower" class="section level2" number="12.1">
+<h2><span class="header-section-number">12.1</span> RNASeqPower</h2>
+<p>The R package <strong>RNASeqPower</strong> helps users to perform a power analysis before running an RNA-Seq experiment. It helps you to estimate, for example, the number of samples required to detect a certain level of significance. The idea of this shiny app is to create a GUI for the RNASeqPower package.</p>
+<p>So we first need to understand how RNASeqPower works. For a complete understanding, check out <a href="https://bioconductor.org/packages/release/bioc/html/RNASeqPower.html">RNASeqPower</a>. For our purpose, we will take a brief look at how it works. We only need to use one function <code>rnapower()</code>. Check out <code>?RNASeqPower::rnapower</code>.</p>
 <p>So, let’s say we want to find out how many samples are required per group. We have some known input parameters. Let’s say the sequencing depth is 50 (<code>depth=50</code>), coefficient of variation is 0.6 (<code>cv=0.6</code>), effect size is 1.5 fold change (<code>effect=1.5</code>), significance cut-off is 0.05 (<code>alpha=0.05</code>) and lastly power of the test is 0.8 (<code>power=0.8</code>). The parameter we want to compute is the number of samples (<code>n</code>), therefore it is not specified.</p>
 <pre class="r"><code>library(RNASeqPower)
 RNASeqPower::rnapower(depth=1000,cv=0.6,effect=2,alpha=0.05,power=0.8)</code></pre>
 <pre><code>## [1] 11.79489</code></pre>
-<p>So, we see the number of samples required given these input conditions.</p>
-<p>Similarly, we can estimate any of the other parameters (except <code>depth</code>). We can try another example we solve for power. What would the power be for a study with 12 per group, to detect a 2-fold change, given deep (50x) coverage?</p>
+<p>And we get the number of samples required given these input conditions.</p>
+<p>Similarly, we can estimate any of the other parameters (except <code>depth</code>). We can try another example where we solve for power. What would the power be for a study with 12 samples per group, to detect a 2-fold change, given deep (50x) coverage?</p>
 <pre class="r"><code>rnapower(depth=50, n=12, cv=0.6, effect=2, alpha=.05)</code></pre>
 <pre><code>## [1] 0.7864965</code></pre>
 <p>And the function has returned the power.</p>
 <p>Now the idea is to create a web application take these input parameters from the user through input widgets.</p>
 </div>
-<div id="scaffolding" class="section level2" number="11.2">
-<h2><span class="header-section-number">11.2</span> Scaffolding</h2>
+<div id="scaffolding" class="section level2" number="12.2">
+<h2><span class="header-section-number">12.2</span> Scaffolding</h2>
 <p>Let’s build the basic scaffolding for our app including the input widgets. Let’s assume we are estimating number of samples.</p>
 <p>We use a sidebar layout. The input controls go on the sidebar panel and the output goes on the main panel. So we need 5 numeric inputs. We can set some default values as well as reasonable min and max values and steps to increase or decrease. The output will be verbatim text, so we use <code>verbatimTextOutput()</code> widget.</p>
 <pre class="r"><code>library(shiny)
@@ -702,15 +803,15 @@ shinyApp(
   server=function(input,output){
   }
 )</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-20-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-27-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
 <p>The app should visually look close to our final end result. Check that the widgets work.</p>
 <p>The next step is to wire up the inputs to the <code>rnapower()</code> function and return the result to the output text field.</p>
 <p><i class='fa fa-clipboard-list'></i> Try to see if you can get this to work.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022041912391796" aria-expanded="false" aria-controls="acc2022041912391796">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061523446084" aria-expanded="false" aria-controls="acc2022061523446084">
 </button>
 </p>
-<div id="acc2022041912391796" class="collapse">
+<div id="acc2022061523446084" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>library(shiny)
 library(RNASeqPower)
@@ -739,20 +840,20 @@ shinyApp(
     })
   }
 )</code></pre>
-<img src="shiny_lab_files/figure-html/unnamed-chunk-21-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
+<img src="shiny_lab_files/figure-html/unnamed-chunk-28-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
 </div>
 </div>
-<p>Verify that the inputs and outputs work. One can stop at this point if you only need to compute number of samples. But, we will continue to add more functionality.</p>
+<p>Verify that the inputs and outputs work. One can stop at this point if you only need to compute number of samples. But, we will continue to enchance the app to be able to compute any of the other parameters.</p>
 </div>
-<div id="conditional-ui" class="section level2" number="11.3">
-<h2><span class="header-section-number">11.3</span> Conditional UI</h2>
+<div id="conditional-ui" class="section level2" number="12.3">
+<h2><span class="header-section-number">12.3</span> Conditional UI</h2>
 <p>The function can estimate not only <strong>sample size</strong>, but <strong>cv</strong>, <strong>effect</strong>, <strong>alpha</strong> or <strong>power</strong>. We should let the user choose what they want to compute. So, we need a selection input widget to enable selection. And the input fields must change depending on the user’s selected choice. The <code>rnapower()</code> function must also use a different set of parameters depending on the selection choice. For conditional logic, you can chain <code>if else</code> statements or use <code>switch()</code>.</p>
 <p><i class='fa fa-clipboard-list'></i> Try to add a selection based conditional UI. <code>?selectInput()</code>, <code>?uiOutput()</code>, <code>?renderUI()</code>.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022041912421568" aria-expanded="false" aria-controls="acc2022041912421568">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061523462732" aria-expanded="false" aria-controls="acc2022061523462732">
 </button>
 </p>
-<div id="acc2022041912421568" class="collapse">
+<div id="acc2022061523462732" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>library(shiny)
 library(RNASeqPower)
@@ -835,7 +936,7 @@ shinyApp(
     })
   }
 )</code></pre>
-<img src="shiny_lab_files/figure-html/unnamed-chunk-22-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
+<img src="shiny_lab_files/figure-html/unnamed-chunk-29-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
 </div>
 </div>
 <p>Let’s summarise what we have done. In the <strong>ui</strong> part, instead of directly including the <code>rnapower()</code> input variable in the <code>sidebarPanel()</code>, we have added a selection input and a conditional UI output. The content inside the output UI depends on the selection made by the user.</p>
@@ -850,8 +951,8 @@ uiOutput(&quot;ui_pa&quot;)</code></pre>
 })</code></pre>
 <p>In the <code>renderPrint({})</code> function, we use a similar idea. <code>rnapower()</code> is calculated conditionally based on the user selection.</p>
 </div>
-<div id="multiple-numeric-input" class="section level2" number="11.4">
-<h2><span class="header-section-number">11.4</span> Multiple numeric input</h2>
+<div id="multiple-numeric-input" class="section level2" number="12.4">
+<h2><span class="header-section-number">12.4</span> Multiple numeric input</h2>
 <p>Another feature of the <code>rnapower()</code> function that we have not discussed so far is that all the input arguments can take more than one number as input. Or in other words, instead of a single number, it can take a vector of number. For example;</p>
 <pre class="r"><code>RNASeqPower::rnapower(depth=c(50,100),cv=0.6,effect=1.5,alpha=0.05,power=0.8)</code></pre>
 <pre><code>##       50      100 
@@ -873,10 +974,10 @@ as.numeric(unlist(strsplit(gsub(&quot; &quot;,&quot;&quot;,x),&quot;,&quot;)))</
 <p>Blank space are removed, the string is split by comma into a list of strings, the list is converted to a vector and the strings are coerced to numbers.</p>
 <p><i class='fa fa-clipboard-list'></i> Update the app such that all numeric inputs are replaced by text inputs and the server logic is able to parse the strings into numbers.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022041912454082" aria-expanded="false" aria-controls="acc2022041912454082">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061523481380" aria-expanded="false" aria-controls="acc2022061523481380">
 </button>
 </p>
-<div id="acc2022041912454082" class="collapse">
+<div id="acc2022061523481380" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>library(shiny)
 library(RNASeqPower)
@@ -984,20 +1085,20 @@ shinyApp(
     })
   }
 )</code></pre>
-<img src="shiny_lab_files/figure-html/unnamed-chunk-29-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
+<img src="shiny_lab_files/figure-html/unnamed-chunk-36-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
 </div>
 </div>
 <p>To summarise our changes, in the ui part, all <code>numericInput()</code> has been changed to <code>textInput()</code> and in the process we lost the number specific input limits such as min, max, step size etc. In the server part, incoming strings are parsed and split into a vector of numbers, saved to a variable and passed to the <code>rnapower()</code> function. Ensure that the app works without errors and we can progress further.</p>
 </div>
-<div id="code-cleaning" class="section level2" number="11.5">
-<h2><span class="header-section-number">11.5</span> Code cleaning</h2>
+<div id="code-cleaning" class="section level2" number="12.5">
+<h2><span class="header-section-number">12.5</span> Code cleaning</h2>
 <p>It is good practice to check whether the current code can be cleaned-up/polished or reduced. In this example, <strong>depth</strong> is always needed and could be moved out of the conditional block. Only one variable changes based on user input, but all 5 variables are repeated in each conditional block. There is room for improvement there.</p>
 <p><i class='fa fa-clipboard-list'></i> Try to figure out how the code can be reorganised and simplified.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022041912481494" aria-expanded="false" aria-controls="acc2022041912481494">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061523500297" aria-expanded="false" aria-controls="acc2022061523500297">
 </button>
 </p>
-<div id="acc2022041912481494" class="collapse">
+<div id="acc2022061523500297" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>library(shiny)
 library(RNASeqPower)
@@ -1047,13 +1148,13 @@ shinyApp(
     })
   }
 )</code></pre>
-<img src="shiny_lab_files/figure-html/unnamed-chunk-30-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
+<img src="shiny_lab_files/figure-html/unnamed-chunk-37-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
 </div>
 </div>
 <p>UI and server blocks have been considerably reduced in length by removing redundant code.</p>
 </div>
-<div id="input-validation" class="section level2" number="11.6">
-<h2><span class="header-section-number">11.6</span> Input validation</h2>
+<div id="input-validation" class="section level2" number="12.6">
+<h2><span class="header-section-number">12.6</span> Input validation</h2>
 <p>When we changed numeric inputs to character, we lost the input limits and numeric validation. Regardless of what input you enter, the app tries to proceed with the calculation.</p>
 <p><i class='fa fa-clipboard-list'></i> Try entering some unreasonable inputs and see what happens. Try entering random strings, or huge integers for <strong>alpha</strong> etc.</p>
 <p>We can bring back input validation manually using <code>validate()</code> functions. This can be used to check if the input conforms to some expected range of values and if not, return a message to the user.</p>
@@ -1068,10 +1169,10 @@ shinyApp(
 </ul>
 <p><i class='fa fa-clipboard-list'></i> Try to figure out how to add input validation. <code>?shiny::validate()</code>.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022041912514258" aria-expanded="false" aria-controls="acc2022041912514258">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061523520133" aria-expanded="false" aria-controls="acc2022061523520133">
 </button>
 </p>
-<div id="acc2022041912514258" class="collapse">
+<div id="acc2022061523520133" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>library(shiny)
 library(RNASeqPower)
@@ -1147,21 +1248,21 @@ shinyApp(
     })
   }
 )</code></pre>
-<img src="shiny_lab_files/figure-html/unnamed-chunk-31-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
+<img src="shiny_lab_files/figure-html/unnamed-chunk-38-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
 </div>
 </div>
 <p>We have added <code>validate()</code> to all incoming text to ensure that user input is within reasonable limits.</p>
 <p><i class='fa fa-clipboard-list'></i> Test that the validation works by inputting unreasonable inputs such as alphabets, symbols etc into the input fields.</p>
 </div>
-<div id="theme" class="section level2" number="11.7">
-<h2><span class="header-section-number">11.7</span> Theme</h2>
+<div id="theme" class="section level2" number="12.7">
+<h2><span class="header-section-number">12.7</span> Theme</h2>
 <p>This part is purely cosmetic. We can add a custom theme from R package <code>shinythemes</code> to make our app stand out from the default. The theme is added as an argument to <code>fluidPage()</code> like so <code>fluidPage(theme = shinytheme("spacelab"))</code>.</p>
 <p><i class='fa fa-clipboard-list'></i> Try changing the theme and pick one that you like. Check out <code>?shinythemes</code>. The themes can be visualised on <a href="https://bootswatch.com/">Bootswatch</a>.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022041912531681" aria-expanded="false" aria-controls="acc2022041912531681">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061523545602" aria-expanded="false" aria-controls="acc2022061523545602">
 </button>
 </p>
-<div id="acc2022041912531681" class="collapse">
+<div id="acc2022061523545602" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>library(shiny)
 library(shinythemes)
@@ -1239,13 +1340,13 @@ shinyApp(
     })
   }
 )</code></pre>
-<img src="shiny_lab_files/figure-html/unnamed-chunk-32-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
+<img src="shiny_lab_files/figure-html/unnamed-chunk-39-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
 </div>
 </div>
 <p>This is the completed app.</p>
 </div>
-<div id="deployment" class="section level2" number="11.8">
-<h2><span class="header-section-number">11.8</span> Deployment</h2>
+<div id="deployment" class="section level2" number="12.8">
+<h2><span class="header-section-number">12.8</span> Deployment</h2>
 <p>You do not necessarily need to do this section. This is just so you know.</p>
 <p>The app is now ready to be deployed. If you have an account on <a href="https://www.shinyapps.io/">shinyapps.io</a>, you can quickly deploy this app to your account using the R package <code>rsconnect</code>.</p>
 <pre class="r"><code>library(rsconnect)
@@ -1256,8 +1357,8 @@ deployApp(appName=&quot;my-awesome-app&quot;,appDir=&quot;.&quot;)</code></pre>
 <p>This completes this app tutorial. Hope you have enjoyed this build and learned something interesting along the way. There are few more example apps below, but that is optional.</p>
 </div>
 </div>
-<div id="calendar-app" class="section level1" number="12">
-<h1><span class="header-section-number">12</span> Calendar app</h1>
+<div id="calendar-app" class="section level1" number="13">
+<h1><span class="header-section-number">13</span> Calendar app</h1>
 <p>A shiny app to create a calendar planner plot.</p>
 <p><strong>Topics covered</strong></p>
 <ul>
@@ -1275,20 +1376,20 @@ deployApp(appName=&quot;my-awesome-app&quot;,appDir=&quot;.&quot;)</code></pre>
 <p>The idea of this app is to create and display a calendar styled planner. Below is a preview of the expected output.</p>
 <p><img src="shiny_lab_assets/calendar_plot.png" /></p>
 <p>The image is a plot created in ggplot. X axis showing week numbers, y axis showing weekdays, facet titles showing months and dates are coloured by categories. We can split this into two parts. The first part is preparing the code for the core task at hand (ie; generating the plot) and the second part is creating a graphical user interface around it using shiny apps to enable the user to input values and adjust dates, categories, plot parameters etc.</p>
-<div id="creating-the-plot" class="section level2" number="12.1">
-<h2><span class="header-section-number">12.1</span> Creating the plot</h2>
+<div id="creating-the-plot" class="section level2" number="13.1">
+<h2><span class="header-section-number">13.1</span> Creating the plot</h2>
 <p>The first step is to figure out how to create this plot in ggplot. The data will be contained in a data.frame. The data.frame is created based on start and end dates.</p>
-<pre class="r"><code>start_date &lt;- as.Date(&quot;2019-06-01&quot;)
-end_date &lt;- as.Date(&quot;2019-07-05&quot;)
+<pre class="r"><code>start_date &lt;- as.Date(&quot;2022-06-01&quot;)
+end_date &lt;- as.Date(&quot;2022-07-05&quot;)
 dfr &lt;- data.frame(date=seq(start_date,end_date,by=1))
 head(dfr)</code></pre>
 <pre><code>##         date
-## 1 2019-06-01
-## 2 2019-06-02
-## 3 2019-06-03
-## 4 2019-06-04
-## 5 2019-06-05
-## 6 2019-06-06</code></pre>
+## 1 2022-06-01
+## 2 2022-06-02
+## 3 2022-06-03
+## 4 2022-06-04
+## 5 2022-06-05
+## 6 2022-06-06</code></pre>
 <p>We can add some code to get specific information from these dates such as the day, week, month and numeric date. Finally we</p>
 <pre class="r"><code>dfr$day &lt;- factor(strftime(dfr$date,format=&quot;%a&quot;),levels=rev(c(&quot;Mon&quot;,&quot;Tue&quot;,&quot;Wed&quot;,&quot;Thu&quot;,&quot;Fri&quot;,&quot;Sat&quot;,&quot;Sun&quot;)))
 dfr$week &lt;- factor(strftime(dfr$date,format=&quot;%V&quot;))
@@ -1297,40 +1398,40 @@ dfr$month &lt;- factor(dfr$month,levels=unique(dfr$month))
 dfr$ddate &lt;- factor(strftime(dfr$date,format=&quot;%d&quot;))
 head(dfr)</code></pre>
 <pre><code>##         date day week month ddate
-## 1 2019-06-01 Sat   22  June    01
-## 2 2019-06-02 Sun   22  June    02
-## 3 2019-06-03 Mon   23  June    03
-## 4 2019-06-04 Tue   23  June    04
-## 5 2019-06-05 Wed   23  June    05
-## 6 2019-06-06 Thu   23  June    06</code></pre>
+## 1 2022-06-01 Wed   22  June    01
+## 2 2022-06-02 Thu   22  June    02
+## 3 2022-06-03 Fri   22  June    03
+## 4 2022-06-04 Sat   22  June    04
+## 5 2022-06-05 Sun   22  June    05
+## 6 2022-06-06 Mon   23  June    06</code></pre>
 <p>Finally, we add a column called track which will hold the categorical information for colouring dates by activity.</p>
 <pre class="r"><code>dfr$track &lt;- &quot;Available&quot;
 dfr$track[dfr$day==&quot;Sat&quot;|dfr$day==&quot;Sun&quot;] &lt;- &quot;Weekend&quot;
 head(dfr)</code></pre>
 <pre><code>##         date day week month ddate     track
-## 1 2019-06-01 Sat   22  June    01   Weekend
-## 2 2019-06-02 Sun   22  June    02   Weekend
-## 3 2019-06-03 Mon   23  June    03 Available
-## 4 2019-06-04 Tue   23  June    04 Available
-## 5 2019-06-05 Wed   23  June    05 Available
-## 6 2019-06-06 Thu   23  June    06 Available</code></pre>
+## 1 2022-06-01 Wed   22  June    01 Available
+## 2 2022-06-02 Thu   22  June    02 Available
+## 3 2022-06-03 Fri   22  June    03 Available
+## 4 2022-06-04 Sat   22  June    04   Weekend
+## 5 2022-06-05 Sun   22  June    05   Weekend
+## 6 2022-06-06 Mon   23  June    06 Available</code></pre>
 <p>This is enough information to plot.</p>
 <pre class="r"><code>ggplot(dfr,aes(x=week,y=day))+
       geom_tile(aes(fill=track))+
       geom_text(aes(label=ddate))+
       facet_grid(~month,scales=&quot;free&quot;,space=&quot;free&quot;)+
       theme_bw()</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-38-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-45-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>We can add more activities to the track column. Or in other words, I refer to it as adding more tracks.</p>
-<pre class="r"><code>dfr$track[dfr$date&gt;=as.Date(&quot;2019-06-10&quot;) &amp; dfr$date&lt;=as.Date(&quot;2019-06-20&quot;)] &lt;- &quot;RaukR&quot;
-dfr$track[dfr$date==as.Date(&quot;2019-06-21&quot;)] &lt;- &quot;Midsummer&quot;
+<pre class="r"><code>dfr$track[dfr$date&gt;=as.Date(&quot;2022-06-13&quot;) &amp; dfr$date&lt;=as.Date(&quot;2022-06-17&quot;)] &lt;- &quot;RaukR&quot;
+dfr$track[dfr$date==as.Date(&quot;2022-06-24&quot;)] &lt;- &quot;Midsummer&quot;
 
 ggplot(dfr,aes(x=week,y=day))+
       geom_tile(aes(fill=track))+
       geom_text(aes(label=ddate))+
       facet_grid(~month,scales=&quot;free&quot;,space=&quot;free&quot;)+
       theme_bw()</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-39-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-46-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>Now, we can customise the plot as you prefer. I am modifying the axes labels, changing colours and removing most of the plot elements.</p>
 <pre class="r"><code>all_cols &lt;- c(&quot;#bebada&quot;,&quot;#fb8072&quot;,&quot;#80b1d3&quot;,&quot;#fdb462&quot;)
   
@@ -1349,13 +1450,13 @@ ggplot(dfr,aes(x=week,y=day))+
             strip.background=element_blank(),
             legend.key.size=unit(0.3,&quot;cm&quot;),
             legend.spacing.x=unit(0.2,&quot;cm&quot;))</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-40-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-47-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>Our plot is now ready and we have the code to create this plot. The next step is to build a shiny app around it.</p>
 </div>
-<div id="building-the-app" class="section level2" number="12.2">
-<h2><span class="header-section-number">12.2</span> Building the app</h2>
-<div id="layout" class="section level3" number="12.2.1">
-<h3><span class="header-section-number">12.2.1</span> Layout</h3>
+<div id="building-the-app" class="section level2" number="13.2">
+<h2><span class="header-section-number">13.2</span> Building the app</h2>
+<div id="layout" class="section level3" number="13.2.1">
+<h3><span class="header-section-number">13.2.1</span> Layout</h3>
 <p>We need to first have a plan for the app page, which UI elements to include and how they will be laid out and structured. My plan is as shown in the preview image.</p>
 <p><img src="shiny_lab_assets/calendar-preview.png" /></p>
 <p>There is a horizontal top bar for the title and two columns below. The left column will contain the input widgets and control. The right column will contain the plot output. Since, this is a commonly used layout, it is available as a predefined function in shiny called <code>pageWithSidebar()</code>. It takes three arguments <code>headerPanel</code>, <code>sidebarPanel</code> and <code>mainPanel</code> which is self explanatory.</p>
@@ -1369,8 +1470,8 @@ ui=fluidPage(
 server=function(input,output){}
 )</code></pre>
 </div>
-<div id="ui" class="section level3" number="12.2.2">
-<h3><span class="header-section-number">12.2.2</span> UI</h3>
+<div id="ui-1" class="section level3" number="13.2.2">
+<h3><span class="header-section-number">13.2.2</span> UI</h3>
 <p>Then we fill in the panels with widgets and contents.</p>
 <pre class="r"><code>shinyApp(
 ui=fluidPage(
@@ -1391,8 +1492,7 @@ ui=fluidPage(
   ),
 server=function(input,output){}
 )</code></pre>
-<p>The app as it is now, when previewed, should look like below:</p>
-<p><img src="shiny_lab_assets/calendar-1.png" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-49-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
 <p>We have defined a part of the side bar panel with a title <strong>Duration</strong>. <code>fluidRow()</code> is an html tag used to create rows. Above, in the side bar panel, a row is defined and two columns are defined inside. Each column is filled with date input widgets for start and end dates. We use the columns here to place date input widgets side by side. To place widgets one below the other, the columns can simply be removed. The default value for the start date is set to current date and the end date is set to current date + 30 days.</p>
 <p>Now we add more sections to the side bar panel, namely track input variables and plot settings variables. We also added custom colours. Custom colours can be selected using the input widget <code>colourpicker::colourInput()</code>.</p>
 <pre class="r"><code>cols &lt;- toupper(c(
@@ -1493,6 +1593,7 @@ ui=fluidPage(
   ),
 server=function(input,output){}
 )</code></pre>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-50-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
 <p><img src="shiny_lab_assets/calendar-2.png" /></p>
 <p>The track start and end dates are by default set to the same as that of duration start and end dates. We will adjust this later. Under the settings section, we have added a few useful plot variables to adjust sizes and spacing of plot elements. They are set to reasonable defaults. These variables will be passed on to the ggplot plotting function.</p>
 <p>We can end with column with the download options. Input fields are height, width, resolution and file format. Last we add a button for download.</p>
@@ -1516,7 +1617,7 @@ fluidRow(
 ),
 downloadButton(&quot;btn_downloadplot&quot;,&quot;Download Plot&quot;),
 tags$hr(),
-helpText(&quot;2019 | RaukR&quot;)</code></pre>
+helpText(&quot;2022 | RaukR&quot;)</code></pre>
 <p>In the main panel, we add the plot output function that will hold the output plot. We also add a slider for image preview scaling and the output image. The idea behind the preview scaling is to allow the user to increase or decrease the size of the plot in the browser without affecting the download size. The part of the UI code to add the preview slider is below:</p>
 <pre class="r"><code>mainPanel(
   sliderInput(&quot;in_scale&quot;,&quot;Image preview scale&quot;,min=0.1,max=3,step=0.10,value=1),
@@ -1638,7 +1739,7 @@ shinyApp(
         ),
         downloadButton(&quot;btn_downloadplot&quot;,&quot;Download Plot&quot;),
         tags$hr(),
-        helpText(&quot;2019 | RaukR&quot;)
+        helpText(&quot;2022 | RaukR&quot;)
       ),
       mainPanel(
         sliderInput(&quot;in_scale&quot;,&quot;Image preview scale&quot;,min=0.1,max=3,step=0.10,value=1),
@@ -1652,8 +1753,8 @@ shinyApp(
 )</code></pre>
 <p><img src="shiny_lab_assets/calendar-3.png" /></p>
 </div>
-<div id="server" class="section level3" number="12.2.3">
-<h3><span class="header-section-number">12.2.3</span> Server</h3>
+<div id="server-1" class="section level3" number="13.2.3">
+<h3><span class="header-section-number">13.2.3</span> Server</h3>
 <p>We can start adding content into the server function to actually enable functionality.</p>
 <p>The server code can be organised into 5 blocks.</p>
 <ol style="list-style-type: decimal">
@@ -2186,12 +2287,11 @@ server=function(input, output, session) {
   })
 })</code></pre>
 <p><img src="shiny_lab_assets/calendar-preview.png" /></p>
-<p>For a variation of this app where number of tracks are user-defined, click <a href="https://github.com/royfrancis/shinyapp_calendar_plot">here</a>.</p>
 </div>
 </div>
 </div>
-<div id="nametagger-app" class="section level1" number="13">
-<h1><span class="header-section-number">13</span> Nametagger app</h1>
+<div id="nametagger-app" class="section level1" number="14">
+<h1><span class="header-section-number">14</span> Nametagger app</h1>
 <p>Generate labels for clip-on nametags.</p>
 <p><strong>Topics covered</strong></p>
 <ul>
@@ -2210,8 +2310,8 @@ server=function(input, output, session) {
 <p>The final app will look something like below.</p>
 <p><img src="shiny_lab_assets/nametagger_preview.png" /></p>
 <p>The idea is to create the labels suitable for A4 paper size and generate as many pages as needed. We wish to include one, two or three lines of text on each label. Also, we may choose to include a logo. We need input for label information, option to select logo, a preview plot and finally an option to download the images.</p>
-<div id="creating-the-figure" class="section level2" number="13.1">
-<h2><span class="header-section-number">13.1</span> Creating the figure</h2>
+<div id="creating-the-figure" class="section level2" number="14.1">
+<h2><span class="header-section-number">14.1</span> Creating the figure</h2>
 <p>We need to first write the code needed to take some input labels and generate a figure.</p>
 <p>We have measured the labels to be 9cm x 5.5cm which means that 8 of them will fit on an A4 paper suitable for print. We have the function for generating the plot below.</p>
 <pre class="r"><code># nametag_plot_page ------------------------------------------------------------
@@ -2391,12 +2491,12 @@ nametag &lt;- function(dfr,label1_sz=8,label1_x=0.5,label1_y=0.54,
 nametag(dfr)</code></pre>
 <p>This should have exported a png image to the working directory. <code>nametag()</code> also has an argument called <code>logo_right</code> to pass in a raster image which will be plotted as a logo on the top right side. <code>nametag()</code> also has numerous other arguments to adjust label positions, logo position, size justification etc. But, these arguments have reasonable defaults.</p>
 </div>
-<div id="building-the-app-1" class="section level2" number="13.2">
-<h2><span class="header-section-number">13.2</span> Building the app</h2>
+<div id="building-the-app-1" class="section level2" number="14.2">
+<h2><span class="header-section-number">14.2</span> Building the app</h2>
 <p>Now that we have the function, we are ready to build the GUI around it. Let’s remind ourselves of the app layout.</p>
 <p><img src="shiny_lab_assets/nametagger_preview.png" /></p>
-<div id="ui-1" class="section level3" number="13.2.1">
-<h3><span class="header-section-number">13.2.1</span> UI</h3>
+<div id="ui-2" class="section level3" number="14.2.1">
+<h3><span class="header-section-number">14.2.1</span> UI</h3>
 <p>We want a three-column layout with a title panel on the top. The input widgets go on the left and the preview figure in the middle and the optional settings on the right. We can start by building up the structure using row and column functions.</p>
 <pre class="r"><code>shinyApp(
 ui=fluidPage(
@@ -2415,7 +2515,7 @@ ui=fluidPage(
 ),
 server=function(input,output) {}
 )</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-57-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-64-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>This code displays a blank page with the title. But, there is quite a bit going on here. We started with a responsive <code>fluidPage</code> container. We added a row and a column to hold everything. This column has the full width of 12. We added the h1 heading. Then we added a new row which contains 3 columns of widths 3,6 and 3 adding up to 12. The first column will hold the standard input widgets, second column will contain the preview plot and the last column is a hidden conditional UI which will hold the optional settings. Conditional UI defined using <code>uiOutput()</code> is hidden by default and is displayed only if a condition is true.</p>
 <p>Next, we will populate the columns with widgets.</p>
 <pre class="r"><code>shinyApp(
@@ -2490,8 +2590,8 @@ server=function(input,output) {}
 )</code></pre>
 <p><img src="shiny_lab_assets/nametagger-2.png" /></p>
 </div>
-<div id="server-1" class="section level3" number="13.2.2">
-<h3><span class="header-section-number">13.2.2</span> Server</h3>
+<div id="server-2" class="section level3" number="14.2.2">
+<h3><span class="header-section-number">14.2.2</span> Server</h3>
 <p>Now let’s plan a bit on how to organise the server code. We can break it up into 8 blocks.</p>
 <ol style="list-style-type: decimal">
 <li>Conditional UI for input</li>
@@ -2905,14 +3005,13 @@ shinyApp(
   }
 )</code></pre>
 <p><img src="shiny_lab_assets/nametagger_preview.png" /></p>
-<p>For a variation of this app with left and right logos and custom fonts, click <a href="https://github.com/royfrancis/shiny-nametagger">here</a>.</p>
-<p>Hopefully, this has not been too overwhelming. Shiny app code may look like a jungle on the first look, but it is easier to understand what is happening by breaking it apart into smaller chunks and creating a flow diagram of how functions are connected. It is crucial to plan out the structure of your app well in advanced as it is easy to get lost and confused. Remember to name functions and variables sensibly. Use text output widgets and/or print statements in the code to keep track of internal variable values during run-time. Go forth and build awesome apps!</p>
+<p>Hopefully, this has not been too overwhelming. Shiny app code may look overcomplicated on the first look, but it is easier to understand what is happening by breaking it apart into smaller chunks and understanding how the various components are connected. It is crucial to plan out the structure of your app well in advanced as it is easy to get confused. Remember to name functions and variables sensibly. Use text output widgets and/or print statements in the code to keep track of internal variable values during run-time. Go forth and build awesome apps!</p>
 <!-- --------------------- Do not edit this and below ---------------------- -->
 </div>
 </div>
 </div>
-<div id="session-info" class="section level1" number="14">
-<h1><span class="header-section-number">14</span> Session info</h1>
+<div id="session-info" class="section level1" number="15">
+<h1><span class="header-section-number">15</span> Session info</h1>
 <pre><code>## R version 4.1.0 (2021-05-18)
 ## Platform: x86_64-conda-linux-gnu (64-bit)
 ## Running under: Ubuntu 20.04.4 LTS
@@ -2921,37 +3020,80 @@ shinyApp(
 ## BLAS/LAPACK: /home/roy/miniconda3/envs/r-4.1/lib/libopenblasp-r0.3.15.so
 ## 
 ## locale:
-##  [1] LC_CTYPE=en_GB.UTF-8       LC_NUMERIC=C              
-##  [3] LC_TIME=en_GB.UTF-8        LC_COLLATE=en_GB.UTF-8    
-##  [5] LC_MONETARY=en_GB.UTF-8    LC_MESSAGES=en_GB.UTF-8   
-##  [7] LC_PAPER=en_GB.UTF-8       LC_NAME=C                 
-##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-## [11] LC_MEASUREMENT=en_GB.UTF-8 LC_IDENTIFICATION=C       
+##  [1] LC_CTYPE=en_GB.UTF-8       LC_NUMERIC=C               LC_TIME=en_GB.UTF-8       
+##  [4] LC_COLLATE=en_GB.UTF-8     LC_MONETARY=en_GB.UTF-8    LC_MESSAGES=en_GB.UTF-8   
+##  [7] LC_PAPER=en_GB.UTF-8       LC_NAME=C                  LC_ADDRESS=C              
+## [10] LC_TELEPHONE=C             LC_MEASUREMENT=en_GB.UTF-8 LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] shinythemes_1.2.0  RNASeqPower_1.32.0 ggplot2_3.3.5      shiny_1.7.1       
-## [5] fontawesome_0.2.2  captioner_2.2.3    bookdown_0.25      knitr_1.38        
+##  [1] shinythemes_1.2.0    RNASeqPower_1.32.0   shiny_1.7.1          fontawesome_0.2.2   
+##  [5] captioner_2.2.3      ggiraph_0.8.2        plotly_4.10.0        kableExtra_1.3.4    
+##  [9] bookdown_0.25        knitr_1.38           magrittr_2.0.3       forcats_0.5.1       
+## [13] readr_2.1.2          tibble_3.1.6         tidyverse_1.3.1      ggnewscale_0.4.7    
+## [17] ggpointdensity_0.1.0 pixture_0.0.2.2000   patchwork_1.1.1      ggplot2_3.3.5       
+## [21] stringr_1.4.0        tidyr_1.2.0          dplyr_1.0.8          SeuratObject_4.0.4  
+## [25] Seurat_4.1.0         purrr_0.3.4          writexl_1.4.0        readxl_1.4.0        
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] tidyselect_1.1.2 xfun_0.30        bslib_0.3.1      purrr_0.3.4     
-##  [5] colorspace_2.0-3 vctrs_0.4.0      generics_0.1.2   htmltools_0.5.2 
-##  [9] yaml_2.3.5       utf8_1.2.2       rlang_1.0.2      jquerylib_0.1.4 
-## [13] later_1.3.0      pillar_1.7.0     glue_1.6.2       withr_2.5.0     
-## [17] DBI_1.1.2        lifecycle_1.0.1  stringr_1.4.0    munsell_0.5.0   
-## [21] gtable_0.3.0     evaluate_0.15    callr_3.7.0      fastmap_1.1.0   
-## [25] Cairo_1.5-15     httpuv_1.6.5     ps_1.6.0         fansi_1.0.3     
-## [29] highr_0.9        Rcpp_1.0.8.3     xtable_1.8-4     promises_1.2.0.1
-## [33] scales_1.1.1     cachem_1.0.6     webshot_0.5.2    jsonlite_1.8.0  
-## [37] farver_2.1.0     mime_0.12        digest_0.6.29    stringi_1.7.6   
-## [41] processx_3.5.3   dplyr_1.0.8      grid_4.1.0       cli_3.2.0       
-## [45] tools_4.1.0      magrittr_2.0.3   sass_0.4.1       tibble_3.1.6    
-## [49] crayon_1.5.1     pkgconfig_2.0.3  ellipsis_0.3.2   assertthat_0.2.1
-## [53] rmarkdown_2.13   R6_2.5.1         compiler_4.1.0</code></pre>
+##   [1] utf8_1.2.2                  reticulate_1.24             tidyselect_1.1.2           
+##   [4] htmlwidgets_1.5.4           grid_4.1.0                  Rtsne_0.15                 
+##   [7] munsell_0.5.0               codetools_0.2-18            ragg_1.2.2                 
+##  [10] ica_1.0-2                   future_1.24.0               miniUI_0.1.1.1             
+##  [13] withr_2.5.0                 spatstat.random_2.2-0       colorspace_2.0-3           
+##  [16] Biobase_2.54.0              highr_0.9                   uuid_1.0-4                 
+##  [19] rstudioapi_0.13             xaringan_0.23               stats4_4.1.0               
+##  [22] SingleCellExperiment_1.16.0 ROCR_1.0-11                 tensor_1.5                 
+##  [25] TTR_0.24.3                  listenv_0.8.0               MatrixGenerics_1.6.0       
+##  [28] labeling_0.4.2              GenomeInfoDbData_1.2.7      polyclip_1.10-0            
+##  [31] farver_2.1.0                pheatmap_1.0.12             parallelly_1.30.0          
+##  [34] vctrs_0.4.0                 generics_0.1.2              xfun_0.30                  
+##  [37] rlist_0.4.6.2               R6_2.5.1                    GenomeInfoDb_1.30.1        
+##  [40] nuclon_0.0.1                cachem_1.0.6                bitops_1.0-7               
+##  [43] spatstat.utils_2.3-0        DelayedArray_0.20.0         assertthat_0.2.1           
+##  [46] promises_1.2.0.1            scales_1.1.1                gtable_0.3.0               
+##  [49] Cairo_1.5-15                globals_0.14.0              processx_3.5.3             
+##  [52] goftest_1.2-3               rlang_1.0.2                 systemfonts_1.0.4          
+##  [55] splines_4.1.0               lazyeval_0.2.2              spatstat.geom_2.4-0        
+##  [58] broom_0.7.12                yaml_2.3.5                  reshape2_1.4.4             
+##  [61] abind_1.4-5                 modelr_0.1.8                crosstalk_1.2.0.9000       
+##  [64] backports_1.4.1             httpuv_1.6.5                quantmod_0.4.18            
+##  [67] tools_4.1.0                 ellipsis_0.3.2              spatstat.core_2.4-2        
+##  [70] jquerylib_0.1.4             RColorBrewer_1.1-3          BiocGenerics_0.40.0        
+##  [73] ggridges_0.5.3              Rcpp_1.0.8.3                plyr_1.8.7                 
+##  [76] zlibbioc_1.40.0             RCurl_1.98-1.6              ps_1.6.0                   
+##  [79] rpart_4.1.16                dbscan_1.1-10               deldir_1.0-6               
+##  [82] pbapply_1.5-0               cowplot_1.1.1               S4Vectors_0.32.3           
+##  [85] zoo_1.8-9                   SummarizedExperiment_1.25.2 haven_2.4.3                
+##  [88] ggrepel_0.9.1               cluster_2.1.3               fs_1.5.2                   
+##  [91] data.table_1.14.2           scattermore_0.8             colourpicker_1.1.1         
+##  [94] lmtest_0.9-40               reprex_2.0.1                RANN_2.6.1                 
+##  [97] fitdistrplus_1.1-8          matrixStats_0.61.0          randomcoloR_1.1.0.1        
+## [100] hms_1.1.1                   mime_0.12                   evaluate_0.15              
+## [103] xtable_1.8-4                IRanges_2.28.0              gridExtra_2.3              
+## [106] compiler_4.1.0              KernSmooth_2.23-20          V8_4.1.0                   
+## [109] crayon_1.5.1                shadowtext_0.1.1            htmltools_0.5.2            
+## [112] mgcv_1.8-40                 later_1.3.0                 tzdb_0.3.0                 
+## [115] lubridate_1.8.0             DBI_1.1.2                   dbplyr_2.1.1               
+## [118] MASS_7.3-56                 highcharter_0.9.4           Matrix_1.4-1               
+## [121] cli_3.2.0                   parallel_4.1.0              igraph_1.3.0               
+## [124] GenomicRanges_1.46.1        pkgconfig_2.0.3             spatstat.sparse_2.1-0      
+## [127] xml2_1.3.3                  svglite_2.1.0               bslib_0.3.1                
+## [130] webshot_0.5.2               XVector_0.34.0              rvest_1.0.2                
+## [133] callr_3.7.0                 digest_0.6.29               sctransform_0.3.3          
+## [136] RcppAnnoy_0.0.19            spatstat.data_2.1-4         rmarkdown_2.13             
+## [139] cellranger_1.1.0            leiden_0.3.9                uwot_0.1.11                
+## [142] curl_4.3.2                  lifecycle_1.0.1             nlme_3.1-157               
+## [145] jsonlite_1.8.0              viridisLite_0.4.0           limma_3.50.1               
+## [148] fansi_1.0.3                 pillar_1.7.0                lattice_0.20-45            
+## [151] fastmap_1.1.0               httr_1.4.2                  survival_3.3-1             
+## [154] glue_1.6.2                  xts_0.12.1                  png_0.1-7                  
+## [157] sass_0.4.1                  stringi_1.7.6               textshaping_0.3.6          
+## [160] irlba_2.3.5                 future.apply_1.8.1</code></pre>
 <p style="text-align: left; font-size: small;">
-Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 19-Apr-2022 at <i class="fa fa-clock-o" aria-hidden="true"></i> 12:45:01.
+Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 15-Jun-2022 at <i class="fa fa-clock-o" aria-hidden="true"></i> 23:35:04.
 </p>
 <hr/>
 <div style="padding-bottom: 1.5em">
