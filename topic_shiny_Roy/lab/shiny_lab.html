@@ -306,7 +306,7 @@ ui &lt;- fluidPage(
 
 server &lt;- function(input,output){}
 shinyApp(ui=ui,server=server)</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 </div>
 <div id="ui-widgets-input" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> UI • Widgets • Input</h1>
@@ -333,7 +333,7 @@ ui=fluidPage(
 ),
 server=function(input,output){},
 options=list(height=900))</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 </div>
 <div id="ui-widgets-outputs" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> UI • Widgets • Outputs</h1>
@@ -358,7 +358,7 @@ options=list(height=900))</code></pre>
     })
 },
 options=list(height=700))</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>In this example, we have a text input box which takes user text and outputs it in three different variations. The first output is html output <code>htmlOutput()</code>. Since the default text is html content, the output is red coloured text. A normal non-html text would just look like normal text. The second output is normal text output <code>textOutput()</code>. The third variation is <code>verbatimTextOutput()</code> which displays text in monospaced code style. This example further shows table output and plot output.</p>
 </div>
 <div id="dynamic-ui" class="section level1" number="4">
@@ -383,7 +383,7 @@ server=function(input,output) {
   output$plot_output &lt;- renderPlot({hist(getdata()[, 1])})
   output$table_output &lt;- renderTable({head(getdata())})
 })</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>Here, conditional UI is used to selectively display an output widget (plot). Similarly, this idea can be used to selectively display any input or output widget.</p>
 </div>
 <div id="updating-widgets" class="section level1" number="5">
@@ -410,7 +410,7 @@ server=function(input,output,session) {
   })
 },
 options=list(height=600))</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>In this example, the user selects a dataset and a column from the selected dataset to be plotted as a histogram. The column name selection widget must automatically update it’s choices depending on the selected dataset. This achieved using <code>observe()</code> where the <code>updateSelectInput()</code> function updates the selection choices. Notice that a third option <code>session</code> is in use in the server function. ie; <code>server=function(input,output,session)</code>. And <code>session</code> is also the first argument in <code>updateSelectInput()</code>. Session keeps track of values in the current session.</p>
 <p>When changing the datasets, we can see that there is a short red error message. This is because, after we have selected a new dataset, the old column name from the previous dataset is searched for in the new dataset. This occurs for a short time and causes the error. This can be fixed using careful error handling. We will discuss this in another section.</p>
 </div>
@@ -428,7 +428,7 @@ options=list(height=600))</code></pre>
     })
   }
 )</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>The plot changes as soon as the input text field is changed. And as we type in text, the image is continuously being redrawn. This can be computationally intensive depending on the situation. A better solution would be to write the text completely without any reactivity and when done, let the app know that you are ready to redraw.</p>
 <p>We can add an action button such that the plot is changed only when the button is clicked.</p>
 <pre class="r"><code>shinyApp(
@@ -444,7 +444,7 @@ options=list(height=600))</code></pre>
     })
   }
 )</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>Now, changes to any of the input fields do not initiate the plot function. The plot is redrawn only when the action button is clicked. When the action button is click, the current values in the input fields are collected and used in the plotting function.</p>
 </div>
 <div id="error-validation" class="section level1" number="7">
@@ -462,7 +462,7 @@ server=function(input, output) {
   output$table_output &lt;- renderTable({head(getdata())})
 },
 options=list(height=&quot;350px&quot;))</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-22-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>In this example, we have a list of datasets to select which is then printed as a table. The first and default option is an empty string which cannot be printed as a table and therefore returns an error.</p>
 <p>We can add an extra line to the above app so that the selected string is validated before running downstream commands in the <code>getdata({})</code> reactive function. The function <code>validate()</code> is used to validate inputs. <code>validate()</code> can be used with <code>need()</code> function or a custom function.</p>
 <p>Below we use the <code>need()</code> function to check the input. It checks if the input is NULL, NA or an empty string and returns a specified message if TRUE. <code>try()</code> is optional and is used to catch any other unexpected errors.</p>
@@ -483,7 +483,7 @@ server=function(input, output) {
   output$table_output &lt;- renderTable({head(getdata())})
 },
 options=list(height=&quot;350px&quot;))</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>Now we see an informative grey message (less scary) asking the user to select a dataset.</p>
 <p>We can use a custom function instead of using <code>need()</code>. Below, we have created a function called <code>valfun()</code> that checks if the input is NULL, NA or an empty string. This is then used in <code>validate()</code>.</p>
 <pre class="r"><code>valfn &lt;- function(x) if(is.null(x) | is.na(x) | x==&quot;&quot;) return(&quot;Input data is incorrect.&quot;)
@@ -505,7 +505,7 @@ server=function(input, output) {
   output$table_output &lt;- renderTable({head(getdata())})
 },
 options=list(height=&quot;350px&quot;))</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>The last option is to simple hide the error. This may be used in situations where there is no input needed from the user. We use <code>req()</code> to check if the input is valid, else stop execution there till the condition becomes true.</p>
 <pre class="r"><code>shinyApp(
 ui=fluidPage(
@@ -524,7 +524,7 @@ server=function(input, output) {
   output$table_output &lt;- renderTable({head(getdata())})
 },
 options=list(height=&quot;350px&quot;))</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-25-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>As expected there is no error or any message at all. This is not always the best to use this option as we need the user to do something. An informative message may be better than nothing.</p>
 <p>Finally, instead of printing messages about the error or hiding the error, we can try to resolve the errors from the previous section in a more robust manner. <code>shiny::req(input$header_input)</code> is added to ensure that a valid column name string is available before running any of the <code>renderPlot()</code> commands. Second, we add <code>validate(need(input$header_input %in% colnames(getdata()),message="Incorrect column name."))</code> to ensure that the column name is actually a column in the currently selected dataset.</p>
 <pre class="r"><code>shinyApp(
@@ -548,7 +548,7 @@ server=function(input,output,session) {
   })
 },
 options=list(height=600))</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-26-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>Now, we do not see any error messages. Note that shiny apps on shinyapps.io do not display the complete regular R error message for security reasons. It returns a generic error message in the app. One needs to inspect the error logs to view the actual error message.</p>
 </div>
 <div id="download-data" class="section level1" number="8">
@@ -578,7 +578,7 @@ options=list(height=600))</code></pre>
   },
   options=list(height=&quot;200px&quot;)
 )</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-27-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 </div>
 <div id="download-plot" class="section level1" number="9">
 <h1><span class="header-section-number">9</span> Download • Plot</h1>
@@ -611,7 +611,7 @@ options=list(height=600))</code></pre>
   },
   options=list(height=&quot;500px&quot;)
 )</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-28-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 </div>
 <div id="shiny-in-rmarkdown" class="section level1" number="10">
 <h1><span class="header-section-number">10</span> Shiny in Rmarkdown</h1>
@@ -659,7 +659,7 @@ hist(iris$Sepal.Length,breaks=input$in_breaks)
 <li>Passing variables into ggplot through non standard evaluation</li>
 </ul>
 <p>Below is a preview of the complete app.</p>
-<p><img src="shiny_lab_assets/data-explorer.png" /></p>
+<p><img src="shiny_lab_files/figure-html/data-explorer-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <div id="ui" class="section level2" number="11.1">
 <h2><span class="header-section-number">11.1</span> UI</h2>
 <p>We start with the standard shiny app template.</p>
@@ -682,7 +682,7 @@ shinyApp(
   ),
   server=function(input,output){}
 )</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-19-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-31-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
 <p>And to the sidebar, we will add 3 input widgets corresponding to x axis variable, y axis variable and colour variable. These will be dropdown type (<code>selectInput()</code>) and choices will be column names of the iris dataframe. And we add the output widget (<code>plotOutput()</code>) in the main panel.</p>
 <pre class="r"><code>library(shiny)
 
@@ -702,7 +702,7 @@ shinyApp(
   ),
   server=function(input,output){}
 )</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-20-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-32-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 </div>
 <div id="server" class="section level2" number="11.2">
 <h2><span class="header-section-number">11.2</span> Server</h2>
@@ -743,9 +743,10 @@ shinyApp(
       geom_point()
   })
       
-  }
+  },
+  options=list(height=&quot;500px&quot;)
 )</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-24-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/data-explorer-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>This was a quick and easy start to shiny apps. You can expand this app to other datasets and map more variables to ggplot etc. Can you add the functionality to <a href="https://shiny.rstudio.com/gallery/file-download.html">download the plots</a>? Or perhaps to <a href="https://shiny.rstudio.com/articles/upload.html">upload a csv file</a> and plot from that file?</p>
 </div>
 </div>
@@ -801,17 +802,18 @@ shinyApp(
     )
   ),
   server=function(input,output){
-  }
+  },
+  options=list(height=&quot;500px&quot;)
 )</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-27-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-38-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
 <p>The app should visually look close to our final end result. Check that the widgets work.</p>
 <p>The next step is to wire up the inputs to the <code>rnapower()</code> function and return the result to the output text field.</p>
 <p><i class='fa fa-clipboard-list'></i> Try to see if you can get this to work.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061523446084" aria-expanded="false" aria-controls="acc2022061523446084">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061712280221" aria-expanded="false" aria-controls="acc2022061712280221">
 </button>
 </p>
-<div id="acc2022061523446084" class="collapse">
+<div id="acc2022061712280221" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>library(shiny)
 library(RNASeqPower)
@@ -840,7 +842,7 @@ shinyApp(
     })
   }
 )</code></pre>
-<img src="shiny_lab_files/figure-html/unnamed-chunk-28-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
+<img src="shiny_lab_files/figure-html/unnamed-chunk-39-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
 </div>
 </div>
 <p>Verify that the inputs and outputs work. One can stop at this point if you only need to compute number of samples. But, we will continue to enchance the app to be able to compute any of the other parameters.</p>
@@ -850,10 +852,10 @@ shinyApp(
 <p>The function can estimate not only <strong>sample size</strong>, but <strong>cv</strong>, <strong>effect</strong>, <strong>alpha</strong> or <strong>power</strong>. We should let the user choose what they want to compute. So, we need a selection input widget to enable selection. And the input fields must change depending on the user’s selected choice. The <code>rnapower()</code> function must also use a different set of parameters depending on the selection choice. For conditional logic, you can chain <code>if else</code> statements or use <code>switch()</code>.</p>
 <p><i class='fa fa-clipboard-list'></i> Try to add a selection based conditional UI. <code>?selectInput()</code>, <code>?uiOutput()</code>, <code>?renderUI()</code>.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061523462732" aria-expanded="false" aria-controls="acc2022061523462732">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061712308967" aria-expanded="false" aria-controls="acc2022061712308967">
 </button>
 </p>
-<div id="acc2022061523462732" class="collapse">
+<div id="acc2022061712308967" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>library(shiny)
 library(RNASeqPower)
@@ -936,7 +938,7 @@ shinyApp(
     })
   }
 )</code></pre>
-<img src="shiny_lab_files/figure-html/unnamed-chunk-29-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
+<img src="shiny_lab_files/figure-html/unnamed-chunk-40-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
 </div>
 </div>
 <p>Let’s summarise what we have done. In the <strong>ui</strong> part, instead of directly including the <code>rnapower()</code> input variable in the <code>sidebarPanel()</code>, we have added a selection input and a conditional UI output. The content inside the output UI depends on the selection made by the user.</p>
@@ -974,10 +976,10 @@ as.numeric(unlist(strsplit(gsub(&quot; &quot;,&quot;&quot;,x),&quot;,&quot;)))</
 <p>Blank space are removed, the string is split by comma into a list of strings, the list is converted to a vector and the strings are coerced to numbers.</p>
 <p><i class='fa fa-clipboard-list'></i> Update the app such that all numeric inputs are replaced by text inputs and the server logic is able to parse the strings into numbers.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061523481380" aria-expanded="false" aria-controls="acc2022061523481380">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061712322342" aria-expanded="false" aria-controls="acc2022061712322342">
 </button>
 </p>
-<div id="acc2022061523481380" class="collapse">
+<div id="acc2022061712322342" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>library(shiny)
 library(RNASeqPower)
@@ -1085,7 +1087,7 @@ shinyApp(
     })
   }
 )</code></pre>
-<img src="shiny_lab_files/figure-html/unnamed-chunk-36-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
+<img src="shiny_lab_files/figure-html/unnamed-chunk-47-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
 </div>
 </div>
 <p>To summarise our changes, in the ui part, all <code>numericInput()</code> has been changed to <code>textInput()</code> and in the process we lost the number specific input limits such as min, max, step size etc. In the server part, incoming strings are parsed and split into a vector of numbers, saved to a variable and passed to the <code>rnapower()</code> function. Ensure that the app works without errors and we can progress further.</p>
@@ -1095,10 +1097,10 @@ shinyApp(
 <p>It is good practice to check whether the current code can be cleaned-up/polished or reduced. In this example, <strong>depth</strong> is always needed and could be moved out of the conditional block. Only one variable changes based on user input, but all 5 variables are repeated in each conditional block. There is room for improvement there.</p>
 <p><i class='fa fa-clipboard-list'></i> Try to figure out how the code can be reorganised and simplified.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061523500297" aria-expanded="false" aria-controls="acc2022061523500297">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061712345380" aria-expanded="false" aria-controls="acc2022061712345380">
 </button>
 </p>
-<div id="acc2022061523500297" class="collapse">
+<div id="acc2022061712345380" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>library(shiny)
 library(RNASeqPower)
@@ -1148,7 +1150,7 @@ shinyApp(
     })
   }
 )</code></pre>
-<img src="shiny_lab_files/figure-html/unnamed-chunk-37-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
+<img src="shiny_lab_files/figure-html/unnamed-chunk-48-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
 </div>
 </div>
 <p>UI and server blocks have been considerably reduced in length by removing redundant code.</p>
@@ -1169,10 +1171,10 @@ shinyApp(
 </ul>
 <p><i class='fa fa-clipboard-list'></i> Try to figure out how to add input validation. <code>?shiny::validate()</code>.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061523520133" aria-expanded="false" aria-controls="acc2022061523520133">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061712369206" aria-expanded="false" aria-controls="acc2022061712369206">
 </button>
 </p>
-<div id="acc2022061523520133" class="collapse">
+<div id="acc2022061712369206" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>library(shiny)
 library(RNASeqPower)
@@ -1248,7 +1250,7 @@ shinyApp(
     })
   }
 )</code></pre>
-<img src="shiny_lab_files/figure-html/unnamed-chunk-38-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
+<img src="shiny_lab_files/figure-html/unnamed-chunk-49-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
 </div>
 </div>
 <p>We have added <code>validate()</code> to all incoming text to ensure that user input is within reasonable limits.</p>
@@ -1259,10 +1261,10 @@ shinyApp(
 <p>This part is purely cosmetic. We can add a custom theme from R package <code>shinythemes</code> to make our app stand out from the default. The theme is added as an argument to <code>fluidPage()</code> like so <code>fluidPage(theme = shinytheme("spacelab"))</code>.</p>
 <p><i class='fa fa-clipboard-list'></i> Try changing the theme and pick one that you like. Check out <code>?shinythemes</code>. The themes can be visualised on <a href="https://bootswatch.com/">Bootswatch</a>.</p>
 <p>
-<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061523545602" aria-expanded="false" aria-controls="acc2022061523545602">
+<button class="btn btn-sm btn-collapse btn-primary collapsed" type="button" data-toggle="collapse" data-target="#acc2022061712380211" aria-expanded="false" aria-controls="acc2022061712380211">
 </button>
 </p>
-<div id="acc2022061523545602" class="collapse">
+<div id="acc2022061712380211" class="collapse">
 <div class="card card-body">
 <pre class="r"><code>library(shiny)
 library(shinythemes)
@@ -1340,7 +1342,7 @@ shinyApp(
     })
   }
 )</code></pre>
-<img src="shiny_lab_files/figure-html/unnamed-chunk-39-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
+<img src="shiny_lab_files/figure-html/unnamed-chunk-50-1.png" width="768" style="display: block; margin: auto auto auto 0;" />
 </div>
 </div>
 <p>This is the completed app.</p>
@@ -1421,7 +1423,7 @@ head(dfr)</code></pre>
       geom_text(aes(label=ddate))+
       facet_grid(~month,scales=&quot;free&quot;,space=&quot;free&quot;)+
       theme_bw()</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-45-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-56-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>We can add more activities to the track column. Or in other words, I refer to it as adding more tracks.</p>
 <pre class="r"><code>dfr$track[dfr$date&gt;=as.Date(&quot;2022-06-13&quot;) &amp; dfr$date&lt;=as.Date(&quot;2022-06-17&quot;)] &lt;- &quot;RaukR&quot;
 dfr$track[dfr$date==as.Date(&quot;2022-06-24&quot;)] &lt;- &quot;Midsummer&quot;
@@ -1431,7 +1433,7 @@ ggplot(dfr,aes(x=week,y=day))+
       geom_text(aes(label=ddate))+
       facet_grid(~month,scales=&quot;free&quot;,space=&quot;free&quot;)+
       theme_bw()</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-46-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-57-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>Now, we can customise the plot as you prefer. I am modifying the axes labels, changing colours and removing most of the plot elements.</p>
 <pre class="r"><code>all_cols &lt;- c(&quot;#bebada&quot;,&quot;#fb8072&quot;,&quot;#80b1d3&quot;,&quot;#fdb462&quot;)
   
@@ -1450,7 +1452,7 @@ ggplot(dfr,aes(x=week,y=day))+
             strip.background=element_blank(),
             legend.key.size=unit(0.3,&quot;cm&quot;),
             legend.spacing.x=unit(0.2,&quot;cm&quot;))</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-47-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-58-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>Our plot is now ready and we have the code to create this plot. The next step is to build a shiny app around it.</p>
 </div>
 <div id="building-the-app" class="section level2" number="13.2">
@@ -1480,19 +1482,20 @@ ui=fluidPage(
     sidebarPanel(
       h3(&quot;Duration&quot;),
       fluidRow(
-          column(6,style=list(&quot;padding-right: 5px;&quot;),
+          column(6,
               dateInput(&quot;in_duration_date_start&quot;,&quot;From&quot;,value=format(Sys.time(),&quot;%Y-%m-%d&quot;))
           ),
-          column(6,style=list(&quot;padding-left: 5px;&quot;),
+          column(6,
               dateInput(&quot;in_duration_date_end&quot;,&quot;To&quot;,value=format(as.Date(Sys.time())+30,&quot;%Y-%m-%d&quot;))
           )
       )
     ),
     mainPanel())
   ),
-server=function(input,output){}
+server=function(input,output){},
+  options=list(height=&quot;400px&quot;)
 )</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-49-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-60-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
 <p>We have defined a part of the side bar panel with a title <strong>Duration</strong>. <code>fluidRow()</code> is an html tag used to create rows. Above, in the side bar panel, a row is defined and two columns are defined inside. Each column is filled with date input widgets for start and end dates. We use the columns here to place date input widgets side by side. To place widgets one below the other, the columns can simply be removed. The default value for the start date is set to current date and the end date is set to current date + 30 days.</p>
 <p>Now we add more sections to the side bar panel, namely track input variables and plot settings variables. We also added custom colours. Custom colours can be selected using the input widget <code>colourpicker::colourInput()</code>.</p>
 <pre class="r"><code>cols &lt;- toupper(c(
@@ -1508,50 +1511,50 @@ ui=fluidPage(
     sidebarPanel(
       h3(&quot;Duration&quot;),
       fluidRow(
-          column(6,style=list(&quot;padding-right: 5px;&quot;),
+          column(6,
               dateInput(&quot;in_duration_date_start&quot;,&quot;From&quot;,value=format(Sys.time(),&quot;%Y-%m-%d&quot;))
           ),
-          column(6,style=list(&quot;padding-left: 5px;&quot;),
+          column(6,
               dateInput(&quot;in_duration_date_end&quot;,&quot;To&quot;,value=format(as.Date(Sys.time())+30,&quot;%Y-%m-%d&quot;))
           )
       ),
       h3(&quot;Tracks&quot;),
       fluidRow(
-          column(3,style=list(&quot;padding-right: 3px;&quot;),
+          column(3,
               textInput(&quot;in_track_name_1&quot;,label=&quot;Name&quot;,value=&quot;Vacation&quot;,placeholder=&quot;Vacation&quot;)
           ),
-          column(3,style=list(&quot;padding-right: 3px; padding-left: 3px;&quot;),
+          column(3,
               dateInput(&quot;in_track_date_start_1&quot;,label=&quot;From&quot;,value=format(Sys.time(),&quot;%Y-%m-%d&quot;))
           ),
-          column(3,style=list(&quot;padding-right: 3px; padding-left: 3px;&quot;),
+          column(3,
               dateInput(&quot;in_track_date_end_1&quot;,label=&quot;To&quot;,value=format(as.Date(Sys.time())+30,&quot;%Y-%m-%d&quot;))
           ),
-          column(3,style=list(&quot;padding-left: 3px;&quot;),
+          column(3,
               colourpicker::colourInput(&quot;in_track_colour_1&quot;,label=&quot;Colour&quot;,
                                         palette=&quot;limited&quot;,allowedCols=cols,value=cols[1])
           )
       ),
       fluidRow(
-          column(3,style=list(&quot;padding-right: 3px;&quot;),
+          column(3,
               textInput(&quot;in_track_name_2&quot;,label=&quot;Name&quot;,value=&quot;Offline&quot;,placeholder=&quot;Offline&quot;)
           ),
-          column(3,style=list(&quot;padding-right: 3px; padding-left: 3px;&quot;),
+          column(3,
               dateInput(&quot;in_track_date_start_2&quot;,label=&quot;From&quot;,value=format(Sys.time(),&quot;%Y-%m-%d&quot;))
           ),
-          column(3,style=list(&quot;padding-right: 3px; padding-left: 3px;&quot;),
+          column(3,
               dateInput(&quot;in_track_date_end_2&quot;,label=&quot;To&quot;,value=format(as.Date(Sys.time())+30,&quot;%Y-%m-%d&quot;))
           ),
-          column(3,style=list(&quot;padding-left: 3px;&quot;),
+          column(3,
               colourpicker::colourInput(&quot;in_track_colour_2&quot;,label=&quot;Colour&quot;,
                                         palette=&quot;limited&quot;,allowedCols=cols,value=cols[2])
           )
       ),
       fluidRow(
-          column(6,style=list(&quot;padding-right: 5px;&quot;),
+          column(6,
               colourpicker::colourInput(&quot;in_track_colour_available&quot;,label=&quot;Track colour (Available)&quot;,
                                         palette=&quot;limited&quot;,allowedCols=cols,value=cols[length(cols)-1])
           ),
-          column(6,style=list(&quot;padding-left: 5px;&quot;),
+          column(6,
               colourpicker::colourInput(&quot;in_track_colour_weekend&quot;,label=&quot;Track colour (Weekend)&quot;,
                                         palette=&quot;limited&quot;,allowedCols=cols,value=cols[length(cols)])
           )
@@ -1561,28 +1564,28 @@ ui=fluidPage(
       selectInput(&quot;in_legend_position&quot;,label=&quot;Legend position&quot;,
                   choices=c(&quot;top&quot;,&quot;right&quot;,&quot;left&quot;,&quot;bottom&quot;),selected=&quot;right&quot;,multiple=F),
       fluidRow(
-          column(6,style=list(&quot;padding-right: 5px;&quot;),
+          column(6,
               selectInput(&quot;in_legend_justification&quot;,label=&quot;Legend justification&quot;,
                           choices=c(&quot;left&quot;,&quot;right&quot;),selected=&quot;right&quot;,multiple=F)
           ),
-          column(6,style=list(&quot;padding-left: 5px;&quot;),
+          column(6,
               selectInput(&quot;in_legend_direction&quot;,label=&quot;Legend direction&quot;,
                           choices=c(&quot;vertical&quot;,&quot;horizontal&quot;),selected=&quot;vertical&quot;,multiple=F)
           )
       ),
       fluidRow(
-          column(6,style=list(&quot;padding-right: 5px;&quot;),
+          column(6,
               numericInput(&quot;in_themefontsize&quot;,label=&quot;Theme font size&quot;,value=8,step=0.5)
           ),
-          column(6,style=list(&quot;padding-left: 5px;&quot;),
+          column(6,
               numericInput(&quot;in_datefontsize&quot;,label=&quot;Date font size&quot;,value=2.5,step=0.1)
           )
       ),
       fluidRow(
-          column(6,style=list(&quot;padding-right: 5px;&quot;),
+          column(6,
               numericInput(&quot;in_monthfontsize&quot;,label=&quot;Month font size&quot;,value=8,step=0.5)
           ),
-          column(6,style=list(&quot;padding-left: 5px;&quot;),
+          column(6,
               numericInput(&quot;in_legendfontsize&quot;,label=&quot;Legend font size&quot;,value=5,step=0.5)
           )
       )
@@ -1593,25 +1596,25 @@ ui=fluidPage(
   ),
 server=function(input,output){}
 )</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-50-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-61-1.png" width="768" style="display: block; margin: auto auto auto 0;" /></p>
 <p><img src="shiny_lab_assets/calendar-2.png" /></p>
 <p>The track start and end dates are by default set to the same as that of duration start and end dates. We will adjust this later. Under the settings section, we have added a few useful plot variables to adjust sizes and spacing of plot elements. They are set to reasonable defaults. These variables will be passed on to the ggplot plotting function.</p>
 <p>We can end with column with the download options. Input fields are height, width, resolution and file format. Last we add a button for download.</p>
 <pre class="r"><code>h3(&quot;Download&quot;),
 helpText(&quot;Width is automatically calculated based on the number of weeks. File type is only applicable to download and does not change preview.&quot;),
 fluidRow(
-    column(6,style=list(&quot;padding-right: 5px;&quot;),
+    column(6,
         numericInput(&quot;in_height&quot;,&quot;Height (cm)&quot;,step=0.5,value=5.5)
     ),
-    column(6,style=list(&quot;padding-left: 5px;&quot;),
+    column(6,
         numericInput(&quot;in_width&quot;,&quot;Width (cm)&quot;,step=0.5,value=NA)
     )
 ),
 fluidRow(
-    column(6,style=list(&quot;padding-right: 5px;&quot;),
+    column(6,
         selectInput(&quot;in_res&quot;,&quot;Res/DPI&quot;,choices=c(&quot;200&quot;,&quot;300&quot;,&quot;400&quot;,&quot;500&quot;),selected=&quot;200&quot;)
     ),
-    column(6,style=list(&quot;padding-left: 5px;&quot;),
+    column(6,
         selectInput(&quot;in_format&quot;,&quot;File type&quot;,choices=c(&quot;png&quot;,&quot;tiff&quot;,&quot;jpeg&quot;,&quot;pdf&quot;),selected=&quot;png&quot;,multiple=FALSE,selectize=TRUE)
     )
 ),
@@ -1625,7 +1628,7 @@ helpText(&quot;2022 | RaukR&quot;)</code></pre>
   tags$br(),
   imageOutput(&quot;out_plot&quot;)
 )</code></pre>
-<p>This should now look like this.</p>
+<p>This should now look like this. Some additional syling has been added to divs.</p>
 <pre class="r"><code>## load colours
 cols &lt;- toupper(c(
   &quot;#bebada&quot;,&quot;#fb8072&quot;,&quot;#80b1d3&quot;,&quot;#fdb462&quot;,&quot;#b3de69&quot;,&quot;#fccde5&quot;,&quot;#FDBF6F&quot;,&quot;#A6CEE3&quot;,
@@ -2513,9 +2516,10 @@ ui=fluidPage(
   )
 )
 ),
-server=function(input,output) {}
+server=function(input,output) {},
+  options=list(height=&quot;400px&quot;)
 )</code></pre>
-<p><img src="shiny_lab_files/figure-html/unnamed-chunk-64-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="shiny_lab_files/figure-html/unnamed-chunk-75-1.png" width="672" style="display: block; margin: auto auto auto 0;" /></p>
 <p>This code displays a blank page with the title. But, there is quite a bit going on here. We started with a responsive <code>fluidPage</code> container. We added a row and a column to hold everything. This column has the full width of 12. We added the h1 heading. Then we added a new row which contains 3 columns of widths 3,6 and 3 adding up to 12. The first column will hold the standard input widgets, second column will contain the preview plot and the last column is a hidden conditional UI which will hold the optional settings. Conditional UI defined using <code>uiOutput()</code> is hidden by default and is displayed only if a condition is true.</p>
 <p>Next, we will populate the columns with widgets.</p>
 <pre class="r"><code>shinyApp(
@@ -3020,80 +3024,197 @@ shinyApp(
 ## BLAS/LAPACK: /home/roy/miniconda3/envs/r-4.1/lib/libopenblasp-r0.3.15.so
 ## 
 ## locale:
-##  [1] LC_CTYPE=en_GB.UTF-8       LC_NUMERIC=C               LC_TIME=en_GB.UTF-8       
-##  [4] LC_COLLATE=en_GB.UTF-8     LC_MONETARY=en_GB.UTF-8    LC_MESSAGES=en_GB.UTF-8   
-##  [7] LC_PAPER=en_GB.UTF-8       LC_NAME=C                  LC_ADDRESS=C              
-## [10] LC_TELEPHONE=C             LC_MEASUREMENT=en_GB.UTF-8 LC_IDENTIFICATION=C       
+##  [1] LC_CTYPE=en_GB.UTF-8      
+##  [2] LC_NUMERIC=C              
+##  [3] LC_TIME=en_GB.UTF-8       
+##  [4] LC_COLLATE=en_GB.UTF-8    
+##  [5] LC_MONETARY=en_GB.UTF-8   
+##  [6] LC_MESSAGES=en_GB.UTF-8   
+##  [7] LC_PAPER=en_GB.UTF-8      
+##  [8] LC_NAME=C                 
+##  [9] LC_ADDRESS=C              
+## [10] LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_GB.UTF-8
+## [12] LC_IDENTIFICATION=C       
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## [1] stats     graphics  grDevices utils    
+## [5] datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] shinythemes_1.2.0    RNASeqPower_1.32.0   shiny_1.7.1          fontawesome_0.2.2   
-##  [5] captioner_2.2.3      ggiraph_0.8.2        plotly_4.10.0        kableExtra_1.3.4    
-##  [9] bookdown_0.25        knitr_1.38           magrittr_2.0.3       forcats_0.5.1       
-## [13] readr_2.1.2          tibble_3.1.6         tidyverse_1.3.1      ggnewscale_0.4.7    
-## [17] ggpointdensity_0.1.0 pixture_0.0.2.2000   patchwork_1.1.1      ggplot2_3.3.5       
-## [21] stringr_1.4.0        tidyr_1.2.0          dplyr_1.0.8          SeuratObject_4.0.4  
-## [25] Seurat_4.1.0         purrr_0.3.4          writexl_1.4.0        readxl_1.4.0        
+##  [1] shinythemes_1.2.0  RNASeqPower_1.32.0
+##  [3] fontawesome_0.2.2  captioner_2.2.3   
+##  [5] gridExtra_2.3      kableExtra_1.3.4  
+##  [7] ggplot2_3.3.5      dplyr_1.0.8       
+##  [9] bookdown_0.25      knitr_1.38        
+## [11] shiny_1.7.1       
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] utf8_1.2.2                  reticulate_1.24             tidyselect_1.1.2           
-##   [4] htmlwidgets_1.5.4           grid_4.1.0                  Rtsne_0.15                 
-##   [7] munsell_0.5.0               codetools_0.2-18            ragg_1.2.2                 
-##  [10] ica_1.0-2                   future_1.24.0               miniUI_0.1.1.1             
-##  [13] withr_2.5.0                 spatstat.random_2.2-0       colorspace_2.0-3           
-##  [16] Biobase_2.54.0              highr_0.9                   uuid_1.0-4                 
-##  [19] rstudioapi_0.13             xaringan_0.23               stats4_4.1.0               
-##  [22] SingleCellExperiment_1.16.0 ROCR_1.0-11                 tensor_1.5                 
-##  [25] TTR_0.24.3                  listenv_0.8.0               MatrixGenerics_1.6.0       
-##  [28] labeling_0.4.2              GenomeInfoDbData_1.2.7      polyclip_1.10-0            
-##  [31] farver_2.1.0                pheatmap_1.0.12             parallelly_1.30.0          
-##  [34] vctrs_0.4.0                 generics_0.1.2              xfun_0.30                  
-##  [37] rlist_0.4.6.2               R6_2.5.1                    GenomeInfoDb_1.30.1        
-##  [40] nuclon_0.0.1                cachem_1.0.6                bitops_1.0-7               
-##  [43] spatstat.utils_2.3-0        DelayedArray_0.20.0         assertthat_0.2.1           
-##  [46] promises_1.2.0.1            scales_1.1.1                gtable_0.3.0               
-##  [49] Cairo_1.5-15                globals_0.14.0              processx_3.5.3             
-##  [52] goftest_1.2-3               rlang_1.0.2                 systemfonts_1.0.4          
-##  [55] splines_4.1.0               lazyeval_0.2.2              spatstat.geom_2.4-0        
-##  [58] broom_0.7.12                yaml_2.3.5                  reshape2_1.4.4             
-##  [61] abind_1.4-5                 modelr_0.1.8                crosstalk_1.2.0.9000       
-##  [64] backports_1.4.1             httpuv_1.6.5                quantmod_0.4.18            
-##  [67] tools_4.1.0                 ellipsis_0.3.2              spatstat.core_2.4-2        
-##  [70] jquerylib_0.1.4             RColorBrewer_1.1-3          BiocGenerics_0.40.0        
-##  [73] ggridges_0.5.3              Rcpp_1.0.8.3                plyr_1.8.7                 
-##  [76] zlibbioc_1.40.0             RCurl_1.98-1.6              ps_1.6.0                   
-##  [79] rpart_4.1.16                dbscan_1.1-10               deldir_1.0-6               
-##  [82] pbapply_1.5-0               cowplot_1.1.1               S4Vectors_0.32.3           
-##  [85] zoo_1.8-9                   SummarizedExperiment_1.25.2 haven_2.4.3                
-##  [88] ggrepel_0.9.1               cluster_2.1.3               fs_1.5.2                   
-##  [91] data.table_1.14.2           scattermore_0.8             colourpicker_1.1.1         
-##  [94] lmtest_0.9-40               reprex_2.0.1                RANN_2.6.1                 
-##  [97] fitdistrplus_1.1-8          matrixStats_0.61.0          randomcoloR_1.1.0.1        
-## [100] hms_1.1.1                   mime_0.12                   evaluate_0.15              
-## [103] xtable_1.8-4                IRanges_2.28.0              gridExtra_2.3              
-## [106] compiler_4.1.0              KernSmooth_2.23-20          V8_4.1.0                   
-## [109] crayon_1.5.1                shadowtext_0.1.1            htmltools_0.5.2            
-## [112] mgcv_1.8-40                 later_1.3.0                 tzdb_0.3.0                 
-## [115] lubridate_1.8.0             DBI_1.1.2                   dbplyr_2.1.1               
-## [118] MASS_7.3-56                 highcharter_0.9.4           Matrix_1.4-1               
-## [121] cli_3.2.0                   parallel_4.1.0              igraph_1.3.0               
-## [124] GenomicRanges_1.46.1        pkgconfig_2.0.3             spatstat.sparse_2.1-0      
-## [127] xml2_1.3.3                  svglite_2.1.0               bslib_0.3.1                
-## [130] webshot_0.5.2               XVector_0.34.0              rvest_1.0.2                
-## [133] callr_3.7.0                 digest_0.6.29               sctransform_0.3.3          
-## [136] RcppAnnoy_0.0.19            spatstat.data_2.1-4         rmarkdown_2.13             
-## [139] cellranger_1.1.0            leiden_0.3.9                uwot_0.1.11                
-## [142] curl_4.3.2                  lifecycle_1.0.1             nlme_3.1-157               
-## [145] jsonlite_1.8.0              viridisLite_0.4.0           limma_3.50.1               
-## [148] fansi_1.0.3                 pillar_1.7.0                lattice_0.20-45            
-## [151] fastmap_1.1.0               httr_1.4.2                  survival_3.3-1             
-## [154] glue_1.6.2                  xts_0.12.1                  png_0.1-7                  
-## [157] sass_0.4.1                  stringi_1.7.6               textshaping_0.3.6          
-## [160] irlba_2.3.5                 future.apply_1.8.1</code></pre>
+##   [1] utf8_1.2.2                 
+##   [2] reticulate_1.24            
+##   [3] tidyselect_1.1.2           
+##   [4] htmlwidgets_1.5.4          
+##   [5] grid_4.1.0                 
+##   [6] Rtsne_0.15                 
+##   [7] munsell_0.5.0              
+##   [8] codetools_0.2-18           
+##   [9] ica_1.0-2                  
+##  [10] future_1.24.0              
+##  [11] miniUI_0.1.1.1             
+##  [12] withr_2.5.0                
+##  [13] spatstat.random_2.2-0      
+##  [14] colorspace_2.0-3           
+##  [15] Biobase_2.54.0             
+##  [16] highr_0.9                  
+##  [17] uuid_1.0-4                 
+##  [18] rstudioapi_0.13            
+##  [19] Seurat_4.1.0               
+##  [20] stats4_4.1.0               
+##  [21] SingleCellExperiment_1.16.0
+##  [22] ROCR_1.0-11                
+##  [23] xaringan_0.23              
+##  [24] tensor_1.5                 
+##  [25] TTR_0.24.3                 
+##  [26] listenv_0.8.0              
+##  [27] labeling_0.4.2             
+##  [28] MatrixGenerics_1.6.0       
+##  [29] GenomeInfoDbData_1.2.7     
+##  [30] polyclip_1.10-0            
+##  [31] farver_2.1.0               
+##  [32] pheatmap_1.0.12            
+##  [33] rprojroot_2.0.3            
+##  [34] parallelly_1.30.0          
+##  [35] vctrs_0.4.0                
+##  [36] generics_0.1.2             
+##  [37] xfun_0.30                  
+##  [38] rlist_0.4.6.2              
+##  [39] R6_2.5.1                   
+##  [40] GenomeInfoDb_1.30.1        
+##  [41] ggiraph_0.8.2              
+##  [42] nuclon_0.0.1               
+##  [43] bitops_1.0-7               
+##  [44] spatstat.utils_2.3-0       
+##  [45] cachem_1.0.6               
+##  [46] DelayedArray_0.20.0        
+##  [47] assertthat_0.2.1           
+##  [48] promises_1.2.0.1           
+##  [49] scales_1.1.1               
+##  [50] gtable_0.3.0               
+##  [51] Cairo_1.5-15               
+##  [52] globals_0.14.0             
+##  [53] processx_3.5.3             
+##  [54] goftest_1.2-3              
+##  [55] rlang_1.0.2                
+##  [56] systemfonts_1.0.4          
+##  [57] splines_4.1.0              
+##  [58] lazyeval_0.2.2             
+##  [59] spatstat.geom_2.4-0        
+##  [60] broom_0.7.12               
+##  [61] yaml_2.3.5                 
+##  [62] reshape2_1.4.4             
+##  [63] abind_1.4-5                
+##  [64] backports_1.4.1            
+##  [65] httpuv_1.6.5               
+##  [66] quantmod_0.4.18            
+##  [67] tools_4.1.0                
+##  [68] ellipsis_0.3.2             
+##  [69] spatstat.core_2.4-2        
+##  [70] jquerylib_0.1.4            
+##  [71] RColorBrewer_1.1-3         
+##  [72] BiocGenerics_0.40.0        
+##  [73] ggridges_0.5.3             
+##  [74] Rcpp_1.0.8.3               
+##  [75] plyr_1.8.7                 
+##  [76] zlibbioc_1.40.0            
+##  [77] purrr_0.3.4                
+##  [78] RCurl_1.98-1.6             
+##  [79] ps_1.6.0                   
+##  [80] rpart_4.1.16               
+##  [81] dbscan_1.1-10              
+##  [82] deldir_1.0-6               
+##  [83] pbapply_1.5-0              
+##  [84] cowplot_1.1.1              
+##  [85] S4Vectors_0.32.3           
+##  [86] zoo_1.8-9                  
+##  [87] SeuratObject_4.0.4         
+##  [88] SummarizedExperiment_1.25.2
+##  [89] ggrepel_0.9.1              
+##  [90] cluster_2.1.3              
+##  [91] here_1.0.1                 
+##  [92] magrittr_2.0.3             
+##  [93] data.table_1.14.2          
+##  [94] scattermore_0.8            
+##  [95] colourpicker_1.1.1         
+##  [96] lmtest_0.9-40              
+##  [97] RANN_2.6.1                 
+##  [98] fitdistrplus_1.1-8         
+##  [99] matrixStats_0.61.0         
+## [100] randomcoloR_1.1.0.1        
+## [101] patchwork_1.1.1            
+## [102] mime_0.12                  
+## [103] evaluate_0.15              
+## [104] xtable_1.8-4               
+## [105] readxl_1.4.0               
+## [106] IRanges_2.28.0             
+## [107] compiler_4.1.0             
+## [108] tibble_3.1.6               
+## [109] writexl_1.4.0              
+## [110] KernSmooth_2.23-20         
+## [111] V8_4.1.0                   
+## [112] crayon_1.5.1               
+## [113] shadowtext_0.1.1           
+## [114] htmltools_0.5.2            
+## [115] mgcv_1.8-40                
+## [116] later_1.3.0                
+## [117] tidyr_1.2.0                
+## [118] lubridate_1.8.0            
+## [119] DBI_1.1.2                  
+## [120] MASS_7.3-56                
+## [121] highcharter_0.9.4          
+## [122] Matrix_1.4-1               
+## [123] cli_3.2.0                  
+## [124] parallel_4.1.0             
+## [125] igraph_1.3.0               
+## [126] GenomicRanges_1.46.1       
+## [127] pkgconfig_2.0.3            
+## [128] plotly_4.10.0              
+## [129] spatstat.sparse_2.1-0      
+## [130] xml2_1.3.3                 
+## [131] svglite_2.1.0              
+## [132] bslib_0.3.1                
+## [133] webshot_0.5.2              
+## [134] XVector_0.34.0             
+## [135] rvest_1.0.2                
+## [136] callr_3.7.0                
+## [137] stringr_1.4.0              
+## [138] digest_0.6.29              
+## [139] sctransform_0.3.3          
+## [140] RcppAnnoy_0.0.19           
+## [141] spatstat.data_2.1-4        
+## [142] rmarkdown_2.13             
+## [143] cellranger_1.1.0           
+## [144] leiden_0.3.9               
+## [145] uwot_0.1.11                
+## [146] curl_4.3.2                 
+## [147] lifecycle_1.0.1            
+## [148] nlme_3.1-157               
+## [149] jsonlite_1.8.0             
+## [150] viridisLite_0.4.0          
+## [151] fansi_1.0.3                
+## [152] pillar_1.7.0               
+## [153] lattice_0.20-45            
+## [154] fastmap_1.1.0              
+## [155] httr_1.4.2                 
+## [156] survival_3.3-1             
+## [157] glue_1.6.2                 
+## [158] xts_0.12.1                 
+## [159] png_0.1-7                  
+## [160] stringi_1.7.6              
+## [161] sass_0.4.1                 
+## [162] irlba_2.3.5                
+## [163] future.apply_1.8.1</code></pre>
 <p style="text-align: left; font-size: small;">
-Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 15-Jun-2022 at <i class="fa fa-clock-o" aria-hidden="true"></i> 23:35:04.
+Built on: <i class="fa fa-calendar" aria-hidden="true"></i> 17-Jun-2022 at <i class="fa fa-clock-o" aria-hidden="true"></i> 12:22:48.
 </p>
 <hr/>
 <div style="padding-bottom: 1.5em">

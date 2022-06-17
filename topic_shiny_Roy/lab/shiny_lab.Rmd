@@ -464,7 +464,34 @@ A common use case of shiny apps is to explore a dataset interactively. So we wil
 
 Below is a preview of the complete app.
 
-![](shiny_lab_assets/data-explorer.png)
+```{r,data-explorer,echo=FALSE}
+library(shiny)
+
+shinyApp(
+  ui=fluidPage(
+    titlePanel("Data explorer"),
+    sidebarLayout(
+      sidebarPanel(
+          selectInput("in_x","X axis variable", choices=colnames(iris), selected=colnames(iris)[1], multiple=FALSE),
+          selectInput("in_y","Y axis variable", choices=colnames(iris), selected=colnames(iris)[2], multiple=FALSE),
+          selectInput("in_col","Colour variable", choices=colnames(iris), selected=colnames(iris)[3], multiple=FALSE),
+      ),
+      mainPanel(
+        plotOutput("out_plot")
+      )
+    )
+  ),
+  server=function(input,output){
+    
+  output$out_plot <- renderPlot({
+    ggplot(iris,aes(!!sym(input$in_x),y=!!sym(input$in_y),col=!!sym(input$in_col)))+
+      geom_point()
+  })
+      
+  },
+  options=list(height="500px")
+)
+```
 
 ## UI
 
@@ -498,7 +525,7 @@ shinyApp(
 
 And to the sidebar, we will add 3 input widgets corresponding to x axis variable, y axis variable and colour variable. These will be dropdown type (`selectInput()`) and choices will be column names of the iris dataframe. And we add the output widget (`plotOutput()`) in the main panel.
 
-```{r,fig.height=6,fig.width=8}
+```{r}
 library(shiny)
 
 shinyApp(
@@ -548,32 +575,7 @@ output$out_plot <- renderPlot({
 
 This is finally added to the server function.
 
-```{r,fig.height=6,fig.width=8}
-library(shiny)
-
-shinyApp(
-  ui=fluidPage(
-    titlePanel("Data explorer"),
-    sidebarLayout(
-      sidebarPanel(
-          selectInput("in_x","X axis variable", choices=colnames(iris), selected=colnames(iris)[1], multiple=FALSE),
-          selectInput("in_y","Y axis variable", choices=colnames(iris), selected=colnames(iris)[2], multiple=FALSE),
-          selectInput("in_col","Colour variable", choices=colnames(iris), selected=colnames(iris)[3], multiple=FALSE),
-      ),
-      mainPanel(
-        plotOutput("out_plot")
-      )
-    )
-  ),
-  server=function(input,output){
-    
-  output$out_plot <- renderPlot({
-    ggplot(iris,aes(!!sym(input$in_x),y=!!sym(input$in_y),col=!!sym(input$in_col)))+
-      geom_point()
-  })
-      
-  }
-)
+```{r,data-explorer}
 ```
 
 This was a quick and easy start to shiny apps. You can expand this app to other datasets and map more variables to ggplot etc. Can you add the functionality to [download the plots](https://shiny.rstudio.com/gallery/file-download.html)? Or perhaps to [upload a csv file](https://shiny.rstudio.com/articles/upload.html) and plot from that file?
@@ -647,7 +649,8 @@ shinyApp(
     )
   ),
   server=function(input,output){
-  }
+  },
+  options=list(height="500px")
 )
 ```
 
@@ -1346,17 +1349,18 @@ ui=fluidPage(
     sidebarPanel(
       h3("Duration"),
       fluidRow(
-          column(6,style=list("padding-right: 5px;"),
+          column(6,
               dateInput("in_duration_date_start","From",value=format(Sys.time(),"%Y-%m-%d"))
           ),
-          column(6,style=list("padding-left: 5px;"),
+          column(6,
               dateInput("in_duration_date_end","To",value=format(as.Date(Sys.time())+30,"%Y-%m-%d"))
           )
       )
     ),
     mainPanel())
   ),
-server=function(input,output){}
+server=function(input,output){},
+  options=list(height="400px")
 )
 ```
 
@@ -1378,50 +1382,50 @@ ui=fluidPage(
     sidebarPanel(
       h3("Duration"),
       fluidRow(
-          column(6,style=list("padding-right: 5px;"),
+          column(6,
               dateInput("in_duration_date_start","From",value=format(Sys.time(),"%Y-%m-%d"))
           ),
-          column(6,style=list("padding-left: 5px;"),
+          column(6,
               dateInput("in_duration_date_end","To",value=format(as.Date(Sys.time())+30,"%Y-%m-%d"))
           )
       ),
       h3("Tracks"),
       fluidRow(
-          column(3,style=list("padding-right: 3px;"),
+          column(3,
               textInput("in_track_name_1",label="Name",value="Vacation",placeholder="Vacation")
           ),
-          column(3,style=list("padding-right: 3px; padding-left: 3px;"),
+          column(3,
               dateInput("in_track_date_start_1",label="From",value=format(Sys.time(),"%Y-%m-%d"))
           ),
-          column(3,style=list("padding-right: 3px; padding-left: 3px;"),
+          column(3,
               dateInput("in_track_date_end_1",label="To",value=format(as.Date(Sys.time())+30,"%Y-%m-%d"))
           ),
-          column(3,style=list("padding-left: 3px;"),
+          column(3,
               colourpicker::colourInput("in_track_colour_1",label="Colour",
                                         palette="limited",allowedCols=cols,value=cols[1])
           )
       ),
       fluidRow(
-          column(3,style=list("padding-right: 3px;"),
+          column(3,
               textInput("in_track_name_2",label="Name",value="Offline",placeholder="Offline")
           ),
-          column(3,style=list("padding-right: 3px; padding-left: 3px;"),
+          column(3,
               dateInput("in_track_date_start_2",label="From",value=format(Sys.time(),"%Y-%m-%d"))
           ),
-          column(3,style=list("padding-right: 3px; padding-left: 3px;"),
+          column(3,
               dateInput("in_track_date_end_2",label="To",value=format(as.Date(Sys.time())+30,"%Y-%m-%d"))
           ),
-          column(3,style=list("padding-left: 3px;"),
+          column(3,
               colourpicker::colourInput("in_track_colour_2",label="Colour",
                                         palette="limited",allowedCols=cols,value=cols[2])
           )
       ),
       fluidRow(
-          column(6,style=list("padding-right: 5px;"),
+          column(6,
               colourpicker::colourInput("in_track_colour_available",label="Track colour (Available)",
                                         palette="limited",allowedCols=cols,value=cols[length(cols)-1])
           ),
-          column(6,style=list("padding-left: 5px;"),
+          column(6,
               colourpicker::colourInput("in_track_colour_weekend",label="Track colour (Weekend)",
                                         palette="limited",allowedCols=cols,value=cols[length(cols)])
           )
@@ -1431,28 +1435,28 @@ ui=fluidPage(
       selectInput("in_legend_position",label="Legend position",
                   choices=c("top","right","left","bottom"),selected="right",multiple=F),
       fluidRow(
-          column(6,style=list("padding-right: 5px;"),
+          column(6,
               selectInput("in_legend_justification",label="Legend justification",
                           choices=c("left","right"),selected="right",multiple=F)
           ),
-          column(6,style=list("padding-left: 5px;"),
+          column(6,
               selectInput("in_legend_direction",label="Legend direction",
                           choices=c("vertical","horizontal"),selected="vertical",multiple=F)
           )
       ),
       fluidRow(
-          column(6,style=list("padding-right: 5px;"),
+          column(6,
               numericInput("in_themefontsize",label="Theme font size",value=8,step=0.5)
           ),
-          column(6,style=list("padding-left: 5px;"),
+          column(6,
               numericInput("in_datefontsize",label="Date font size",value=2.5,step=0.1)
           )
       ),
       fluidRow(
-          column(6,style=list("padding-right: 5px;"),
+          column(6,
               numericInput("in_monthfontsize",label="Month font size",value=8,step=0.5)
           ),
-          column(6,style=list("padding-left: 5px;"),
+          column(6,
               numericInput("in_legendfontsize",label="Legend font size",value=5,step=0.5)
           )
       )
@@ -1475,18 +1479,18 @@ We can end with column with the download options. Input fields are height, width
 h3("Download"),
 helpText("Width is automatically calculated based on the number of weeks. File type is only applicable to download and does not change preview."),
 fluidRow(
-    column(6,style=list("padding-right: 5px;"),
+    column(6,
         numericInput("in_height","Height (cm)",step=0.5,value=5.5)
     ),
-    column(6,style=list("padding-left: 5px;"),
+    column(6,
         numericInput("in_width","Width (cm)",step=0.5,value=NA)
     )
 ),
 fluidRow(
-    column(6,style=list("padding-right: 5px;"),
+    column(6,
         selectInput("in_res","Res/DPI",choices=c("200","300","400","500"),selected="200")
     ),
-    column(6,style=list("padding-left: 5px;"),
+    column(6,
         selectInput("in_format","File type",choices=c("png","tiff","jpeg","pdf"),selected="png",multiple=FALSE,selectize=TRUE)
     )
 ),
@@ -1506,7 +1510,7 @@ mainPanel(
 )
 ```
 
-This should now look like this.
+This should now look like this. Some additional syling has been added to divs.
 
 ```{r,eval=FALSE}
 ## load colours
@@ -2451,7 +2455,8 @@ ui=fluidPage(
   )
 )
 ),
-server=function(input,output) {}
+server=function(input,output) {},
+  options=list(height="400px")
 )
 ```
 
