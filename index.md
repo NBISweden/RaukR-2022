@@ -70,7 +70,9 @@ description: Advanced R for Bioinformatics
 ## 17-Jun-2022 (Fri)
 
 - **Introduction to shiny apps** (Roy Francis, Lokeshwaran Manoharan)
-    - Presentation
-    - Lab
+    - [Presentation](topic_shiny_Roy/presentation/shiny_presentation.html)
+    - [Lab](topic_shiny_Roy/lab/shiny_lab.html)
+
+---
 
 **2022** • NBIS
