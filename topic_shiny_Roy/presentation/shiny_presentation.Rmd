@@ -49,19 +49,19 @@ class: spaced
 
 ## Contents
 
-* [Introduction](#intro)
-* [Code Structure](#code-structure)
-* [App execution](#running)
-* [UI](#ui-layout)
-* [Code execution](#runtime)
-* [Reactivity](#reactivity-1)
-* [Updating widgets](#updating)
-* [Isolate](#isolate)
-* [Error validation](#validation)
-* [Download](#download-data)
-* [Deploy](#deploy)
-* [Interactive documents](#interactive-docs)
-* [Extensions](#extensions)
+- [Introduction](#intro)
+- [Code Structure](#code-structure)
+- [App execution](#running)
+- [UI](#ui-layout)
+- [Code execution](#runtime)
+- [Reactivity](#reactivity-1)
+- [Updating widgets](#updating)
+- [Isolate](#isolate)
+- [Error validation](#validation)
+- [Download](#download-data)
+- [Deploy](#deploy)
+- [Interactive documents](#interactive-docs)
+- [Extensions](#extensions)
 
 ---
 name: intro
@@ -74,29 +74,29 @@ class: spaced
 
 ## What is shiny?
 
-* Interactive documents & web applications
-* Completely created using R
-* Needs a live environment
+- Interactive documents & web applications
+- Completely created using R
+- Needs a live environment
 
 --
 
 ### Usage
 
-* [Standalone web applications](http://shiny.rstudio.com/gallery/see-more.html)
-* [Dashboard/Flexboard](http://rstudio.github.io/shinydashboard/examples.html)
-* Interactive RMarkdown
-* Gadgets/RStudio extensions
+- [Standalone web applications](http://shiny.rstudio.com/gallery/see-more.html)
+- [Dashboard/Flexboard](http://rstudio.github.io/shinydashboard/examples.html)
+- Interactive RMarkdown
+- Gadgets/RStudio extensions
 
 --
 
 ### App structure
 
-* UI Layout
-* UI Inputs (Widgets)
-* UI Outputs
-* Renderer
-* Builder
-* [Function reference](https://shiny.rstudio.com/reference/shiny)
+- UI Layout
+- UI Inputs (Widgets)
+- UI Outputs
+- Renderer
+- Builder
+- [Function reference](https://shiny.rstudio.com/reference/shiny)
 
 ---
 name: code-structure
@@ -138,8 +138,8 @@ name: running
 
 ## Running the app
 
-* Change to app directory, then run `runApp()`
-* Use `shinyApp()`
+- Change to app directory, then run `runApp()`
+- Use `shinyApp()`
 
 ```{r,eval=FALSE}
 shinyApp(
@@ -148,8 +148,8 @@ server=function(input,output) {}
 )
 ```
 
-* From Rmd file using `rmarkdown::run()`
-* Running as a separate process from terminal
+- From Rmd file using `rmarkdown::run()`
+- Running as a separate process from terminal
 
 ```
 R -e "shiny::runApp('~/shinyapp')"
@@ -310,7 +310,7 @@ server=function(input, output) {
 })
 ```
 
-* Other options include `conditionalPanel()`, `ìnsertUI()` and `removeUI()`
+- Other options include `conditionalPanel()`, `ìnsertUI()` and `removeUI()`
 
 ---
 name: runtime
@@ -454,8 +454,8 @@ name: updating
 
 ## Updating widgets
 
-* Widgets can be updated once initialised.
-* Add third argument **session** to server function
+- Widgets can be updated once initialised.
+- Add third argument **session** to server function
 
 ```
 server=function(input,output,session) {}
@@ -463,7 +463,7 @@ server=function(input,output,session) {}
 
 --
 
-* Example of a typical UI
+- Example of a typical UI
 
 ```
 ui=fluidPage(
@@ -475,8 +475,8 @@ ui=fluidPage(
 
 --
 
-* Update functions can be used to update input widgets
-* Reactive observer `observe({})` monitors for a conditional change
+- Update functions can be used to update input widgets
+- Reactive observer `observe({})` monitors for a conditional change
 
 ```
 server=function(input,output,session) {
@@ -495,7 +495,7 @@ name: isolate
 
 ## Isolate reactivity
 
-* Reactivity can be controlled.
+- Reactivity can be controlled.
 
 ```
 shinyApp(
@@ -518,7 +518,7 @@ name: validation
 
 ## Error validation
 
-* Shiny returns an error with missing or incorrect values
+- Shiny returns an error with missing or incorrect values
 
 .pull-left-70[.limity100[
 ```{r,eval=FALSE}
@@ -542,12 +542,12 @@ server=function(input, output) {
 
 --
 
-* Errors can be handled in a controlled manner
+- Errors can be handled in a controlled manner
 
 --
 
-* `validate()` can be used to check input
-* `validate()` using `need()`
+- `validate()` can be used to check input
+- `validate()` using `need()`
 
 .pull-left-70[.limity100[
 ```
@@ -574,7 +574,7 @@ server=function(input, output) {
 
 --
 
-* `validate()` using custom function
+- `validate()` using custom function
 
 .pull-left-70[.limity100[
 ```
@@ -603,14 +603,14 @@ server=function(input,output) {
 
 --
 
-* `shiny::req()` checks input variable and silently stops execution
+- `shiny::req()` checks input variable and silently stops execution
 
 ---
 name: download-data
 
 ## Download • Data
 
-* Add button and `downloadHandler()` function
+- Add button and `downloadHandler()` function
 
 ```
 shinyApp(
@@ -635,8 +635,8 @@ server=function(input, output) {
 })
 ```
 
-* Run in system browser if Rstudio browser doesn't work
-* See usage of download buttons
+- Run in system browser if Rstudio browser doesn't work
+- See usage of download buttons
 
 ---
 name: download-plot
@@ -670,27 +670,27 @@ output$button_download <- downloadHandler(
 })
 ```
 
-* Run in system browser if Rstudio browser doesn't work
-* See usage of download buttons
+- Run in system browser if Rstudio browser doesn't work
+- See usage of download buttons
 
 ---
 name: deploy
 
 ## Deployment
 
-* R scripts
-  * GitHub
-  * R Package
-  * Docker container
+- R scripts
+  - GitHub
+  - R Package
+  - Docker container
 
-* Webpage
-  * Shinyapps.io
-  * Shiny Server (Free)
-  * Shiny Server Pro
+- Webpage
+  - Shinyapps.io
+  - Shiny Server (Free)
+  - Shiny Server Pro
 
 --
 
-* Automatically deploying to shinyapps.io
+- Automatically deploying to shinyapps.io
 
 ```
 library(rsconnect)
@@ -700,15 +700,15 @@ deployApp(appName="name")
 
 --
 
-* Shiny apps user guide https://docs.rstudio.com/shinyapps.io/index.html  
-* Shiny server guide https://docs.rstudio.com/shiny-server/
+- Shiny apps user guide https://docs.rstudio.com/shinyapps.io/index.html  
+- Shiny server guide https://docs.rstudio.com/shiny-server/
 
 ---
 name: interactive-docs
 
 ## Interactive documents
 
-* Shiny can run in RMarkdown documents. Set YAML `runtime: shiny`.  
+- Shiny can run in RMarkdown documents. Set YAML `runtime: shiny`.  
 
 ```
 ---
@@ -718,19 +718,19 @@ runtime: shiny
 ---
 ```
 
-* Shiny widgets can be included directly  
+- Shiny widgets can be included directly  
 
 ```{r,echo=FALSE,comment=""}
 cat(paste0("```{r}\n","selectInput('n_breaks',label='Number of bins:',choices=c(10,20,35,50),selected=20)\n","```\n"))
 ```
 
-* Whole shiny apps can be included directly  
+- Whole shiny apps can be included directly  
 
 ```{r,echo=FALSE,comment=""}
 cat(paste0("```{r}\n","shinyApp(\n","  ui=fluidPage(),\n","  server=function(input,output) {}\n",")\n","```\n"))
 ```
 
-* Hosted shiny apps can be embedded using `<iframe>`  
+- Hosted shiny apps can be embedded using `<iframe>`  
 
 ```
 <iframe src="https://user.shinyapps.io/app"></iframe>
@@ -741,13 +741,13 @@ name: extensions
 
 ## Extensions
 
-* [Naxstats](https://github.com/nanxstats/awesome-shiny-extensions): Repo collection all shiny extensions
-* [shinythemes](https://github.com/rstudio/shinythemes): Bootswatch themes for shiny
-* shinyurl: using URLs to recreate state of an app
-* shinypod: Reusable modules
-* [shinyjs](https://deanattali.com/shinyjs/): custom javascript functionality
-* [shinyWidgets](https://github.com/dreamRs/shinyWidgets): Bootstrap 3 custom widgets
-* [shinyBS](https://github.com/ebailey78/shinyBS): Bootstrap 3 widgets
+- [Naxstats](https://github.com/nanxstats/awesome-shiny-extensions): Repo collection all shiny extensions
+- [shinythemes](https://github.com/rstudio/shinythemes): Bootswatch themes for shiny
+- shinyurl: using URLs to recreate state of an app
+- shinypod: Reusable modules
+- [shinyjs](https://deanattali.com/shinyjs/): custom javascript functionality
+- [shinyWidgets](https://github.com/dreamRs/shinyWidgets): Bootstrap 3 custom widgets
+- [shinyBS](https://github.com/ebailey78/shinyBS): Bootstrap 3 widgets
 
 ---
 name: help
@@ -755,16 +755,18 @@ class: spaced
 
 ## Help
 
-* [Mastering Shiny Book](https://mastering-shiny.org/index.html)
-* [**RStudio Shiny home**](https://shiny.rstudio.com/) 
-* [**RStudio Shiny tutorial**](http://shiny.rstudio.com/tutorial/)
-* [**RStudio Shiny articles**](https://shiny.rstudio.com/articles/)
+- [**Mastering Shiny Book**](https://mastering-shiny.org/index.html)
+- [**RStudio Shiny home**](https://shiny.rstudio.com/) 
+- [**RStudio Shiny tutorial**](http://shiny.rstudio.com/tutorial/)
+- [**RStudio Shiny articles**](https://shiny.rstudio.com/articles/)
 
 ### Other topics
 
-* [Applications of action buttons](http://shiny.rstudio.com/articles/action-buttons.html)  
-* [Progress indicators](http://shiny.rstudio.com/articles/progress.html)  
-* [Shiny modules](https://shiny.rstudio.com/articles/modules.html)
+- [Applications of action buttons](http://shiny.rstudio.com/articles/action-buttons.html)  
+- [Progress indicators](http://shiny.rstudio.com/articles/progress.html)  
+- [Shiny modules](https://shiny.rstudio.com/articles/modules.html)
+- [Shiny profiling](https://shiny.rstudio.com/articles/profiling.html)
+- [Shiny unit tests](https://shiny.rstudio.com/articles/testing-overview.html)
 ...
 
 <!-- --------------------- Do not edit this and below --------------------- -->
